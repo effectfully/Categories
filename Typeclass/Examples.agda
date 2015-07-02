@@ -66,16 +66,6 @@ module Test where
   _<$>_ = F₁
 
   open import Data.Nat
-  open import Data.Nat.Properties.Simple
-
-  test : ∀ n m -> n + m ≡ m + n
-  test  ℕ.zero   m =
-    m     ≈⟨ P.sym (+-right-identity m) ⟩
-    m + 0 ∎
-  test (ℕ.suc n) m =
-    ℕ.suc (n + m) ≈⟨ P.cong ℕ.suc (+-comm n m) ⟩
-    ℕ.suc (m + n) ≈⟨ P.sym (+-suc m n) ⟩
-    m + ℕ.suc n   ∎
 
   test-→ : (List ℕ -> ℕ) -> (ℕ -> List ℕ) -> ℕ -> ℕ
   test-→ = _<$>_

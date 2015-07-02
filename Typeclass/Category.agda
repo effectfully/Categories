@@ -22,7 +22,7 @@ record Setoid {α} (A : Set α) : Set (suc α) where
     Setoid->IsEquivalence = isEquivalence
 open Setoid {{...}} public
 
-module EqReasoning {α} {A : Set α} {{setoid : Setoid A}} where
+module EqReasoning {α} {A : Set α} (setoid : Setoid A) where
   infixr 2 _≈⟨_⟩_
   infix  3 _∎
 
@@ -31,7 +31,6 @@ module EqReasoning {α} {A : Set α} {{setoid : Setoid A}} where
 
   _∎ : (x : A) -> x ≈ x
   x ∎ = refl x
-open EqReasoning public
 
 record IsCategory
   {α β} {Obj : Set α} (_⇒_ : Obj -> Obj -> Set β)
@@ -58,7 +57,6 @@ record IsCategory
     ; assoc    = sym {{isEquivalence {{setoid}}}} _ assoc
     ; ∘-resp-≈ = flip ∘-resp-≈
     }
-open IsCategory {{...}} public
 
 record Category α β : Set (suc (α ⊔ β)) where
   infix  4 _⇒_
@@ -75,6 +73,8 @@ record Category α β : Set (suc (α ⊔ β)) where
 
     Category->IsCategory : IsCategory _⇒_
     Category->IsCategory = isCategory
+
+  open IsCategory {{...}}
 
   categoryᵒᵖ : Category α β
   categoryᵒᵖ = record

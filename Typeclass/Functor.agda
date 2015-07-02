@@ -7,6 +7,9 @@ record IsFunctor
   (_⇒₁_ : Obj₁ -> Obj₁ -> Set β₁) (_⇒₂_ : Obj₂ -> Obj₂ -> Set β₂) (F₀ : Obj₁ -> Obj₂)
   {{setoid₁ : ∀ {A B} -> Setoid (A ⇒₁ B)}} {{setoid₂ : ∀ {A B} -> Setoid (A ⇒₂ B)}}
   {{C₁ : IsCategory _⇒₁_}} {{C₂ : IsCategory _⇒₂_}} : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂) where
+
+  open IsCategory {{...}}
+
   field
     F₁ : ∀ {A B} -> A ⇒₁ B -> F₀ A ⇒₂ F₀ B
 
