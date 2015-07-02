@@ -23,14 +23,27 @@ record Setoid {α} (A : Set α) : Set (suc α) where
 open Setoid {{...}} public
 
 module EqReasoning {α} {A : Set α} (setoid : Setoid A) where
-  infixr 2 _≈⟨_⟩_
+  infix  4 _IsRelatedTo_
+  infix  1 begin_
+  infixr 2 _→⟨_⟩_ _←⟨_⟩_
   infix  3 _∎
+  
+  record _IsRelatedTo_ (x y : A) : Set α where
+    constructor relTo
+    field eq : x ≈ y
 
-  _≈⟨_⟩_ : ∀ (x {y z} : A) -> x ≈ y -> y ≈ z -> x ≈ z
-  x ≈⟨ p ⟩ q = trans x p q
+  begin_ : ∀ {x y} -> x IsRelatedTo y -> x ≈ y
+  begin (relTo p) = p
 
-  _∎ : (x : A) -> x ≈ x
-  x ∎ = refl x
+  _→⟨_⟩_ : ∀ {y z} x -> x ≈ y -> y IsRelatedTo z -> x IsRelatedTo z
+  x →⟨ p ⟩ (relTo q) = relTo (trans x p q)
+
+  _←⟨_⟩_ : ∀ {y z} x -> y ≈ x -> y IsRelatedTo z -> x IsRelatedTo z
+  _←⟨_⟩_ {y} x p (relTo q) = relTo (trans x (sym y p) q)
+
+  _∎ : ∀ x -> x IsRelatedTo x
+  x ∎ = relTo (refl x)
+open EqReasoning {{...}} public
 
 record IsCategory
   {α β} {Obj : Set α} (_⇒_ : Obj -> Obj -> Set β)

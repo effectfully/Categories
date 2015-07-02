@@ -10,7 +10,7 @@ record IsNaturalTransformation
   {{C₁ : IsCategory _⇒₁_}} {{C₂ : IsCategory _⇒₂_}}
   (Ψ : IsFunctor _⇒₁_ _⇒₂_ Ψ₀) (Ψ : IsFunctor _⇒₁_ _⇒₂_ Φ₀) : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂) where
 
-  open IsCategory {{...}}
+  open IsCategory C₂
 
   field
     η    : ∀ {O} -> Ψ₀ O ⇒₂ Φ₀ O
@@ -23,10 +23,12 @@ Id : ∀
   {{setoid₁ : ∀ {A B} -> Setoid (A ⇒₁ B)}} {{setoid₂ : ∀ {A B} -> Setoid (A ⇒₂ B)}}
   {{C₁ : IsCategory _⇒₁_}} {{C₂ : IsCategory _⇒₂_}}
   -> (Ψ : IsFunctor _⇒₁_ _⇒₂_ Ψ₀) -> IsNaturalTransformation Ψ Ψ
-Id {{setoid₂ = setoid₂}} {{C₂ = C₂}} Ψ = record
+Id {{C₂ = C₂}} Ψ = record
   { η    = λ {O}         -> id
-  ; comm = λ {A} {B} {f} -> let open EqReasoning setoid₂ in
-    id ∘ F₁ f ≈⟨ idˡ ⟩
-    F₁ f      ≈⟨ sym (F₁ f ∘ id) idʳ ⟩
-    F₁ f ∘ id ∎
+  ; comm = λ {A} {B} {f} ->
+    begin
+      id ∘ F₁ f →⟨ idˡ ⟩
+      F₁ f      ←⟨ idʳ ⟩
+      F₁ f ∘ id
+    ∎
   } where open IsCategory C₂
