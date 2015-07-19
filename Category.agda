@@ -4,7 +4,7 @@ open import Level public
 open import Function using (flip; _∘′_) renaming (id to id→) public
 open import Data.Product using (_,_; uncurry) public
 
-open import Categories.IndexedSetoid public
+open import Categories.Setoid public
 
 record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
   infix  3 _⇒_

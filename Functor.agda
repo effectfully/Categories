@@ -2,7 +2,7 @@ module Categories.Functor where
 
 open import Categories.Category
 
--- infixr 9 _∘ᶠ_
+infixr 9 _∘ᶠ_
 
 record Functor {α₁ α₂ β₁ β₂ γ₁ γ₂} (C₁ : Category α₁ β₁ γ₁) (C₂ : Category α₂ β₂ γ₂)
                : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) where
@@ -101,7 +101,7 @@ Functor-IndexedSetoid = record
                             }
   ; isIndexedEquivalence = record
       { irefl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in hrefl      }    
-      ; isym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in hsym p     }
+      ; isym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in hsym   p   }
       ; itrans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in htrans p q }
       }
   }

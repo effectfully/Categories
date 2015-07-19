@@ -65,7 +65,7 @@ NaturalTransformation-IndexedSetoid {C₂ = C₂} = record
                             }
   ; isIndexedEquivalence = record
       { irefl  =          irefl   
-      ; isym   = λ p   -> isym p
+      ; isym   = λ p   -> isym   p
       ; itrans = λ p q -> itrans p q
       }
   } where open IndexedSetoidFrom C₂
