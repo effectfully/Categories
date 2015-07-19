@@ -1,7 +1,7 @@
 module Categories.Category where
 
 open import Level public
-open import Function as F using (flip) public
+open import Function using (flip; _∘′_) renaming (id to id→) public
 open import Data.Product using (_,_; uncurry) public
 
 open import Categories.IndexedSetoid public
@@ -15,7 +15,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
     _⇒_    : Obj -> Obj -> Set β
     setoid : IndexedSetoid (uncurry _⇒_) γ
 
-  open IndexedSetoid setoid
+  open IndexedSetoid setoid using (_≈_) public
 
   field
     id  : ∀ {A}     -> A ⇒ A
@@ -44,39 +44,38 @@ module _ {α β γ} (C : Category α β γ) where
   module MixedEqReasoningFrom where
     open Heterogeneous public; open MixedEqReasoning setoid public
 
--- module _ where
---   open Category
-
---   arr-syntax  = _⇒_
---   eq-syntax   = _≈_
---   comp-syntax = _∘_
-  
---   syntax arr-syntax  C A B = A [ C ]⇒ B
---   syntax eq-syntax   C f g = f [ C ]≈ g
---   syntax comp-syntax C f g = f [ C ]∘ g
-
 module _ {α β γ} (C : Category α β γ) where
   module First  where
     open Category C renaming (Obj to Obj₁; _⇒_ to _⇒₁_; id to id₁; _∘_ to _∘₁_;
-                              idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁
-                             ) public
-    open IndexedSetoid setoid renaming (_≈_ to _≈₁_) public
+                              idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁;
+                              _≈_ to _≈₁_) public
     open Heterogeneous C renaming (_≋_ to _≋₁_; hetero to hetero₁; ∘-resp-≋ to ∘-resp-≋₁) public
 
   module Second where
     open Category C renaming (Obj to Obj₂; _⇒_ to _⇒₂_; id to id₂; _∘_ to _∘₂_;
-                              idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂
-                             ) public
-    open IndexedSetoid setoid renaming (_≈_ to _≈₂_) public
+                              idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂;
+                              _≈_ to _≈₂_) public
     open Heterogeneous C renaming (_≋_ to _≋₂_; hetero to hetero₂; ∘-resp-≋ to ∘-resp-≋₂) public
 
   module Third  where
     open Category C renaming (Obj to Obj₃; _⇒_ to _⇒₃_; id to id₃; _∘_ to _∘₃_;
-                              idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃
-                             ) public
-    open IndexedSetoid setoid renaming (_≈_ to _≈₃_) public
+                              idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃;
+                              _≈_ to _≈₃_) public
     open Heterogeneous C renaming (_≋_ to _≋₃_; hetero to hetero₃; ∘-resp-≋ to ∘-resp-≋₃) public
-   
+
+module _ where
+  open Category
+
+  arr-syntax  = _⇒_
+  eq-syntax   = _≈_
+  comp-syntax = _∘_
+  heq-syntax  = Heterogeneous._≋_
+
+  syntax arr-syntax  C A B = A [ C ]⇒ B
+  syntax eq-syntax   C f g = f [ C ]≈ g
+  syntax comp-syntax C f g = f [ C ]∘ g
+  syntax heq-syntax  C f g = f [ C ]≋ g
+
 _ᵒᵖ : ∀ {α β γ} -> Category α β γ -> Category α β γ
 C ᵒᵖ = record 
   { _⇒_      = flip _⇒_
@@ -94,4 +93,4 @@ C ᵒᵖ = record
   ; idʳ      = idˡ
   ; assoc    = λ _ -> isym (assoc _)
   ; ∘-resp-≈ = flip ∘-resp-≈
-  } where open Category C; open IndexedSetoid setoid
+  } where open Category C hiding (_≈_); open IndexedSetoid setoid
