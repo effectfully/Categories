@@ -93,8 +93,7 @@ _∘ᶠ_ {C₁ = C₁} {C₂ = C₂} {C₃ = C₃} F₂ F₁ = record
           open IndexedEqReasoningFrom C₃
 
 Functor-IndexedSetoid : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-                      -> IndexedSetoid (uncurry (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}))
-                                       (α₁ ⊔ β₁ ⊔ γ₂)
+                      -> IndexedSetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
 Functor-IndexedSetoid = record
   { _≈_                  = λ{ {C₁ , C₂} F₁ F₂ -> let open Firstᶠ F₁; open Secondᶠ F₂ in
                                  ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f

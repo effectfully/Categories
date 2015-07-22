@@ -58,7 +58,7 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
 
 NaturalTransformation-IndexedSetoid :
   ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-  -> IndexedSetoid (uncurry (NaturalTransformation {C₁ = C₁} {C₂ = C₂})) (α₁ ⊔ γ₂)
+  -> IndexedSetoid₂ (NaturalTransformation {C₁ = C₁} {C₂ = C₂}) (α₁ ⊔ γ₂)
 NaturalTransformation-IndexedSetoid {C₂ = C₂} = record
   { _≈_                  = λ{ N₁ N₂ -> let open Firstⁿ N₁; open Secondⁿ N₂ in
                                  ∀ {O} -> η₁ {O} ≈ η₂ {O}

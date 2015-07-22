@@ -2,7 +2,7 @@ module Categories.Category where
 
 open import Level public
 open import Function using (flip; _∘′_) renaming (id to id→) public
-open import Data.Product using (_,_; uncurry) public
+open import Data.Product using (_,_) public
 
 open import Categories.Setoid public
 
@@ -13,7 +13,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
   field
     Obj    : Set α
     _⇒_    : Obj -> Obj -> Set β
-    setoid : IndexedSetoid (uncurry _⇒_) γ
+    setoid : IndexedSetoid₂ _⇒_ γ
 
   open IndexedSetoid setoid using (_≈_) public
 

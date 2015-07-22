@@ -2,6 +2,7 @@ module Categories.Setoid where
 
 open import Level
 open import Function
+open import Data.Product
 
 infixr 10 _%
 _% = _∘_
@@ -54,6 +55,10 @@ record HeteroSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α �
     isHeteroEquivalence : IsHeteroEquivalence A _≈_
 
   open IsHeteroEquivalence isHeteroEquivalence public
+
+IndexedSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
+               -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
+IndexedSetoid₂ A = IndexedSetoid (uncurry A)
 
 module Firstˢ  {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid renaming (_≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
@@ -188,26 +193,6 @@ module HeteroIndexedEquality where
   open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-IndexedSetoid {A = A}) public
 
 module HeteroEquality {α} = Hetero (≡-IndexedSetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
-
-→-Setoid : ∀ {α β γ} {A : Set α} {B : Set β} -> Setoid (A -> B) (α ⊔ β ⊔ suc γ)
-→-Setoid {γ = γ} {B = B} = record
-  { _≈_           = λ f g -> (setoid : Setoid B γ) -> let open Setoid setoid in ∀ x -> f x ≈ g x
-  ; isEquivalence = record
-      { refl  = λ     setoid x -> let open Setoid setoid in refl
-      ; sym   = λ p   setoid x -> let open Setoid setoid in sym   (p setoid x)
-      ; trans = λ p q setoid x -> let open Setoid setoid in trans (p setoid x) (q setoid x)
-      }
-  }
-
-→→-Setoid : ∀ {α β γ} {A : Set α} {B : Set β} -> (setoid : Setoid B γ) -> Setoid (A -> B) (α ⊔ γ)
-→→-Setoid {A = A} {B = B} setoid = record
-  { _≈_           = λ f g -> ∀ x -> f x ≈ g x
-  ; isEquivalence = record
-      { refl  = λ     x -> refl
-      ; sym   = λ p   x -> sym   (p x)
-      ; trans = λ p q x -> trans (p x) (q x)
-      }
-    } where open Setoid setoid
 
 module Test where
   open import Data.Nat
