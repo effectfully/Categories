@@ -112,9 +112,9 @@ Cat {α} {β} {γ} = record
   ; setoid   = Functor-IndexedSetoid
   ; id       = idᶠ
   ; _∘_      = _∘ᶠ_
-  ; idˡ      = λ {C₁ C₂}         -> let open Heterogeneous C₂ in hrefl
-  ; idʳ      = λ {C₁ C₂}         -> let open Heterogeneous C₂ in hrefl
-  ; assoc    = λ {C₁ C₂ C₃ C₄} _ -> let open Heterogeneous C₄ in hrefl
+  ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
+  ; idʳ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
+  ; assoc    = λ {C₁ C₂ C₃ C₄} -> let open Heterogeneous C₄ in hrefl
   ; ∘-resp-≈ = λ {C₁ C₂ C₃ G₁ G₂ F₁ F₂} q p {A B f} ->
       let open Functor; open Heterogeneousᶠ G₂; open MixedEqReasoningFrom C₃ in
         begin

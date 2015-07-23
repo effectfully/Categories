@@ -23,10 +23,14 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
 
     idˡ      : ∀ {A B} {f : A ⇒ B} -> id ∘ f ≈ f
     idʳ      : ∀ {A B} {f : A ⇒ B} -> f ∘ id ≈ f
-    assoc    : ∀ {A B C D} (h : C ⇒ D) {g : B ⇒ C} {f : A ⇒ B}
+    assoc    : ∀ {A B C D} {h : C ⇒ D} {g : B ⇒ C} {f : A ⇒ B}
              -> (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
     ∘-resp-≈ : ∀ {A B C} {g₁ g₂ : B ⇒ C} {f₁ f₂ : A ⇒ B}
              -> g₁ ≈ g₂ -> f₁ ≈ f₂ -> g₁ ∘ f₁ ≈ g₂ ∘ f₂
+
+  assocₑ : ∀ {A B C D} (h : C ⇒ D) {g : B ⇒ C} {f : A ⇒ B}
+         -> (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
+  assocₑ _ = assoc
 
 module _ {α β γ} (C : Category α β γ) where
   open Category C
@@ -91,6 +95,6 @@ C ᵒᵖ = record
   ; _∘_      = flip _∘_
   ; idˡ      = idʳ
   ; idʳ      = idˡ
-  ; assoc    = λ _ -> isym (assoc _)
+  ; assoc    = isym assoc
   ; ∘-resp-≈ = flip ∘-resp-≈
   } where open Category C

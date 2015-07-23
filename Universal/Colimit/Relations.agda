@@ -42,14 +42,7 @@ module _ {A B} (p : Coproduct A B) where
     ; ι₁        = π ∘ ι₁
     ; ι₂        = π ∘ ι₂
     ; _↖_       = λ p q -> (p ↓ q) ↗
-    ; comm      =
-        begin
-          (π ∘ ι₁) ∘ f →⟨ assoc _ ⟩
-           π ∘ ι₁  ∘ f →⟨ comm    ⟩
-           π ∘ ι₂  ∘ g ←⟨ assoc _ ⟩
-          (π ∘ ι₂) ∘ g
-        ∎
+    ; comm      = assoc ⟩ comm ⟨ᵢ assoc
     ; ↖-inj     = ↓-inj ∘′ ↗-inj
-    ; universal = λ r s -> ↗-univ (isym (↓-univ (itrans (assoc _) r)
-                                                (itrans (assoc _) s)))
+    ; universal = λ r s -> ↗-univ (isym (↓-univ (itrans assoc r) (itrans assoc s)))
     } where open Coequalizer e renaming (universal to ↗-univ)

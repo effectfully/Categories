@@ -2,7 +2,10 @@ open import Categories.Category
 
 module Categories.Universal.Limit.Equalizer {α β γ} (ℂ : Category α β γ) where
 
+open import Categories.Morphism
+
 open Category ℂ
+open IndexedEqReasoningFrom ℂ
 
 record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   infixr 5 ↙_
@@ -27,3 +30,13 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
     
   ↙-resp-≈ : ∀ {C} {p q : C ⇒ A} -> p ≈ q -> ↙ p ≈ ↙ q
   ↙-resp-≈ r = universal (itrans ι-↙ (isym r))
+
+  ↙-mono : Mono ℂ ι
+  ↙-mono = record
+    { mono = λ {_} {p} {q} r ->
+        begin
+          p         ←⟨ universal r ⟩
+          ↙ (ι ∘ q) →⟨ ∘-η         ⟩
+          q
+        ∎
+    }

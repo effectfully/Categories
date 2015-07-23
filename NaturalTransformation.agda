@@ -45,11 +45,11 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   { η          = λ {O} -> η₁ {O} ∘ η₂ {O}
   ; naturality = λ {A B f} ->
       begin
-        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc η₁                   ⟩
+        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc                      ⟩
         η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ irefl naturality₂ ⟩
-        η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc η₁                   ⟩
+        η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc                      ⟩
         (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ naturality₁ irefl ⟩
-        (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc (F⇒₃ f)              ⟩
+        (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc                      ⟩
         F⇒₃ f ∘ (η₁ ∘ η₂)
       ∎
   } where open Firstⁿ N₁; open Secondⁿ N₂
@@ -80,6 +80,6 @@ Fun {C₁ = C₁} {C₂ = C₂} = record
   ; _∘_      = _∘ⁿ_
   ; idˡ      = idˡ
   ; idʳ      = idʳ
-  ; assoc    = λ _ -> assoc _
+  ; assoc    = assoc
   ; ∘-resp-≈ = λ q p -> ∘-resp-≈ q p
   } where open NaturalTransformation; open Category C₂

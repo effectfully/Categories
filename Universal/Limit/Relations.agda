@@ -7,7 +7,6 @@ open import Categories.Universal.Limit.Equalizer ℂ
 open import Categories.Universal.Limit.Pullback  ℂ
 
 open Category ℂ
-open IndexedEqReasoningFrom ℂ
 
 module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
   open Pullback p
@@ -42,14 +41,7 @@ module _ {A B} (p : Product A B) where
     ; π₁        = π₁ ∘ ι
     ; π₂        = π₂ ∘ ι
     ; _↘_       = λ p q -> ↙ (p ↑ q)
-    ; comm      =
-        begin
-           f ∘ π₁  ∘ ι ←⟨ assoc _ ⟩
-          (f ∘ π₁) ∘ ι →⟨ comm    ⟩
-          (g ∘ π₂) ∘ ι →⟨ assoc _ ⟩
-           g ∘ π₂  ∘ ι
-        ∎
+    ; comm      = assoc ⟨ comm ⟩ᵢ assoc
     ; ↘-inj     = ↑-inj ∘′ ↙-inj
-    ; universal = λ r s -> ↙-univ (isym (↑-univ (itrans (isym (assoc _)) r)
-                                                (itrans (isym (assoc _)) s)))
+    ; universal = λ r s -> ↙-univ (isym (↑-univ (itrans (isym assoc) r) (itrans (isym assoc) s)))
     } where open Equalizer e renaming (universal to ↙-univ)
