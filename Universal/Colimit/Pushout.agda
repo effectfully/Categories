@@ -1,10 +1,10 @@
 open import Categories.Category
 
-module Categories.Universal.Colimit.Pushout {α β γ} (C : Category α β γ) where
+module Categories.Universal.Colimit.Pushout {α β γ} (ℂ : Category α β γ) where
 
 open import Data.Product
 
-open Category C
+open Category ℂ
 
 record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ) where
   infixr 5 _↖_

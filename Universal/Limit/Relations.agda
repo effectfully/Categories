@@ -1,13 +1,13 @@
 open import Categories.Category
 
-module Categories.Universal.Limit.Relations {α β γ} (C : Category α β γ) where
+module Categories.Universal.Limit.Relations {α β γ} (ℂ : Category α β γ) where
 
-open import Categories.Universal.Limit.Product   C
-open import Categories.Universal.Limit.Equalizer C
-open import Categories.Universal.Limit.Pullback  C
+open import Categories.Universal.Limit.Product   ℂ
+open import Categories.Universal.Limit.Equalizer ℂ
+open import Categories.Universal.Limit.Pullback  ℂ
 
-open Category C
-open IndexedEqReasoningFrom C
+open Category ℂ
+open IndexedEqReasoningFrom ℂ
 
 module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
   open Pullback p

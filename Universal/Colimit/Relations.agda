@@ -1,13 +1,13 @@
 open import Categories.Category
 
-module Categories.Universal.Colimit.Relations {α β γ} (C : Category α β γ) where
+module Categories.Universal.Colimit.Relations {α β γ} (ℂ : Category α β γ) where
 
-open import Categories.Universal.Colimit.Coproduct   C
-open import Categories.Universal.Colimit.Coequalizer C
-open import Categories.Universal.Colimit.Pushout     C
+open import Categories.Universal.Colimit.Coproduct   ℂ
+open import Categories.Universal.Colimit.Coequalizer ℂ
+open import Categories.Universal.Colimit.Pushout     ℂ
 
-open Category C
-open IndexedEqReasoningFrom C
+open Category ℂ
+open IndexedEqReasoningFrom ℂ
 
 module _ {A B C} {f : C ⇒ A} {g : C ⇒ B} (p : Pushout f g) where
   open Pushout p

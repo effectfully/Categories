@@ -1,10 +1,10 @@
 open import Categories.Category
 
-module Categories.Universal.Limit.Pullback {α β γ} (C : Category α β γ) where
+module Categories.Universal.Limit.Pullback {α β γ} (ℂ : Category α β γ) where
 
 open import Data.Product
 
-open Category C
+open Category ℂ
 
 record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
   infixr 5 _↘_

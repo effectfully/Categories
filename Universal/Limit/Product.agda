@@ -1,10 +1,10 @@
 open import Categories.Category
 
-module Categories.Universal.Limit.Product {α β γ} (C : Category α β γ) where
+module Categories.Universal.Limit.Product {α β γ} (ℂ : Category α β γ) where
 
 open import Data.Product
 
-open Category C
+open Category ℂ
 
 record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   infixr 5 _↑_
