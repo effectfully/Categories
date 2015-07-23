@@ -15,7 +15,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
     _⇒_    : Obj -> Obj -> Set β
     setoid : IndexedSetoid₂ _⇒_ γ
 
-  open IndexedSetoid setoid using (_≈_) public
+  open IndexedSetoid setoid public
 
   field
     id  : ∀ {A}     -> A ⇒ A
@@ -48,19 +48,19 @@ module _ {α β γ} (C : Category α β γ) where
   module First  where
     open Category C renaming (Obj to Obj₁; _⇒_ to _⇒₁_; id to id₁; _∘_ to _∘₁_;
                               idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁;
-                              _≈_ to _≈₁_) public
+                              _≈_ to _≈₁_; irefl to irefl₁; isym to isym₁; itrans to itrans₁) public
     open Heterogeneous C renaming (_≋_ to _≋₁_; hetero to hetero₁; ∘-resp-≋ to ∘-resp-≋₁) public
 
   module Second where
     open Category C renaming (Obj to Obj₂; _⇒_ to _⇒₂_; id to id₂; _∘_ to _∘₂_;
                               idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂;
-                              _≈_ to _≈₂_) public
+                              _≈_ to _≈₂_; irefl to irefl₂; isym to isym₂; itrans to itrans₂) public
     open Heterogeneous C renaming (_≋_ to _≋₂_; hetero to hetero₂; ∘-resp-≋ to ∘-resp-≋₂) public
 
   module Third  where
     open Category C renaming (Obj to Obj₃; _⇒_ to _⇒₃_; id to id₃; _∘_ to _∘₃_;
                               idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃;
-                              _≈_ to _≈₃_) public
+                              _≈_ to _≈₃_; irefl to irefl₃; isym to isym₃; itrans to itrans₃) public
     open Heterogeneous C renaming (_≋_ to _≋₃_; hetero to hetero₃; ∘-resp-≋ to ∘-resp-≋₃) public
 
 module _ where
@@ -93,4 +93,4 @@ C ᵒᵖ = record
   ; idʳ      = idˡ
   ; assoc    = λ _ -> isym (assoc _)
   ; ∘-resp-≈ = flip ∘-resp-≈
-  } where open Category C hiding (_≈_); open IndexedSetoid setoid
+  } where open Category C

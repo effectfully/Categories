@@ -54,7 +54,7 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
       ∎
   } where open Firstⁿ N₁; open Secondⁿ N₂
           open Firstᶠ F₁; open Secondᶠ F₂; open Thirdᶠ F₃
-          open Category C₂; open IndexedSetoid setoid; open IndexedEqReasoningFrom C₂
+          open Category C₂; open IndexedEqReasoningFrom C₂
 
 NaturalTransformation-IndexedSetoid :
   ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
