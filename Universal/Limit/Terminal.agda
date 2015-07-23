@@ -2,8 +2,7 @@ open import Categories.Category
 
 module Categories.Universal.Limit.Terminal {α β γ} (ℂ : Category α β γ) where
 
-open Category ℂ
-open IndexedEqReasoningFrom ℂ
+open IndexedEqReasoningWith ℂ
 
 record Terminal (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
   field

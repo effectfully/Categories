@@ -32,6 +32,9 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   π₂-↑ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π₂ ∘ (f ↑ g) ≈ g
   π₂-↑ = proj₂ (↑-inj ∘-η)
 
+  ↑-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> (f ∘ h) ↑ (g ∘ h) ≈ (f ↑ g) ∘ h
+  ↑-∘ = universal (itrans (isym assoc) (∘-resp-≈ˡ π₁-↑)) (itrans (isym assoc) (∘-resp-≈ˡ π₂-↑))
+
   ↑-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↑ g₁ ≈ f₂ ↑ g₂
   ↑-resp-≈ p q = universal (itrans π₁-↑ (isym p)) (itrans π₂-↑ (isym q))

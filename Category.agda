@@ -28,9 +28,15 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
     ∘-resp-≈ : ∀ {A B C} {g₁ g₂ : B ⇒ C} {f₁ f₂ : A ⇒ B}
              -> g₁ ≈ g₂ -> f₁ ≈ f₂ -> g₁ ∘ f₁ ≈ g₂ ∘ f₂
 
-  assocₑ : ∀ {A B C D} (h : C ⇒ D) {g : B ⇒ C} {f : A ⇒ B}
-         -> (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
-  assocₑ _ = assoc
+  -- assocₑ : ∀ {A B C D} (h : C ⇒ D) {g : B ⇒ C} {f : A ⇒ B}
+  --        -> (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
+  -- assocₑ _ = assoc
+
+  ∘-resp-≈ˡ : ∀ {A B C} {g₁ g₂ : B ⇒ C} {f : A ⇒ B} -> g₁ ≈ g₂ -> g₁ ∘ f ≈ g₂ ∘ f
+  ∘-resp-≈ˡ p = ∘-resp-≈ p irefl
+
+  ∘-resp-≈ʳ : ∀ {A B C} {g : B ⇒ C} {f₁ f₂ : A ⇒ B} -> f₁ ≈ f₂ -> g ∘ f₁ ≈ g ∘ f₂
+  ∘-resp-≈ʳ p = ∘-resp-≈ irefl p
 
 module _ {α β γ} (C : Category α β γ) where
   open Category C
@@ -47,6 +53,9 @@ module _ {α β γ} (C : Category α β γ) where
 
   module MixedEqReasoningFrom where
     open Heterogeneous public; open MixedEqReasoning setoid public
+
+module IndexedEqReasoningWith {α β γ} (C : Category α β γ) where
+  open Category C public; open IndexedEqReasoning setoid public
 
 module _ {α β γ} (C : Category α β γ) where
   module First  where

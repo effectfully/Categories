@@ -32,6 +32,9 @@ record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   ↓-ι₂ : ∀ {C} {f : A ⇒ C} {g : B ⇒ C} -> (f ↓ g) ∘ ι₂ ≈ g
   ↓-ι₂ = proj₂ (↓-inj ∘-η)
 
+  ↓-∘ : ∀ {C D} {f : A ⇒ C} {g : B ⇒ C} {h : C ⇒ D} -> (h ∘ f) ↓ (h ∘ g) ≈ h ∘ (f ↓ g)
+  ↓-∘ = universal (itrans assoc (∘-resp-≈ʳ ↓-ι₁)) (itrans assoc (∘-resp-≈ʳ ↓-ι₂))
+
   ↓-resp-≈ : ∀ {C} {f₁ f₂ : A ⇒ C} {g₁ g₂ : B ⇒ C}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↓ g₁ ≈ f₂ ↓ g₂
   ↓-resp-≈ p q = universal (itrans ↓-ι₁ (isym p)) (itrans ↓-ι₂ (isym q))

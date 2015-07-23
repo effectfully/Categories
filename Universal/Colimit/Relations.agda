@@ -7,7 +7,6 @@ open import Categories.Universal.Colimit.Coequalizer ℂ
 open import Categories.Universal.Colimit.Pushout     ℂ
 
 open Category ℂ
-open IndexedEqReasoningFrom ℂ
 
 module _ {A B C} {f : C ⇒ A} {g : C ⇒ B} (p : Pushout f g) where
   open Pushout p

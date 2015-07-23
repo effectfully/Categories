@@ -33,6 +33,9 @@ record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ
   ↖-ι₂ : ∀ {D} {p : A ⇒ D} {q : B ⇒ D} -> (p ↖ q) ∘ ι₂ ≈ q
   ↖-ι₂ = proj₂ (↖-inj ∘-η)
 
+  ↖-∘ : ∀ {C D} {f : A ⇒ C} {g : B ⇒ C} {h : C ⇒ D} -> (h ∘ f) ↖ (h ∘ g) ≈ h ∘ (f ↖ g)
+  ↖-∘ = universal (itrans assoc (∘-resp-≈ʳ ↖-ι₁)) (itrans assoc (∘-resp-≈ʳ ↖-ι₂))
+
   ↖-resp-≈ : ∀ {D} {p₁ p₂ : A ⇒ D} {q₁ q₂ : B ⇒ D}
            -> p₁ ≈ p₂ -> q₁ ≈ q₂ -> p₁ ↖ q₁ ≈ p₂ ↖ q₂
   ↖-resp-≈ p q = universal (itrans ↖-ι₁ (isym p)) (itrans ↖-ι₂ (isym q))

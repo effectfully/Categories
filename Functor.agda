@@ -67,7 +67,7 @@ idᶠ {C = C} = record
   ; F-id     = irefl
   ; F-∘      = λ _ _ -> irefl
   ; F-resp-≈ = id→
-  } where open IndexedSetoidFrom C
+  } where open Category C
 
 _∘ᶠ_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
          {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}

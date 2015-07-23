@@ -35,7 +35,7 @@ idⁿ {C₂ = C₂} {F} = record
         F⇒ f      ←⟨ idʳ ⟩
         F⇒ f ∘ id
       ∎
-  } where open Functor F; open Category C₂; open IndexedEqReasoningFrom C₂
+  } where open Functor F; open IndexedEqReasoningWith C₂
 
 -- Vertical.
 _∘ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
@@ -45,16 +45,16 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   { η          = λ {O} -> η₁ {O} ∘ η₂ {O}
   ; naturality = λ {A B f} ->
       begin
-        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc                      ⟩
-        η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ irefl naturality₂ ⟩
-        η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc                      ⟩
-        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ naturality₁ irefl ⟩
-        (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc                      ⟩
+        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc                 ⟩
+        η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ʳ naturality₂ ⟩
+        η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc                 ⟩
+        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ˡ naturality₁ ⟩
+        (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc                 ⟩
         F⇒₃ f ∘ (η₁ ∘ η₂)
       ∎
   } where open Firstⁿ N₁; open Secondⁿ N₂
           open Firstᶠ F₁; open Secondᶠ F₂; open Thirdᶠ F₃
-          open Category C₂; open IndexedEqReasoningFrom C₂
+          open IndexedEqReasoningWith C₂
 
 NaturalTransformation-IndexedSetoid :
   ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
@@ -68,7 +68,7 @@ NaturalTransformation-IndexedSetoid {C₂ = C₂} = record
       ; isym   = λ p   -> isym   p
       ; itrans = λ p q -> itrans p q
       }
-  } where open IndexedSetoidFrom C₂
+  } where open Category C₂
 
 Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
         -> Category (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ γ₂)

@@ -33,6 +33,9 @@ record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ �
   π₂-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} -> π₂ ∘ (p ↘ q) ≈ q
   π₂-↘ = proj₂ (↘-inj ∘-η)
 
+  ↘-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> (f ∘ h) ↘ (g ∘ h) ≈ (f ↘ g) ∘ h 
+  ↘-∘ = universal (itrans (isym assoc) (∘-resp-≈ˡ π₁-↘)) (itrans (isym assoc) (∘-resp-≈ˡ π₂-↘))
+
   ↑-resp-≈ : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B}
            -> p₁ ≈ p₂ -> q₁ ≈ q₂ -> p₁ ↘ q₁ ≈ p₂ ↘ q₂
   ↑-resp-≈ r s = universal (itrans π₁-↘ (isym r)) (itrans π₂-↘ (isym s))
