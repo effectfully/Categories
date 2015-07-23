@@ -14,7 +14,7 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
 
   Pullback->Product : Product A B
   Pullback->Product = record
-    { A×B       = A×B
+    { Ob        = Ob
     ; π₁        = π₁
     ; π₂        = π₂
     ; _↑_       = _↘_
@@ -24,7 +24,7 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
 
   Pullback->Equalizer : Equalizer (f ∘ π₁) (g ∘ π₂)
   Pullback->Equalizer = record
-    { Eq        = A×B
+    { Ob        = Ob
     ; ι         = id
     ; ↙_        = id→
     ; comm      = ∘-resp-≈ comm irefl
@@ -33,12 +33,12 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
     }
 
 module _ {A B} (p : Product A B) where
-  open Product p renaming (universal to ↑-univ)
+  open Product p renaming (universal to ↑-univ) hiding (Ob)
 
   Product&Equalizer->Pullback : ∀ {C} {f : A ⇒ C} {g : B ⇒ C}
                               -> Equalizer (f ∘ π₁) (g ∘ π₂) -> Pullback f g
   Product&Equalizer->Pullback {_} {f} {g} e = record
-    { A×B       = Eq
+    { Ob        = Ob
     ; π₁        = π₁ ∘ ι
     ; π₂        = π₂ ∘ ι
     ; _↘_       = λ p q -> ↙ (p ↑ q)
