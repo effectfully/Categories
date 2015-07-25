@@ -46,9 +46,9 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   ; naturality = λ {A B f} ->
       begin
         (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc                 ⟩
-        η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ʳ naturality₂ ⟩
+        η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ˡ naturality₂ ⟩
         η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc                 ⟩
-        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ˡ naturality₁ ⟩
+        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ʳ naturality₁ ⟩
         (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc                 ⟩
         F⇒₃ f ∘ (η₁ ∘ η₂)
       ∎
@@ -64,9 +64,9 @@ NaturalTransformation-IndexedSetoid {C₂ = C₂} = record
                                  ∀ {O} -> η₁ {O} ≈ η₂ {O}
                             }
   ; isIndexedEquivalence = record
-      { irefl  =          irefl   
-      ; isym   = λ p   -> isym   p
-      ; itrans = λ p q -> itrans p q
+      { refl  =          refl   
+      ; sym   = λ p   -> sym   p
+      ; trans = λ p q -> trans p q
       }
   } where open Category C₂
 

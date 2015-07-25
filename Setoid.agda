@@ -8,52 +8,67 @@ infixr 10 _%
 _% = _∘_
 
 record IsEquivalence {α β} {A : Set α} (_≈_ : A -> A -> Set β) : Set (α ⊔ β) where
-  infix 2 _⟨_⟩_ _⟩_⟨_
-
   field
     refl  : ∀ {x}     -> x ≈ x
     sym   : ∀ {x y}   -> x ≈ y -> y ≈ x
     trans : ∀ {x y z} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  _⟨_⟩_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
-  p ⟨ r ⟩ q = trans (sym p) (trans r q)
+  module Tools where
+    infix  2 _⟨_⟩_ _⟩_⟨_
+    infixl 3 _⋯_
 
-  _⟩_⟨_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
-  p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
+    _⋯_ = trans
+
+    _⟨_⟩_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
+    p ⟨ r ⟩ q = trans (sym p) (trans r q)
+
+    _⟩_⟨_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
+    p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
 
 record IsIndexedEquivalence {ι α β} {I : Set ι} (A : I -> Set α)
                             (_≈_ : ∀ {i} -> A i -> A i -> Set β)
                             : Set (ι ⊔ α ⊔ β) where
-  infix 2 _⟨_⟩ᵢ_ _⟩_⟨ᵢ_
-
   field
-    irefl  : ∀ {i} {x     : A i} -> x ≈ x
-    isym   : ∀ {i} {x y   : A i} -> x ≈ y -> y ≈ x
-    itrans : ∀ {i} {x y z : A i} -> x ≈ y -> y ≈ z -> x ≈ z
+    refl  : ∀ {i} {x     : A i} -> x ≈ x
+    sym   : ∀ {i} {x y   : A i} -> x ≈ y -> y ≈ x
+    trans : ∀ {i} {x y z : A i} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  _⟨_⟩ᵢ_ : ∀ {i} {x₁ x₂ y₁ y₂ : A i} -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
-  p ⟨ r ⟩ᵢ q = itrans (isym p) (itrans r q)
+  module Tools where
+    infix  2 _⟨_⟩_ _⟩_⟨_
+    infixl 3 _⋯_
 
-  _⟩_⟨ᵢ_ : ∀ {i} {x₁ x₂ y₁ y₂ : A i} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
-  p ⟩ r ⟨ᵢ q = isym p ⟨ r ⟩ᵢ isym q
+    _⋯_ = trans
+
+    left  : ∀ {i} {x y z : A i} -> x ≈ y -> z ≈ y -> x ≈ z
+    left  p q = trans p (sym q)
+
+    right : ∀ {i} {x y z : A i} -> x ≈ y -> x ≈ z -> y ≈ z
+    right p q = trans (sym p) q
+
+    _⟨_⟩_ : ∀ {i} {x₁ x₂ y₁ y₂ : A i} -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
+    p ⟨ r ⟩ q = trans (sym p) (trans r q)
+
+    _⟩_⟨_ : ∀ {i} {x₁ x₂ y₁ y₂ : A i} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
+    p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
 
 record IsHeteroEquivalence {ι α β} {I : Set ι} (A : I -> Set α)
                            (_≈_ : ∀ {i j} -> A i -> A j -> Set β)
                            : Set (ι ⊔ α ⊔ β) where
-  infix 2 _⟨_⟩ₕ_ _⟩_⟨ₕ_
-  
   field
-    hrefl  : ∀ {i}     {x : A i}                     -> x ≈ x
-    hsym   : ∀ {i j}   {x : A i} {y : A j}           -> x ≈ y -> y ≈ x
-    htrans : ∀ {i j k} {x : A i} {y : A j} {z : A k} -> x ≈ y -> y ≈ z -> x ≈ z
+    refl  : ∀ {i}     {x : A i}                     -> x ≈ x
+    sym   : ∀ {i j}   {x : A i} {y : A j}           -> x ≈ y -> y ≈ x
+    trans : ∀ {i j k} {x : A i} {y : A j} {z : A k} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  _⟨_⟩ₕ_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
-         -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
-  p ⟨ r ⟩ₕ q = htrans (hsym p) (htrans r q)
+  module Tools where
+    infix 2 _⟨_⟩_ _⟩_⟨_
 
-  _⟩_⟨ₕ_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
-         -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
-  p ⟩ r ⟨ₕ q = hsym p ⟨ r ⟩ₕ hsym q
+    _⟨_⟩_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
+          -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
+    p ⟨ r ⟩ q = trans (sym p) (trans r q)
+
+    _⟩_⟨_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
+          -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
+    p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
 
 record Setoid {α} (A : Set α) β : Set (α ⊔ suc β) where
   infix 4 _≈_
@@ -100,9 +115,9 @@ module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
   indexedSetoid = record
     { _≈_                  = _≈_
     ; isIndexedEquivalence = record
-        { irefl  = refl
-        ; isym   = sym
-        ; itrans = trans
+        { refl  = refl
+        ; sym   = sym
+        ; trans = trans
         }
     }
 
@@ -133,9 +148,9 @@ module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (indexedSetoid : Indexed
   heteroSetoid = record
     { _≈_                 = λ x y -> x ≋ y
     ; isHeteroEquivalence = record
-        { hrefl  = hetero irefl
-        ; hsym   = hlift₁ (hetero ∘ isym)
-        ; htrans = hlift₂ (hetero % ∘ itrans)
+        { refl  = hetero refl
+        ; sym   = hlift₁ (hetero ∘ sym)
+        ; trans = hlift₂ (hetero % ∘ trans)
         }
     }
 
@@ -158,30 +173,30 @@ module HeteroEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
   begin (relTo x≈y) = x≈y
 
   _→⟨_⟩_ : ∀ {i j k} {y : A j} {z : A k} -> (x : A i) -> x ≈ y -> y IsRelatedTo z -> x IsRelatedTo z
-  x →⟨ x≈y ⟩ (relTo y≈z) = relTo (htrans x≈y y≈z)
+  x →⟨ x≈y ⟩ (relTo y≈z) = relTo (trans x≈y y≈z)
 
   _←⟨_⟩_ : ∀ {i j k} {y : A j} {z : A k} -> (x : A i) -> y ≈ x -> y IsRelatedTo z -> x IsRelatedTo z
-  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ hsym y≈x ⟩ y-irt-z
+  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ sym y≈x ⟩ y-irt-z
 
   _∎ : ∀ {i} -> (x : A i) -> x IsRelatedTo x
-  x ∎ = relTo hrefl
+  x ∎ = relTo refl
 
 module IndexedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
                           (indexedSetoid : IndexedSetoid A β) where
-  open IndexedSetoid indexedSetoid; open Hetero indexedSetoid
+  open module I = IndexedSetoid indexedSetoid; open Hetero indexedSetoid
   private open module HER = HeteroEqReasoning heteroSetoid hiding (begin_; _→⟨_⟩_; _←⟨_⟩_) public
 
   infix  1 begin_
   infixr 2 _→⟨_⟩_ _←⟨_⟩_
 
   begin_ : ∀ {i} {x y : A i} -> x IsRelatedTo y -> x ≈ y
-  begin (relTo x≋y) = homo x≋y
+  begin x-irt-y = homo (HER.begin x-irt-y)
 
   _→⟨_⟩_ : ∀ {i k} {y : A i} {z : A k} -> (x : A i) -> x ≈ y -> y IsRelatedTo z -> x IsRelatedTo z
   x →⟨ x≈y ⟩ y-irt-z = x HER.→⟨ hetero x≈y ⟩ y-irt-z
 
   _←⟨_⟩_ : ∀ {i k} {y : A i} {z : A k} -> (x : A i) -> y ≈ x -> y IsRelatedTo z -> x IsRelatedTo z
-  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ isym y≈x ⟩ y-irt-z
+  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ I.sym y≈x ⟩ y-irt-z
 
 module EqReasoning {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid; open Indexed setoid; open IndexedEqReasoning indexedSetoid public
@@ -206,9 +221,9 @@ open import Relation.Binary.PropositionalEquality as PE using (_≡_)
 ≡-IndexedSetoid = record
   { _≈_                  = _≡_
   ; isIndexedEquivalence = record
-      { irefl  = PE.refl
-      ; isym   = PE.sym
-      ; itrans = PE.trans
+      { refl  = PE.refl
+      ; sym   = PE.sym
+      ; trans = PE.trans
       }
   }
 
@@ -227,4 +242,4 @@ module Test where
   open HeteroEquality
 
   test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
-  test n m rewrite +-comm n m = hrefl
+  test n m rewrite +-comm n m = refl

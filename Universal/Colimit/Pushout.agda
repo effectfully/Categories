@@ -25,7 +25,7 @@ record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ
   η = universal idˡ idˡ
 
   ∘-η : ∀ {D} {u : Ob ⇒ D} -> u ∘ ι₁ ↖ u ∘ ι₂ ≈ u
-  ∘-η = universal irefl irefl
+  ∘-η = universal refl refl
 
   ↖-ι₁ : ∀ {D} {p : A ⇒ D} {q : B ⇒ D} -> (p ↖ q) ∘ ι₁ ≈ p
   ↖-ι₁ = proj₁ (↖-inj ∘-η)
@@ -33,9 +33,9 @@ record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ
   ↖-ι₂ : ∀ {D} {p : A ⇒ D} {q : B ⇒ D} -> (p ↖ q) ∘ ι₂ ≈ q
   ↖-ι₂ = proj₂ (↖-inj ∘-η)
 
-  ↖-∘ : ∀ {C D} {f : A ⇒ C} {g : B ⇒ C} {h : C ⇒ D} -> (h ∘ f) ↖ (h ∘ g) ≈ h ∘ (f ↖ g)
-  ↖-∘ = universal (itrans assoc (∘-resp-≈ʳ ↖-ι₁)) (itrans assoc (∘-resp-≈ʳ ↖-ι₂))
+  ↖-∘ : ∀ {D E} {p : A ⇒ D} {q : B ⇒ D} {r : D ⇒ E} -> (r ∘ p) ↖ (r ∘ q) ≈ r ∘ (p ↖ q)
+  ↖-∘ = universal (∘ˡ-resp-≈ˡ ↖-ι₁) (∘ˡ-resp-≈ˡ ↖-ι₂)
 
   ↖-resp-≈ : ∀ {D} {p₁ p₂ : A ⇒ D} {q₁ q₂ : B ⇒ D}
            -> p₁ ≈ p₂ -> q₁ ≈ q₂ -> p₁ ↖ q₁ ≈ p₂ ↖ q₂
-  ↖-resp-≈ p q = universal (itrans ↖-ι₁ (isym p)) (itrans ↖-ι₂ (isym q))
+  ↖-resp-≈ p q = universal (left ↖-ι₁ p) (left ↖-ι₂ q)

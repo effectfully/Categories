@@ -22,16 +22,16 @@ record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   η = universal idˡ
 
   ∘-η : ∀ {C} {u : Ob ⇒ C} -> (u ∘ π) ↗ ≈ u
-  ∘-η = universal irefl
+  ∘-η = universal refl
 
   ↗-π : ∀ {C} {p : B ⇒ C} -> (p ↗) ∘ π ≈ p
   ↗-π = ↗-inj ∘-η
     
   ↗-resp-≈ : ∀ {C} {p q : B ⇒ C} -> p ≈ q -> p ↗ ≈ q ↗
-  ↗-resp-≈ r = universal (itrans ↗-π (isym r))
+  ↗-resp-≈ r = universal (left ↗-π r)
 
   ∘-↗ : ∀ {C D} {q : C ⇒ D} {p : B ⇒ C} -> (q ∘ p) ↗ ≈ q ∘ (p ↗)
-  ∘-↗ = universal (itrans assoc (∘-resp-≈ʳ ↗-π))
+  ∘-↗ = universal (∘ˡ-resp-≈ˡ ↗-π)
 
   π-epi : Epi ℂ π
   π-epi = record

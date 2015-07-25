@@ -24,7 +24,7 @@ record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   η = universal idˡ idˡ
 
   ∘-η : ∀ {C} {u : Ob ⇒ C} -> u ∘ ι₁ ↓ u ∘ ι₂ ≈ u
-  ∘-η = universal irefl irefl
+  ∘-η = universal refl refl
 
   ↓-ι₁ : ∀ {C} {f : A ⇒ C} {g : B ⇒ C} -> (f ↓ g) ∘ ι₁ ≈ f
   ↓-ι₁ = proj₁ (↓-inj ∘-η)
@@ -33,8 +33,8 @@ record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   ↓-ι₂ = proj₂ (↓-inj ∘-η)
 
   ↓-∘ : ∀ {C D} {f : A ⇒ C} {g : B ⇒ C} {h : C ⇒ D} -> (h ∘ f) ↓ (h ∘ g) ≈ h ∘ (f ↓ g)
-  ↓-∘ = universal (itrans assoc (∘-resp-≈ʳ ↓-ι₁)) (itrans assoc (∘-resp-≈ʳ ↓-ι₂))
+  ↓-∘ = universal (∘ˡ-resp-≈ˡ ↓-ι₁) (∘ˡ-resp-≈ˡ ↓-ι₂)
 
   ↓-resp-≈ : ∀ {C} {f₁ f₂ : A ⇒ C} {g₁ g₂ : B ⇒ C}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↓ g₁ ≈ f₂ ↓ g₂
-  ↓-resp-≈ p q = universal (itrans ↓-ι₁ (isym p)) (itrans ↓-ι₂ (isym q))
+  ↓-resp-≈ p q = universal (left ↓-ι₁ p) (left ↓-ι₂ q)

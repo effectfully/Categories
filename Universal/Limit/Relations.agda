@@ -26,9 +26,9 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
     { Ob        = Ob
     ; ι         = id
     ; ↙_        = id→
-    ; comm      = ∘-resp-≈ comm irefl
+    ; comm      = ∘-resp-≈ comm refl
     ; ↙-inj     = id→
-    ; universal = λ r -> isym (itrans (isym idˡ) r)
+    ; universal = flip right idˡ
     }
 
 module _ {A B} (p : Product A B) where
@@ -41,7 +41,7 @@ module _ {A B} (p : Product A B) where
     ; π₁        = π₁ ∘ ι
     ; π₂        = π₂ ∘ ι
     ; _↘_       = λ p q -> ↙ (p ↑ q)
-    ; comm      = assoc ⟨ comm ⟩ᵢ assoc
+    ; comm      = reassoc² comm
     ; ↘-inj     = ↑-inj ∘′ ↙-inj
-    ; universal = λ r s -> ↙-univ (isym (↑-univ (itrans (isym assoc) r) (itrans (isym assoc) s)))
+    ; universal = λ r s -> ↙-univ (sym (↑-univ (reassocˡ r) (reassocˡ s)))
     } where open Equalizer e renaming (universal to ↙-univ)

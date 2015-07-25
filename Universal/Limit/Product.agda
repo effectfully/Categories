@@ -24,7 +24,7 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   η = universal idʳ idʳ
 
   ∘-η : ∀ {C} {u : C ⇒ Ob} -> π₁ ∘ u ↑ π₂ ∘ u ≈ u
-  ∘-η = universal irefl irefl
+  ∘-η = universal refl refl
 
   π₁-↑ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π₁ ∘ (f ↑ g) ≈ f
   π₁-↑ = proj₁ (↑-inj ∘-η)
@@ -33,8 +33,8 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   π₂-↑ = proj₂ (↑-inj ∘-η)
 
   ↑-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> (f ∘ h) ↑ (g ∘ h) ≈ (f ↑ g) ∘ h
-  ↑-∘ = universal (itrans (isym assoc) (∘-resp-≈ˡ π₁-↑)) (itrans (isym assoc) (∘-resp-≈ˡ π₂-↑))
+  ↑-∘ = universal (∘ˡ-resp-≈ʳ π₁-↑) (∘ˡ-resp-≈ʳ π₂-↑)
 
   ↑-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↑ g₁ ≈ f₂ ↑ g₂
-  ↑-resp-≈ p q = universal (itrans π₁-↑ (isym p)) (itrans π₂-↑ (isym q))
+  ↑-resp-≈ p q = universal (left π₁-↑ p) (left π₂-↑ q)

@@ -64,8 +64,8 @@ idᶠ : ∀ {α β γ} {C : Category α β γ} -> Endofunctor C
 idᶠ {C = C} = record
   { F·       = id→
   ; F⇒       = id→
-  ; F-id     = irefl
-  ; F-∘      = λ _ _ -> irefl
+  ; F-id     = refl
+  ; F-∘      = λ _ _ -> refl
   ; F-resp-≈ = id→
   } where open Category C
 
@@ -99,9 +99,9 @@ Functor-IndexedSetoid = record
                                  ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
                             }
   ; isIndexedEquivalence = record
-      { irefl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in hrefl      }    
-      ; isym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in hsym   p   }
-      ; itrans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in htrans p q }
+      { refl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in refl      }    
+      ; sym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in sym   p   }
+      ; trans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in trans p q }
       }
   }
 
@@ -112,9 +112,9 @@ Cat {α} {β} {γ} = record
   ; setoid   = Functor-IndexedSetoid
   ; id       = idᶠ
   ; _∘_      = _∘ᶠ_
-  ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
-  ; idʳ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
-  ; assoc    = λ {C₁ C₂ C₃ C₄} -> let open Heterogeneous C₄ in hrefl
+  ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in refl
+  ; idʳ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in refl
+  ; assoc    = λ {C₁ C₂ C₃ C₄} -> let open Heterogeneous C₄ in refl
   ; ∘-resp-≈ = λ {C₁ C₂ C₃ G₁ G₂ F₁ F₂} q p {A B f} ->
       let open Functor; open Heterogeneousᶠ G₂; open MixedEqReasoningFrom C₃ in
         begin

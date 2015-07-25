@@ -26,9 +26,9 @@ module _ {A B C} {f : C ⇒ A} {g : C ⇒ B} (p : Pushout f g) where
     { Ob        = Ob
     ; π         = id
     ; _↗        = id→
-    ; comm      = ∘-resp-≈ irefl comm
+    ; comm      = ∘-resp-≈ˡ comm
     ; ↗-inj     = id→
-    ; universal = λ r -> itrans (isym r) idʳ
+    ; universal = flip right idʳ
     }
 
 module _ {A B} (p : Coproduct A B) where
@@ -41,7 +41,7 @@ module _ {A B} (p : Coproduct A B) where
     ; ι₁        = π ∘ ι₁
     ; ι₂        = π ∘ ι₂
     ; _↖_       = λ p q -> (p ↓ q) ↗
-    ; comm      = assoc ⟩ comm ⟨ᵢ assoc
+    ; comm      = unreassoc² comm
     ; ↖-inj     = ↓-inj ∘′ ↗-inj
-    ; universal = λ r s -> ↗-univ (isym (↓-univ (itrans assoc r) (itrans assoc s)))
+    ; universal = λ r s -> ↗-univ (sym (↓-univ (unreassocˡ r) (unreassocˡ s)))
     } where open Coequalizer e renaming (universal to ↗-univ)
