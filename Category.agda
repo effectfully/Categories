@@ -72,7 +72,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
              -> i ≈ g ∘ f -> h ∘ i ≈ (h ∘ g) ∘ f
   ∘ʳ-resp-≈ˡ = unreassocʳ ∘′ ∘-resp-≈ˡ
 
-  ∘²-resp-≈ˡ : ∀ {A B C D} {h : C ⇒ D} {g₁ g₂ : B ⇒ C} {f₁ f₂ : A ⇒ B}
+  ∘²-resp-≈ˡ : ∀ {A B₁ B₂ C D} {h : C ⇒ D} {g₁ : B₁ ⇒ C} {g₂ : B₂ ⇒ C} {f₁ : A ⇒ B₁} {f₂ : A ⇒ B₂}
              -> g₁ ∘ f₁ ≈ g₂ ∘ f₂ -> (h ∘ g₁) ∘ f₁ ≈ (h ∘ g₂) ∘ f₂
   ∘²-resp-≈ˡ = unreassoc² ∘′ ∘-resp-≈ˡ
 
@@ -84,8 +84,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
              -> i ≈ g ∘ f -> i ∘ h ≈ g ∘ f ∘ h
   ∘ʳ-resp-≈ʳ = reassocʳ ∘′ ∘-resp-≈ʳ
 
-  ∘²-resp-≈ʳ : ∀ {A B₁ B₂ C D} {g₁ : B₁ ⇒ C} {g₂ : B₂ ⇒ C}
-                 {f₁ : A ⇒ B₁} {f₂ : A ⇒ B₂} {h : D ⇒ A}
+  ∘²-resp-≈ʳ : ∀ {A B₁ B₂ C D} {g₁ : B₁ ⇒ C} {g₂ : B₂ ⇒ C} {f₁ : A ⇒ B₁} {f₂ : A ⇒ B₂} {h : D ⇒ A}
              -> g₁ ∘ f₁ ≈ g₂ ∘ f₂ -> g₁ ∘ f₁ ∘ h ≈ g₂ ∘ f₂ ∘ h
   ∘²-resp-≈ʳ = reassoc² ∘′ ∘-resp-≈ʳ
 
