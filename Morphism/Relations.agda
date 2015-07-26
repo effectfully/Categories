@@ -6,13 +6,13 @@ open import Data.Product
 
 open import Categories.Morphism.Morphism
 
-open IndexedEqReasoningWith ℂ
+open IEqReasoningWith ℂ
 
 Mono->Epi : ∀ {A B} {f : A ⇒ B} -> Mono ℂ f -> Epi (ℂ ᵒᵖ) f
-Mono->Epi m = record { epi = mono } where open Mono ℂ m
+Mono->Epi = id→
 
 Epi->Mono : ∀ {A B} {f : A ⇒ B} -> Epi ℂ f -> Mono (ℂ ᵒᵖ) f
-Epi->Mono e = record { mono = epi } where open Epi ℂ e
+Epi->Mono = id→
 
 Iso->Iso : ∀ {A B} {f : A ⇒ B} -> Iso ℂ f -> Iso (ℂ ᵒᵖ) f
 Iso->Iso i = record
@@ -22,8 +22,8 @@ Iso->Iso i = record
   } where open Iso ℂ i
 
 Iso->Mono&Epi : ∀ {A B} {f : A ⇒ B} -> Iso ℂ f -> Mono ℂ f × Epi ℂ f
-Iso->Mono&Epi {f = f} i = record
-  { mono = λ {C g h} p ->
+Iso->Mono&Epi {f = f} i =
+  ( λ {C g h} p ->
       begin
         g             ←⟨ idˡ                  ⟩
         id ∘ g        →⟨ ∘-resp-≈ʳ (sym isoʳ) ⟩
@@ -34,8 +34,8 @@ Iso->Mono&Epi {f = f} i = record
         id ∘ h        →⟨ idˡ                  ⟩
         h
       ∎
-  }                     , record
-  { epi = λ {C g h} p ->
+  )                     ,
+  ( λ {C g h} p ->
       begin
         g             ←⟨ idʳ                  ⟩
         g ∘ id        →⟨ ∘-resp-≈ˡ (sym isoˡ) ⟩
@@ -46,5 +46,5 @@ Iso->Mono&Epi {f = f} i = record
         h ∘ id        →⟨ idʳ                  ⟩
         h
       ∎
-  }
+  )
   where open Iso ℂ i

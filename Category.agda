@@ -13,9 +13,9 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
   field
     Obj    : Set α
     _⇒_    : Obj -> Obj -> Set β
-    setoid : IndexedSetoid₂ _⇒_ γ
+    setoid : ISetoid₂ _⇒_ γ
 
-  open IndexedSetoid setoid public; open Tools public
+  open ISetoid setoid public; open ITools public
 
   field
     id  : ∀ {A}     -> A ⇒ A
@@ -91,8 +91,8 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
 module _ {α β γ} (C : Category α β γ) where
   open Category C
 
-  module IndexedSetoidFrom      = IndexedSetoid setoid
-  module IndexedEqReasoningFrom = IndexedEqReasoning setoid
+  module ISetoidFrom      = ISetoid setoid
+  module IEqReasoningFrom = IEqReasoning setoid
 
   module Heterogeneous where
     open Hetero setoid public
@@ -104,31 +104,31 @@ module _ {α β γ} (C : Category α β γ) where
   module MixedEqReasoningFrom where
     open Heterogeneous public; open MixedEqReasoning setoid public
 
-module IndexedEqReasoningWith {α β γ} (C : Category α β γ) where
-  open Category C public; open IndexedEqReasoning setoid public
+module IEqReasoningWith {α β γ} (C : Category α β γ) where
+  open Category C public; open IEqReasoning setoid public
 
 -- Too ugly. Search for a better abstraction.
 module _ {α β γ} (C : Category α β γ) where
-  module First  where
+  module Category¹ where
     open Category C renaming (Obj to Obj₁; _⇒_ to _⇒₁_; id to id₁; _∘_ to _∘₁_;
                               idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁;
                               _≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
     open Heterogeneous C renaming (_≋_ to _≋₁_; hetero to hetero₁; ∘-resp-≋ to ∘-resp-≋₁;
-                                   module Tools to HTools₁) public
+                                   module HTools to HTools₁) public
 
-  module Second where
+  module Category² where
     open Category C renaming (Obj to Obj₂; _⇒_ to _⇒₂_; id to id₂; _∘_ to _∘₂_;
                               idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂;
                               _≈_ to _≈₂_; refl to refl₂; sym to sym₂; trans to trans₂) public
     open Heterogeneous C renaming (_≋_ to _≋₂_; hetero to hetero₂; ∘-resp-≋ to ∘-resp-≋₂;
-                                   module Tools to HTools₂) public
+                                   module HTools to HTools₂) public
 
-  module Third  where
+  module Category³ where
     open Category C renaming (Obj to Obj₃; _⇒_ to _⇒₃_; id to id₃; _∘_ to _∘₃_;
                               idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃;
                               _≈_ to _≈₃_; refl to refl₃; sym to sym₃; trans to trans₃) public
     open Heterogeneous C renaming (_≋_ to _≋₃_; hetero to hetero₃; ∘-resp-≋ to ∘-resp-≋₃;
-                                   module Tools to HTools₃) public
+                                   module HTools to HTools₃) public
 
 module _ where
   open Category
@@ -147,8 +147,8 @@ _ᵒᵖ : ∀ {α β γ} -> Category α β γ -> Category α β γ
 C ᵒᵖ = record 
   { _⇒_      = flip _⇒_
   ; setoid   = record
-      { _≈_                  = _≈_
-      ; isIndexedEquivalence = record
+      { _≈_            = _≈_
+      ; isIEquivalence = record
           { refl  = refl
           ; sym   = sym
           ; trans = trans

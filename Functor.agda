@@ -1,12 +1,14 @@
 module Categories.Functor where
 
+open import Data.Product
+
 open import Categories.Category
 
 infixr 9 _∘ᶠ_
 
 record Functor {α₁ α₂ β₁ β₂ γ₁ γ₂} (C₁ : Category α₁ β₁ γ₁) (C₂ : Category α₂ β₂ γ₂)
                : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) where
-  open First C₁; open Second C₂
+  open Category¹ C₁; open Category² C₂
 
   field
     F· : Obj₁ -> Obj₂
@@ -16,9 +18,19 @@ record Functor {α₁ α₂ β₁ β₂ γ₁ γ₂} (C₁ : Category α₁ β�
     F-∘      : ∀ {A B C} -> (g : B ⇒₁ C) -> (f : A ⇒₁ B) -> F⇒ (g ∘₁ f) ≈₂ F⇒ g ∘₂ F⇒ f
     F-resp-≈ : ∀ {A B} {g f : A ⇒₁ B} -> g ≈₁ f -> F⇒ g ≈₂ F⇒ f
 
+Faithful : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+         -> (F : Functor C₁ C₂) -> Set (α₁ ⊔ β₁ ⊔ γ₁ ⊔ γ₂)
+Faithful {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (f g : A ⇒₁ B) -> F⇒ f ≈₂ F⇒ g -> f ≈₁ g
+  where open Functor F; open Category¹ C₁; open Category² C₂
+
+Full : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+     -> (F : Functor C₁ C₂) -> Set (α₁ ⊔ β₁ ⊔ β₂ ⊔ γ₂)
+Full {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒₂ F· B) -> ∃ λ f -> F⇒ f ≈₂ g
+  where open Functor F; open Category¹ C₁; open Category² C₂
+  
 module Heterogeneousᶠ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
                       (F : Functor C₁ C₂) where
-  open Functor F; open First C₁; open Second C₂
+  open Functor F; open Category¹ C₁; open Category² C₂
 
   hF-id : ∀ {A} -> F⇒ {A} id₁ ≋₂ id₂
   hF-id = hetero₂ F-id
@@ -32,17 +44,17 @@ module Heterogeneousᶠ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category �
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          (F : Functor C₁ C₂) where
 
-  module Firstᶠ  where
+  module Functor¹ where
     open Functor F renaming (F· to F·₁; F⇒ to F⇒₁; F-id to F-id₁; F-∘ to F-∘₁;
                              F-resp-≈ to F-resp-≈₁) public
     open Heterogeneousᶠ F renaming (hF-id to hF-id₁; hF-∘ to hF-∘₁; F-resp-≋ to F-resp-≋₁) public
 
-  module Secondᶠ where
+  module Functor² where
     open Functor F renaming (F· to F·₂; F⇒ to F⇒₂; F-id to F-id₂; F-∘ to F-∘₂;
                              F-resp-≈ to F-resp-≈₂) public
     open Heterogeneousᶠ F renaming (hF-id to hF-id₂; hF-∘ to hF-∘₂; F-resp-≋ to F-resp-≋₂) public
 
-  module Thirdᶠ  where
+  module Functor³ where
     open Functor F renaming (F· to F·₃; F⇒ to F⇒₃; F-id to F-id₃; F-∘ to F-∘₃;
                              F-resp-≈ to F-resp-≈₃) public
     open Heterogeneousᶠ F renaming (hF-id to hF-id₃; hF-∘ to hF-∘₃; F-resp-≋ to F-resp-≋₃) public
@@ -50,9 +62,9 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
 Endofunctor : ∀ {α β γ} -> Category α β γ -> Set (α ⊔ β ⊔ γ)
 Endofunctor C = Functor C C
 
-_ᵒᵖᶠ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+_ᶠᵒᵖ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
      -> Functor C₁ C₂ -> Functor (C₁ ᵒᵖ) (C₂ ᵒᵖ)
-F ᵒᵖᶠ = record
+F ᶠᵒᵖ = record
   { F·       = F·
   ; F⇒       = F⇒
   ; F-id     = F-id
@@ -88,17 +100,17 @@ _∘ᶠ_ {C₁ = C₁} {C₂ = C₂} {C₃ = C₃} F₂ F₁ = record
         F⇒₂ (F⇒₁ g) ∘₃ F⇒₂ (F⇒₁ f)
       ∎
   ; F-resp-≈ = F-resp-≈₂ ∘′ F-resp-≈₁
-  } where open Firstᶠ F₁; open Secondᶠ F₂
-          open First C₁; open Second C₂; open Third C₃
-          open IndexedEqReasoningFrom C₃
+  } where open Functor¹ F₁; open Functor² F₂
+          open Category¹ C₁; open Category² C₂; open Category³ C₃
+          open IEqReasoningFrom C₃
 
-Functor-IndexedSetoid : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-                      -> IndexedSetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
-Functor-IndexedSetoid = record
-  { _≈_                  = λ{ {C₁ , C₂} F₁ F₂ -> let open Firstᶠ F₁; open Secondᶠ F₂ in
+Functor-ISetoid : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
+                -> ISetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
+Functor-ISetoid = record
+  { _≈_            = λ{ {C₁ , C₂} F₁ F₂ -> let open Functor¹ F₁; open Functor² F₂ in
                                  ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
-                            }
-  ; isIndexedEquivalence = record
+                      }
+  ; isIEquivalence = record
       { refl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in refl      }    
       ; sym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in sym   p   }
       ; trans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in trans p q }
@@ -109,7 +121,7 @@ Cat : ∀ {α β γ} -> Category (suc (α ⊔ β ⊔ γ)) (α ⊔ β ⊔ γ) (α
 Cat {α} {β} {γ} = record
   { Obj      = Category α β γ
   ; _⇒_      = Functor
-  ; setoid   = Functor-IndexedSetoid
+  ; setoid   = Functor-ISetoid
   ; id       = idᶠ
   ; _∘_      = _∘ᶠ_
   ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in refl

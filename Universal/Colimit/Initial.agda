@@ -2,7 +2,7 @@ open import Categories.Category
 
 module Categories.Universal.Colimit.Initial {α β γ} (ℂ : Category α β γ) where
 
-open IndexedEqReasoningWith ℂ
+open IEqReasoningWith ℂ
 
 record Initial (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
   field

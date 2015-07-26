@@ -4,7 +4,7 @@ module Categories.Universal.Limit.Equalizer {α β γ} (ℂ : Category α β γ)
 
 open import Categories.Morphism.Morphism
 
-open IndexedEqReasoningWith ℂ
+open IEqReasoningWith ℂ
 
 record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   infixr 5 ↙_
@@ -34,11 +34,9 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   ↙-resp-≈ r = universal (left ι-↙ r)
 
   ι-mono : Mono ℂ ι
-  ι-mono = record
-    { mono = λ {_ p q} r ->
-        begin
-          p         ←⟨ universal r ⟩
-          ↙ (ι ∘ q) →⟨ ∘-η         ⟩
-          q
-        ∎
-    }
+  ι-mono = λ {_ p q} r ->
+    begin
+      p         ←⟨ universal r ⟩
+      ↙ (ι ∘ q) →⟨ ∘-η         ⟩
+      q
+    ∎

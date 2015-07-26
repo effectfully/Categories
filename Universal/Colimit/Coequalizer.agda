@@ -4,7 +4,7 @@ module Categories.Universal.Colimit.Coequalizer {α β γ} (ℂ : Category α β
 
 open import Categories.Morphism.Morphism
 
-open IndexedEqReasoningWith ℂ
+open IEqReasoningWith ℂ
 
 record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   infixl 5 _↗
@@ -34,11 +34,9 @@ record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   ∘-↗ = universal (∘ˡ-resp-≈ˡ ↗-π)
 
   π-epi : Epi ℂ π
-  π-epi = record
-    { epi = λ {_ p q} r ->
-        begin
-          p         ←⟨ universal r ⟩
-          (q ∘ π) ↗ →⟨ ∘-η         ⟩
-          q
-        ∎
-    }
+  π-epi = λ {_ p q} r ->
+    begin
+      p         ←⟨ universal r ⟩
+      (q ∘ π) ↗ →⟨ ∘-η         ⟩
+      q
+    ∎

@@ -19,21 +19,26 @@ record IsEquivalence {α β} {A : Set α} (_≈_ : A -> A -> Set β) : Set (α �
 
     _⋯_ = trans
 
+    left  : ∀ {x y z} -> x ≈ y -> z ≈ y -> x ≈ z
+    left  p q = trans p (sym q)
+
+    right : ∀ {x y z} -> x ≈ y -> x ≈ z -> y ≈ z
+    right p q = trans (sym p) q
+
     _⟨_⟩_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
     p ⟨ r ⟩ q = trans (sym p) (trans r q)
 
     _⟩_⟨_ : ∀ {x₁ x₂ y₁ y₂} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
     p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
 
-record IsIndexedEquivalence {ι α β} {I : Set ι} (A : I -> Set α)
-                            (_≈_ : ∀ {i} -> A i -> A i -> Set β)
-                            : Set (ι ⊔ α ⊔ β) where
+record IsIEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i} -> A i -> A i -> Set β)
+                      : Set (ι ⊔ α ⊔ β) where
   field
     refl  : ∀ {i} {x     : A i} -> x ≈ x
     sym   : ∀ {i} {x y   : A i} -> x ≈ y -> y ≈ x
     trans : ∀ {i} {x y z : A i} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  module Tools where
+  module ITools where
     infix  2 _⟨_⟩_ _⟩_⟨_
     infixl 3 _⋯_
 
@@ -51,16 +56,18 @@ record IsIndexedEquivalence {ι α β} {I : Set ι} (A : I -> Set α)
     _⟩_⟨_ : ∀ {i} {x₁ x₂ y₁ y₂ : A i} -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
     p ⟩ r ⟨ q = sym p ⟨ r ⟩ sym q
 
-record IsHeteroEquivalence {ι α β} {I : Set ι} (A : I -> Set α)
-                           (_≈_ : ∀ {i j} -> A i -> A j -> Set β)
-                           : Set (ι ⊔ α ⊔ β) where
+record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i j} -> A i -> A j -> Set β)
+                      : Set (ι ⊔ α ⊔ β) where
   field
     refl  : ∀ {i}     {x : A i}                     -> x ≈ x
     sym   : ∀ {i j}   {x : A i} {y : A j}           -> x ≈ y -> y ≈ x
     trans : ∀ {i j k} {x : A i} {y : A j} {z : A k} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  module Tools where
+  module HTools where
     infix 2 _⟨_⟩_ _⟩_⟨_
+    infixl 3 _⋯_
+
+    _⋯_ = trans
 
     _⟨_⟩_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
           -> x₁ ≈ x₂ -> x₁ ≈ y₁ -> y₁ ≈ y₂ -> x₂ ≈ y₂
@@ -79,50 +86,61 @@ record Setoid {α} (A : Set α) β : Set (α ⊔ suc β) where
 
   open IsEquivalence isEquivalence public
 
-record IndexedSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
+record ISetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
   infix 4 _≈_
   
   field
-    _≈_                  : ∀ {i} -> A i -> A i -> Set β
-    isIndexedEquivalence : IsIndexedEquivalence A _≈_
+    _≈_            : ∀ {i} -> A i -> A i -> Set β
+    isIEquivalence : IsIEquivalence A _≈_
 
-  open IsIndexedEquivalence isIndexedEquivalence public
+  open IsIEquivalence isIEquivalence public
 
-record HeteroSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
+record HSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
   infix 4 _≈_
   
   field
-    _≈_                 : ∀ {i j} -> A i -> A j -> Set β
-    isHeteroEquivalence : IsHeteroEquivalence A _≈_
+    _≈_            : ∀ {i j} -> A i -> A j -> Set β
+    isHEquivalence : IsHEquivalence A _≈_
 
-  open IsHeteroEquivalence isHeteroEquivalence public
+  open IsHEquivalence isHEquivalence public
 
-IndexedSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
-               -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
-IndexedSetoid₂ A = IndexedSetoid (uncurry A)
+ISetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
+         -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
+ISetoid₂ A = ISetoid (uncurry A)
 
-module Firstˢ  {α β} {A : Set α} (setoid : Setoid A β) where
+module Setoid¹ {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid renaming (_≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
 
-module Secondˢ {α β} {A : Set α} (setoid : Setoid A β) where
+module Setoid² {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid renaming (_≈_ to _≈₂_; refl to refl₂; sym to sym₂; trans to trans₂) public
 
+module ISetoid¹ {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open ISetoid isetoid renaming (_≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
+
+module ISetoid² {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open ISetoid isetoid renaming (_≈_ to _≈₂_; refl to refl₂; sym to sym₂; trans to trans₂) public
+
+module HSetoid¹ {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
+  open HSetoid hsetoid renaming (_≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
+
+module HSetoid² {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
+  open HSetoid hsetoid renaming (_≈_ to _≈₂_; refl to refl₂; sym to sym₂; trans to trans₂) public
+
 module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
-  open import Data.Unit.Base
   open Setoid setoid
 
-  indexedSetoid : IndexedSetoid (λ{ tt -> A }) β
-  indexedSetoid = record
-    { _≈_                  = _≈_
-    ; isIndexedEquivalence = record
+  isetoid : ∀ {ι} {I : Set ι} -> ISetoid (λ (_ : I) -> A) β
+  isetoid = record
+    { _≈_            = _≈_
+    ; isIEquivalence = record
         { refl  = refl
         ; sym   = sym
         ; trans = trans
         }
     }
 
-module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (indexedSetoid : IndexedSetoid A β) where
-  open IndexedSetoid indexedSetoid
+module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open ISetoid isetoid
 
   infix 4 _≋_
 
@@ -144,21 +162,20 @@ module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (indexedSetoid : Indexed
          -> x₁ ≋ x₂ -> y₁ ≋ y₂ -> C x₁ y₂
   hlift₂ f (hetero x₁≈x₂) (hetero y₁≈y₂) = f x₁≈x₂ y₁≈y₂
 
-  heteroSetoid : HeteroSetoid A β
-  heteroSetoid = record
-    { _≈_                 = λ x y -> x ≋ y
-    ; isHeteroEquivalence = record
+  hsetoid : HSetoid A β
+  hsetoid = record
+    { _≈_            = λ x y -> x ≋ y
+    ; isHEquivalence = record
         { refl  = hetero refl
         ; sym   = hlift₁ (hetero ∘ sym)
         ; trans = hlift₂ (hetero % ∘ trans)
         }
     }
 
-  open HeteroSetoid heteroSetoid public hiding (_≈_)
+  open HSetoid hsetoid public hiding (_≈_)
 
-module HeteroEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
-                         (heteroSetoid : HeteroSetoid A β) where
-  open HeteroSetoid heteroSetoid
+module HEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
+  open HSetoid hsetoid
 
   infix  4 _IsRelatedTo_
   infix  1 begin_
@@ -181,10 +198,9 @@ module HeteroEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
   _∎ : ∀ {i} -> (x : A i) -> x IsRelatedTo x
   x ∎ = relTo refl
 
-module IndexedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
-                          (indexedSetoid : IndexedSetoid A β) where
-  open module I = IndexedSetoid indexedSetoid; open Hetero indexedSetoid
-  private open module HER = HeteroEqReasoning heteroSetoid hiding (begin_; _→⟨_⟩_; _←⟨_⟩_) public
+module IEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open module I = ISetoid isetoid; open Hetero isetoid
+  private open module HER = HEqReasoning hsetoid hiding (begin_; _→⟨_⟩_; _←⟨_⟩_) public
 
   infix  1 begin_
   infixr 2 _→⟨_⟩_ _←⟨_⟩_
@@ -199,11 +215,11 @@ module IndexedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
   x ←⟨ y≈x ⟩ y-irt-z = x →⟨ I.sym y≈x ⟩ y-irt-z
 
 module EqReasoning {α β} {A : Set α} (setoid : Setoid A β) where
-  open Setoid setoid; open Indexed setoid; open IndexedEqReasoning indexedSetoid public
+  open import Data.Unit.Base
+  open Setoid setoid; open Indexed setoid; open IEqReasoning {I = ⊤} isetoid public
 
-module MixedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α}
-                        (indexedSetoid : IndexedSetoid A β) where
-  open Hetero indexedSetoid; open HeteroEqReasoning heteroSetoid public
+module MixedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open Hetero isetoid; open HEqReasoning hsetoid public
 
 open import Relation.Binary.PropositionalEquality as PE using (_≡_)
 
@@ -217,29 +233,29 @@ open import Relation.Binary.PropositionalEquality as PE using (_≡_)
       }
   }
 
-≡-IndexedSetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> IndexedSetoid A α
-≡-IndexedSetoid = record
-  { _≈_                  = _≡_
-  ; isIndexedEquivalence = record
+≡-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A α
+≡-ISetoid = record
+  { _≈_            = _≡_
+  ; isIEquivalence = record
       { refl  = PE.refl
       ; sym   = PE.sym
       ; trans = PE.trans
       }
   }
 
-module HeteroIndexedEquality where
-  open module  Heq {ι α} {I : Set ι} (A : I -> Set α) = Hetero (≡-IndexedSetoid {A = A}) using (_≋_)
+module HIEquality where
+  open module  Heq {ι α} {I : Set ι} (A : I -> Set α) = Hetero (≡-ISetoid {A = A}) using (_≋_)
   heq = _≋_
   syntax heq A x y = x [ A ]≅ y
-  open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-IndexedSetoid {A = A}) public
+  open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-ISetoid {A = A}) public
 
-module HeteroEquality {α} = Hetero (≡-IndexedSetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
+module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
 
 module Test where
   open import Data.Nat
   open import Data.Nat.Properties.Simple
   open import Data.Fin hiding (_+_)
-  open HeteroEquality
+  open HEquality
 
   test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
   test n m rewrite +-comm n m = refl

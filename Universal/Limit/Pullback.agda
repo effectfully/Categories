@@ -6,7 +6,7 @@ open import Data.Product
 
 open import Categories.Morphism.Morphism ℂ
 
-open IndexedEqReasoningWith ℂ
+open IEqReasoningWith ℂ
 
 record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
   infixr 5 _↘_
@@ -52,12 +52,27 @@ record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ �
   ↘-∘ = universal (∘ˡ-resp-≈ʳ π₁-↘) (∘ˡ-resp-≈ʳ π₂-↘)
 
   π₁-Mono : Mono g -> Mono π₁
-  π₁-Mono m = record
-    { mono = λ r -> π-inj r (mono (∘²-resp-≈ʳ comm ⟨ ∘-resp-≈ˡ r ⟩ ∘²-resp-≈ʳ comm))
-    } where open Mono m
+  π₁-Mono mono = λ r -> π-inj r (mono (∘²-resp-≈ʳ comm ⟨ ∘-resp-≈ˡ r ⟩ ∘²-resp-≈ʳ comm))
+
+flip-Product : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g -> Pullback g f
+flip-Product p = record
+  { Ob        = Ob
+  ; π₁        = π₂
+  ; π₂        = π₁
+  ; _↘_       = flip _↘_
+  ; comm      = sym comm
+  ; ↘-inj     = λ r -> swap (↘-inj r)
+  ; universal = flip universal
+  } where open Pullback p
+
+-- flip-Product-≅ : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> {!_≃_!} -- Pullback f g ≃ Pullback g f
+-- flip-Product-≅ = {!!}
 
 glue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
-     -> (pᵣ : Pullback f g) -> let open Pullback pᵣ in Pullback h π₁ -> Pullback (f ∘ h) g
+     -> (pᵣ : Pullback f g)
+     -> let open Pullback pᵣ in
+        Pullback h π₁
+     -> Pullback (f ∘ h) g
 glue {h = h} {f} {g} pᵣ pₗ = record
   { Ob        = pₗ.Ob
   ; π₁        = pₗ.π₁
@@ -78,16 +93,18 @@ glue {h = h} {f} {g} pᵣ pₗ = record
                                                            (reassocˡ s)))
   } where module pᵣ = Pullback pᵣ; module pₗ = Pullback pₗ
 
-unglue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D} (m : Mono f)
-       -> (pᵣ : Pullback f g) -> Pullback (f ∘ h) g -> let open Pullback pᵣ in Pullback h π₁
-unglue {h = h} {f} {g} m pᵣ pₗᵣ = record
+unglue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
+       -> (pᵣ : Pullback f g)
+       -> let open Pullback pᵣ in
+          (m : Mono π₂)
+       -> Pullback (f ∘ h) g
+       -> Pullback h π₁
+unglue {h = h} {f} {g} pᵣ mono pₗᵣ = record
   { Ob        = pₗᵣ.Ob
   ; π₁        = pₗᵣ.π₁
   ; π₂        = h ∘ pₗᵣ.π₁ pᵣ.↘ pₗᵣ.π₂
   ; _↘_       = λ p q -> p pₗᵣ.↘ pᵣ.π₂ ∘ q
   ; comm      = sym pᵣ.π₁-↘
-  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case pₗᵣ.↘-inj r of
-      λ{ (s₁ , s₂) -> s₁ , pᵣ.π-inj
-           (mono (∘²-resp-≈ʳ pᵣ.comm ⟩ ∘-resp-≈ˡ s₂ ⟨ ∘²-resp-≈ʳ pᵣ.comm)) s₂ }
+  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case pₗᵣ.↘-inj r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
   ; universal = λ r s -> pₗᵣ.universal r (∘-resp-≈ʳ (sym pᵣ.π₂-↘) ⋯ ∘ˡ-resp-≈ˡ s)
-  } where module pᵣ = Pullback pᵣ; module pₗᵣ = Pullback pₗᵣ; open Mono m
+  } where module pᵣ = Pullback pᵣ; module pₗᵣ = Pullback pₗᵣ
