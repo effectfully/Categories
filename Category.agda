@@ -14,13 +14,12 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
     Obj    : Set α
     _⇒_    : Obj -> Obj -> Set β
     setoid : ISetoid₂ _⇒_ γ
+    id     : ∀ {A}     -> A ⇒ A
+    _∘_    : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
 
   open ISetoid setoid public; open ITools public
 
   field
-    id  : ∀ {A}     -> A ⇒ A
-    _∘_ : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
-
     idˡ      : ∀ {A B} {f : A ⇒ B} -> id ∘ f ≈ f
     idʳ      : ∀ {A B} {f : A ⇒ B} -> f ∘ id ≈ f
     assoc    : ∀ {A B C D} {h : C ⇒ D} {g : B ⇒ C} {f : A ⇒ B}
@@ -109,26 +108,26 @@ module IEqReasoningWith {α β γ} (C : Category α β γ) where
 
 -- Too ugly. Search for a better abstraction.
 module _ {α β γ} (C : Category α β γ) where
-  module Category¹ where
+  module Category₁ where
     open Category C renaming (Obj to Obj₁; _⇒_ to _⇒₁_; id to id₁; _∘_ to _∘₁_;
                               idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁;
                               _≈_ to _≈₁_; refl to refl₁; sym to sym₁; trans to trans₁) public
     open Heterogeneous C renaming (_≋_ to _≋₁_; hetero to hetero₁; ∘-resp-≋ to ∘-resp-≋₁;
-                                   module HTools to HTools₁) public
+                                   module HTools to HTools₁; inst to hinst₁) public
 
-  module Category² where
+  module Category₂ where
     open Category C renaming (Obj to Obj₂; _⇒_ to _⇒₂_; id to id₂; _∘_ to _∘₂_;
                               idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂;
                               _≈_ to _≈₂_; refl to refl₂; sym to sym₂; trans to trans₂) public
     open Heterogeneous C renaming (_≋_ to _≋₂_; hetero to hetero₂; ∘-resp-≋ to ∘-resp-≋₂;
-                                   module HTools to HTools₂) public
+                                   module HTools to HTools₂; inst to hinst₂) public
 
-  module Category³ where
+  module Category₃ where
     open Category C renaming (Obj to Obj₃; _⇒_ to _⇒₃_; id to id₃; _∘_ to _∘₃_;
                               idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃;
                               _≈_ to _≈₃_; refl to refl₃; sym to sym₃; trans to trans₃) public
     open Heterogeneous C renaming (_≋_ to _≋₃_; hetero to hetero₃; ∘-resp-≋ to ∘-resp-≋₃;
-                                   module HTools to HTools₃) public
+                                   module HTools to HTools₃; inst to hinst₃) public
 
 module _ where
   open Category

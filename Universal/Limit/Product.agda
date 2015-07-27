@@ -38,3 +38,5 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   ↑-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↑ g₁ ≈ f₂ ↑ g₂
   ↑-resp-≈ p q = universal (left π₁-↑ p) (left π₂-↑ q)
+
+BinaryProducts = ∀ {A B} -> Product A B

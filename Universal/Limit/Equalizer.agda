@@ -40,3 +40,5 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
       ↙ (ι ∘ q) →⟨ ∘-η         ⟩
       q
     ∎
+
+Equalizers = ∀ {A B : Obj} {f g : A ⇒ B} -> Equalizer f g
