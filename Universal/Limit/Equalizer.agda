@@ -7,37 +7,41 @@ open import Categories.Morphism.Morphism
 open IEqReasoningWith ℂ
 
 record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
-  infixr 5 ↙_
+  infix 5 ↙_⟨_⟩
 
   field
-    Ob : Obj
-    ι  : Ob ⇒ A
-    ↙_ : ∀ {C} -> C ⇒ A -> C ⇒ Ob
-      
-    comm      : f ∘ ι ≈ g ∘ ι
-    ↙-inj     : ∀ {C} {p q : C ⇒ A} -> ↙ p ≈ ↙ q -> p ≈ q
-    universal : ∀ {C} {p : C ⇒ A} {u : C ⇒ Ob} -> ι ∘ u ≈ p -> ↙ p ≈ u
+    Ob    : Obj
+    ι     : Ob ⇒ A
+    ↙_⟨_⟩ : ∀ {C} -> (p : C ⇒ A) -> .(f ∘ p ≈ g ∘ p) -> C ⇒ Ob
 
-  η : ↙ ι ≈ id
+    .comm     : f ∘ ι ≈ g ∘ ι
+    ↙-inj     : ∀ {C} {p q : C ⇒ A} .{r : f ∘ p ≈ g ∘ p} .{s : f ∘ q ≈ g ∘ q}
+              -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⟩ -> p ≈ q
+    universal : ∀ {C} {u : C ⇒ Ob} {p : C ⇒ A}
+              -> .(r : ι ∘ u ≈ p) -> ↙ p ⟨ ∘-resp-≈ˡ r ⟨ ∘²-resp-≈ʳ comm ⟩ ∘-resp-≈ˡ r ⟩ ≈ u
+
+  η : ↙ ι ⟨ _ ⟩ ≈ id
   η = universal idʳ
 
-  ∘-η : ∀ {C} {u : C ⇒ Ob} -> ↙ (ι ∘ u) ≈ u
+  ∘-η : ∀ {C} {u : C ⇒ Ob} -> ↙ (ι ∘ u) ⟨ _ ⟩ ≈ u
   ∘-η = universal refl
 
-  ι-↙ : ∀ {C} {p : C ⇒ A} -> ι ∘ (↙ p) ≈ p
+  ι-↙ : ∀ {C} {p : C ⇒ A} .{r : f ∘ p ≈ g ∘ p} -> ι ∘ ↙ p ⟨ r ⟩ ≈ p
   ι-↙ = ↙-inj ∘-η
 
-  ↙-∘ : ∀ {C D} {q : D ⇒ A} {p : C ⇒ D} -> ↙ (q ∘ p) ≈ (↙ q) ∘ p
+  ↙-∘ : ∀ {C D} {q : D ⇒ A} {p : C ⇒ D} .{s : f ∘ q ≈ g ∘ q}
+      -> ↙ (q ∘ p) ⟨ _ ⟩ ≈ (↙ q ⟨ s ⟩) ∘ p
   ↙-∘ = universal (∘ˡ-resp-≈ʳ ι-↙)
   
-  ↙-resp-≈ : ∀ {C} {p q : C ⇒ A} -> p ≈ q -> ↙ p ≈ ↙ q
+  ↙-resp-≈ : ∀ {C} {p q : C ⇒ A} .{r : f ∘ p ≈ g ∘ p}
+           -> (s : p ≈ q) -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ ∘-resp-≈ˡ s ⟨ r ⟩ ∘-resp-≈ˡ s ⟩
   ↙-resp-≈ r = universal (left ι-↙ r)
 
   ι-mono : Mono ℂ ι
   ι-mono = λ {_ p q} r ->
     begin
-      p         ←⟨ universal r ⟩
-      ↙ (ι ∘ q) →⟨ ∘-η         ⟩
+      p               ←⟨ universal r ⟩
+      ↙ (ι ∘ q) ⟨ _ ⟩ →⟨ ∘-η         ⟩
       q
     ∎
 

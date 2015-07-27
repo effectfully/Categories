@@ -1,10 +1,11 @@
 module Categories.Categories.Agda where
 
-open import Function renaming (const to _ᵏ_)
+open import Function
 open import Relation.Binary.PropositionalEquality
 open import Data.Product
 
 open import Categories.Category
+open import Categories.Utilities.Product
 
 Agda : ∀ {α} -> Category (suc α) α α
 Agda {α} = record
@@ -22,10 +23,6 @@ Agda {α} = record
                 -> (∀ y -> g₁ y ≡ g₂ y) -> (∀ x -> f₁ x ≡ f₂ x) -> ∀ x -> g₁ (f₁ x) ≡ g₂ (f₂ x)
       ∘′-resp-≡ q p x rewrite p x = q _
 
-,′-inj : ∀ {α β} {A : Set α} {B : Set β} {x x' : A} {y y' : B}
-       -> (x , y) ≡ (x' , y') -> x ≡ x' × y ≡ y'
-,′-inj refl = refl , refl
-
 module _ {α} where
   open import Categories.Universal.Limit.Product   (Agda {α})
   open import Categories.Universal.Limit.Equalizer (Agda {α})
@@ -41,12 +38,11 @@ module _ {α} where
     }
 
   equalizers : Equalizers
-  equalizers {_} {_} {f} {g} = record
-    { Ob        = ∃ λ x -> f x ≡ g x
-    ; ι         = proj₁
-    -- Oops, weak definition of equalizers. Coequalizers, Pullbacks, Pushouts. Tomorrow.
-    ; ↙_        = λ p x -> p x , {!!}
-    ; comm      = {!!}
-    ; ↙-inj     = {!!}
-    ; universal = {!!}
+  equalizers {f = f} {g = g} = record
+    { Ob        = ∃ᵢ λ x -> f x ≡ g x
+    ; ι         = iproj₁
+    ; ↙_⟨_⟩     = λ p r x -> p x ,ᵢ r x
+    ; comm      = iproj₂
+    ; ↙-inj     = λ p x -> ,ᵢ-inj₁ (p x)
+    ; universal = λ r x -> ∃ᵢ-η (r x)
     }

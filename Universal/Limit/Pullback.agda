@@ -9,102 +9,113 @@ open import Categories.Morphism.Morphism ℂ
 open IEqReasoningWith ℂ
 
 record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
-  infixr 5 _↘_
+  infix 5 _↘_⟨_⟩
 
   field
-    Ob  : Obj
-    π₁  : Ob ⇒ A
-    π₂  : Ob ⇒ B   
-    _↘_ : ∀ {D} -> D ⇒ A -> D ⇒ B -> D ⇒ Ob
+    Ob     : Obj
+    π¹     : Ob ⇒ A
+    π²     : Ob ⇒ B   
+    _↘_⟨_⟩ : ∀ {D} -> (p : D ⇒ A) -> (q : D ⇒ B) -> .(f ∘ p ≈ g ∘ q) -> D ⇒ Ob
 
-    comm     : f ∘ π₁ ≈ g ∘ π₂
-    ↘-inj    : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B}
-             -> p₁ ↘ q₁ ≈ p₂ ↘ q₂ -> p₁ ≈ p₂ × q₁ ≈ q₂
+    .comm     : f ∘ π¹ ≈ g ∘ π²
+    ↘-inj     : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B} .{r : f ∘ p₁ ≈ g ∘ q₁} .{s : f ∘ p₂ ≈ g ∘ q₂}
+              -> p₁ ↘ q₁ ⟨ r ⟩ ≈ p₂ ↘ q₂ ⟨ s ⟩ -> p₁ ≈ p₂ × q₁ ≈ q₂
     universal : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} {u : D ⇒ Ob}
-              -> π₁ ∘ u ≈ p -> π₂ ∘ u ≈ q -> p ↘ q ≈ u
+              -> .(r : π¹ ∘ u ≈ p)
+              -> .(s : π² ∘ u ≈ q)
+              -> p ↘ q ⟨ ∘-resp-≈ˡ r ⟨ ∘²-resp-≈ʳ comm ⟩ ∘-resp-≈ˡ s ⟩ ≈ u
 
-  η : π₁ ↘ π₂ ≈ id
+  η : π¹ ↘ π² ⟨ _ ⟩ ≈ id
   η = universal idʳ idʳ
 
-  ∘-η : ∀ {D} {u : D ⇒ Ob} -> π₁ ∘ u ↘ π₂ ∘ u ≈ u
+  ∘-η : ∀ {D} {u : D ⇒ Ob} -> π¹ ∘ u ↘ π² ∘ u ⟨ _ ⟩ ≈ u
   ∘-η = universal refl refl
 
   π-inj : ∀ {D} {p : D ⇒ Ob} {q : D ⇒ Ob}
-        -> π₁ ∘ p ≈ π₁ ∘ q -> π₂ ∘ p ≈ π₂ ∘ q -> p ≈ q
+        -> .(π¹ ∘ p ≈ π¹ ∘ q) -> .(π² ∘ p ≈ π² ∘ q) -> p ≈ q
   π-inj {_} {p} {q} r s =
     begin
-      p               ←⟨ universal r s ⟩
-      π₁ ∘ q ↘ π₂ ∘ q →⟨ ∘-η           ⟩
+      p                     ←⟨ universal r s ⟩
+      π¹ ∘ q ↘ π² ∘ q ⟨ _ ⟩ →⟨ ∘-η           ⟩
       q
     ∎
 
-  π₁-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} -> π₁ ∘ (p ↘ q) ≈ p
-  π₁-↘ = proj₁ (↘-inj ∘-η)
+  π¹-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} .{r : f ∘ p ≈ g ∘ q} -> π¹ ∘ (p ↘ q ⟨ r ⟩) ≈ p
+  π¹-↘ = proj₁ (↘-inj ∘-η)
 
-  π₂-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} -> π₂ ∘ (p ↘ q) ≈ q
-  π₂-↘ = proj₂ (↘-inj ∘-η)
+  π²-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} .{r : f ∘ p ≈ g ∘ q} -> π² ∘ (p ↘ q ⟨ r ⟩) ≈ q
+  π²-↘ = proj₂ (↘-inj ∘-η)
 
-  ↑-resp-≈ : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B}
-           -> p₁ ≈ p₂ -> q₁ ≈ q₂ -> p₁ ↘ q₁ ≈ p₂ ↘ q₂
-  ↑-resp-≈ r s = universal (left π₁-↘ r) (left π₂-↘ s)
+  ↘-∘ : ∀ {D E} {r : D ⇒ E} {p : E ⇒ A} {q : E ⇒ B} .{s : f ∘ p ≈ g ∘ q}
+      -> (p ∘ r) ↘ (q ∘ r) ⟨ _ ⟩ ≈ (p ↘ q ⟨ s ⟩) ∘ r 
+  ↘-∘ = universal (∘ˡ-resp-≈ʳ π¹-↘) (∘ˡ-resp-≈ʳ π²-↘)
 
-  ↘-∘ : ∀ {D E} {r : D ⇒ E} {p : E ⇒ A} {q : E ⇒ B} -> (p ∘ r) ↘ (q ∘ r) ≈ (p ↘ q) ∘ r 
-  ↘-∘ = universal (∘ˡ-resp-≈ʳ π₁-↘) (∘ˡ-resp-≈ʳ π₂-↘)
+  ↘-resp-≈ : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B} .{r : f ∘ p₁ ≈ g ∘ q₁} .{s : f ∘ p₂ ≈ g ∘ q₂}
+           -> p₁ ≈ p₂ -> q₁ ≈ q₂ -> p₁ ↘ q₁ ⟨ r ⟩ ≈ p₂ ↘ q₂ ⟨ s ⟩
+  ↘-resp-≈ r s = universal (left π¹-↘ r) (left π²-↘ s)
 
-  π₁-Mono : Mono g -> Mono π₁
-  π₁-Mono mono = λ r -> π-inj r (mono (∘²-resp-≈ʳ comm ⟨ ∘-resp-≈ˡ r ⟩ ∘²-resp-≈ʳ comm))
+  π¹-Mono : Mono g -> Mono π¹
+  π¹-Mono mono = λ r -> π-inj r (mono (∘²-resp-≈ʳ comm ⟨ ∘-resp-≈ˡ r ⟩ ∘²-resp-≈ʳ comm))
 
 flip-Product : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g -> Pullback g f
 flip-Product p = record
   { Ob        = Ob
-  ; π₁        = π₂
-  ; π₂        = π₁
-  ; _↘_       = flip _↘_
+  ; π¹        = π²
+  ; π²        = π¹
+  ; _↘_⟨_⟩    = λ p q r -> q ↘ p ⟨ sym r ⟩
   ; comm      = sym comm
   ; ↘-inj     = λ r -> swap (↘-inj r)
-  ; universal = flip universal
+  ; universal = λ r s -> universal s r
   } where open Pullback p
 
--- flip-Product-≅ : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> {!_≃_!} -- Pullback f g ≃ Pullback g f
--- flip-Product-≅ = {!!}
+module _ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
+  module Pullback₁ where
+    open Pullback p renaming (Ob to Ob₁; π¹ to π¹₁; π² to π²₁; _↘_⟨_⟩ to _↘₁_⟨_⟩;
+                              comm to comm₁; ↘-inj to ↘-inj₁; universal to universal₁;
+                              ∘-η to ∘-η₁; π-inj to π-inj₁; π¹-↘ to π¹-↘₁; π²-↘ to π²-↘₁) public
 
+  module Pullback₂ where
+    open Pullback p renaming (Ob to Ob₂; π¹ to π¹₂; π² to π²₂; _↘_⟨_⟩ to _↘₂_⟨_⟩;
+                              comm to comm₂; ↘-inj to ↘-inj₂; universal to universal₂;
+                              ∘-η to ∘-η₂; π-inj to π-inj₂; π¹-↘ to π¹-↘₂; π²-↘ to π²-↘₂) public
+                              
 glue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
-     -> (pᵣ : Pullback f g)
-     -> let open Pullback pᵣ in
-        Pullback h π₁
+     -> (p₂ : Pullback f g)
+     -> let open Pullback p₂ in
+        Pullback h π¹
      -> Pullback (f ∘ h) g
-glue {h = h} {f} {g} pᵣ pₗ = record
-  { Ob        = pₗ.Ob
-  ; π₁        = pₗ.π₁
-  ; π₂        = pᵣ.π₂ ∘ pₗ.π₂
-  ; _↘_       = λ p q -> p pₗ.↘ h ∘ p pᵣ.↘ q
+glue {h = h} {f} {g} p₂ p₁ = record
+  { Ob        = Ob₁
+  ; π¹        = π¹₁
+  ; π²        = π²₂ ∘ π²₁
+  ; _↘_⟨_⟩    = λ p q r -> p ↘₁ h ∘ p ↘₂ q ⟨ reassocˡ r ⟩ ⟨ sym π¹-↘₂ ⟩
   ; comm      =
       begin
-        (f ∘ h) ∘ pₗ.π₁     →⟨ assoc             ⟩
-        f ∘ h ∘ pₗ.π₁       →⟨ ∘-resp-≈ˡ pₗ.comm ⟩
-        f ∘ pᵣ.π₁ ∘ pₗ.π₂   ←⟨ assoc             ⟩
-        (f ∘ pᵣ.π₁) ∘ pₗ.π₂ →⟨ ∘-resp-≈ʳ pᵣ.comm ⟩
-        (g ∘ pᵣ.π₂) ∘ pₗ.π₂ →⟨ assoc             ⟩
-        g ∘ pᵣ.π₂ ∘ pₗ.π₂
+        (f ∘ h) ∘ π¹₁   →⟨ assoc           ⟩
+        f ∘ h ∘ π¹₁     →⟨ ∘-resp-≈ˡ comm₁ ⟩
+        f ∘ π¹₂ ∘ π²₁   ←⟨ assoc           ⟩
+        (f ∘ π¹₂) ∘ π²₁ →⟨ ∘-resp-≈ʳ comm₂ ⟩
+        (g ∘ π²₂) ∘ π²₁ →⟨ assoc           ⟩
+        g ∘ π²₂ ∘ π²₁
       ∎
-  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case pₗ.↘-inj r of
-      λ{ (s₁ , s₂) -> s₁ , proj₂ (pᵣ.↘-inj s₂) }
-  ; universal = λ r s -> pₗ.universal r (sym (pᵣ.universal (∘²-resp-≈ʳ (sym pₗ.comm) ⋯ ∘-resp-≈ˡ r)
-                                                           (reassocˡ s)))
-  } where module pᵣ = Pullback pᵣ; module pₗ = Pullback pₗ
+  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of
+      λ{ (s₁ , s₂) -> s₁ , proj₂ (↘-inj₂ s₂) }
+  ; universal = λ r s -> universal₁ r (sym (universal₂ (∘²-resp-≈ʳ (sym comm₁) ⋯ ∘-resp-≈ˡ r)
+                                                       (reassocˡ s)))
+  } where open Pullback₁ p₁; open Pullback₂ p₂
 
 unglue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
-       -> (pᵣ : Pullback f g)
-       -> let open Pullback pᵣ in
-          (m : Mono π₂)
+       -> (p₂ : Pullback f g)
+       -> let open Pullback p₂ in
+          (m : Mono π²)
        -> Pullback (f ∘ h) g
-       -> Pullback h π₁
-unglue {h = h} {f} {g} pᵣ mono pₗᵣ = record
-  { Ob        = pₗᵣ.Ob
-  ; π₁        = pₗᵣ.π₁
-  ; π₂        = h ∘ pₗᵣ.π₁ pᵣ.↘ pₗᵣ.π₂
-  ; _↘_       = λ p q -> p pₗᵣ.↘ pᵣ.π₂ ∘ q
-  ; comm      = sym pᵣ.π₁-↘
-  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case pₗᵣ.↘-inj r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
-  ; universal = λ r s -> pₗᵣ.universal r (∘-resp-≈ʳ (sym pᵣ.π₂-↘) ⋯ ∘ˡ-resp-≈ˡ s)
-  } where module pᵣ = Pullback pᵣ; module pₗᵣ = Pullback pₗᵣ
+       -> Pullback h π¹
+unglue {h = h} {f} {g} p₂ mono p₁ = record
+  { Ob        = Ob₁
+  ; π¹        = π¹₁
+  ; π²        = h ∘ π¹₁ ↘₂ π²₁ ⟨ reassocˡ comm₁ ⟩
+  ; _↘_⟨_⟩    = λ p q r -> p ↘₁ π²₂ ∘ q ⟨ ∘ˡ-resp-≈ˡ r ⋯ ∘²-resp-≈ʳ comm₂ ⟩
+  ; comm      = sym π¹-↘₂
+  ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
+  ; universal = λ r s -> universal₁ r (∘-resp-≈ʳ (sym π²-↘₂) ⋯ ∘ˡ-resp-≈ˡ s)
+  } where open Pullback₁ p₁; open Pullback₂ p₂
