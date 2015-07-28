@@ -14,30 +14,30 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
     ι     : Ob ⇒ A
     ↙_⟨_⟩ : ∀ {C} -> (p : C ⇒ A) -> .(f ∘ p ≈ g ∘ p) -> C ⇒ Ob
 
-    .comm     : f ∘ ι ≈ g ∘ ι
-    ↙-inj     : ∀ {C} {p q : C ⇒ A} .{r : f ∘ p ≈ g ∘ p} .{s : f ∘ q ≈ g ∘ q}
-              -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⟩ -> p ≈ q
-    universal : ∀ {C} {u : C ⇒ Ob} {p : C ⇒ A}
-              -> .(r : ι ∘ u ≈ p) -> ↙ p ⟨ ∘-resp-≈ˡ r ⟨ ∘²-resp-≈ʳ comm ⟩ ∘-resp-≈ˡ r ⟩ ≈ u
+    .comm      : f ∘ ι ≈ g ∘ ι
+    .↙-inj     : ∀ {C} {p q : C ⇒ A} {r : f ∘ p ≈ g ∘ p} {s : f ∘ q ≈ g ∘ q}
+               -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⟩ -> p ≈ q
+    .universal : ∀ {C} {u : C ⇒ Ob} {p : C ⇒ A}
+               -> (r : ι ∘ u ≈ p) -> ↙ p ⟨ r ⌈ ∘²-resp-≈ʳ comm ⌉ʳ r ⟩ ≈ u
 
-  η : ↙ ι ⟨ _ ⟩ ≈ id
+  .η : ↙ ι ⟨ _ ⟩ ≈ id
   η = universal idʳ
 
-  ∘-η : ∀ {C} {u : C ⇒ Ob} -> ↙ (ι ∘ u) ⟨ _ ⟩ ≈ u
+  .∘-η : ∀ {C} {u : C ⇒ Ob} -> ↙ (ι ∘ u) ⟨ _ ⟩ ≈ u
   ∘-η = universal refl
 
-  ι-↙ : ∀ {C} {p : C ⇒ A} .{r : f ∘ p ≈ g ∘ p} -> ι ∘ ↙ p ⟨ r ⟩ ≈ p
+  .ι-↙ : ∀ {C} {p : C ⇒ A} {r : f ∘ p ≈ g ∘ p} -> ι ∘ ↙ p ⟨ r ⟩ ≈ p
   ι-↙ = ↙-inj ∘-η
 
-  ↙-∘ : ∀ {C D} {q : D ⇒ A} {p : C ⇒ D} .{s : f ∘ q ≈ g ∘ q}
-      -> ↙ (q ∘ p) ⟨ _ ⟩ ≈ (↙ q ⟨ s ⟩) ∘ p
+  .↙-∘ : ∀ {C D} {q : D ⇒ A} {p : C ⇒ D} {s : f ∘ q ≈ g ∘ q}
+       -> ↙ (q ∘ p) ⟨ _ ⟩ ≈ (↙ q ⟨ s ⟩) ∘ p
   ↙-∘ = universal (∘ˡ-resp-≈ʳ ι-↙)
   
-  ↙-resp-≈ : ∀ {C} {p q : C ⇒ A} .{r : f ∘ p ≈ g ∘ p}
-           -> (s : p ≈ q) -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ ∘-resp-≈ˡ s ⟨ r ⟩ ∘-resp-≈ˡ s ⟩
-  ↙-resp-≈ r = universal (left ι-↙ r)
+  .↙-resp-≈ : ∀ {C} {p q : C ⇒ A} {r : f ∘ p ≈ g ∘ p}
+            -> (s : p ≈ q) -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⌈ r ⌉ʳ s ⟩
+  ↙-resp-≈ s = universal (left ι-↙ s)
 
-  ι-mono : Mono ℂ ι
+  .ι-mono : Mono ℂ ι
   ι-mono = λ {_ p q} r ->
     begin
       p               ←⟨ universal r ⟩

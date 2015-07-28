@@ -28,8 +28,8 @@ Initial->Terminal i = record
 Product->Coproduct : ∀ {A B} -> Product ℂ A B -> Coproduct (ℂ ᵒᵖ) A B
 Product->Coproduct p = record
   { Ob        = Ob
-  ; ι₁        = π₁
-  ; ι₂        = π₂
+  ; ι¹        = π¹
+  ; ι²        = π²
   ; _↓_       = _↑_
   ; ↓-inj     = ↑-inj
   ; universal = universal
@@ -38,8 +38,8 @@ Product->Coproduct p = record
 Coproduct->Product : ∀ {A B} -> Coproduct ℂ A B -> Product (ℂ ᵒᵖ) A B
 Coproduct->Product p = record
   { Ob        = Ob
-  ; π₁        = ι₁
-  ; π₂        = ι₂
+  ; π¹        = ι¹
+  ; π²        = ι²
   ; _↑_       = _↓_
   ; ↑-inj     = ↓-inj
   ; universal = universal
@@ -48,9 +48,9 @@ Coproduct->Product p = record
 Pullback->Pushout : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback ℂ f g -> Pushout (ℂ ᵒᵖ) f g
 Pullback->Pushout p = record
   { Ob        = Ob
-  ; ι₁        = π₁
-  ; ι₂        = π₂
-  ; _↖_       = _↘_
+  ; ι¹        = π¹
+  ; ι²        = π²
+  ; _↖_⟨_⟩    = _↘_⟨_⟩
   ; comm      = comm
   ; ↖-inj     = ↘-inj
   ; universal = universal
@@ -59,9 +59,9 @@ Pullback->Pushout p = record
 Pushout->Pullback : ∀ {A B C} {f : C ⇒ A} {g : C ⇒ B} -> Pushout ℂ f g -> Pullback (ℂ ᵒᵖ) f g
 Pushout->Pullback p = record
   { Ob        = Ob
-  ; π₁        = ι₁
-  ; π₂        = ι₂
-  ; _↘_       = _↖_
+  ; π¹        = ι¹
+  ; π²        = ι²
+  ; _↘_⟨_⟩    = _↖_⟨_⟩
   ; comm      = comm
   ; ↘-inj     = ↖-inj
   ; universal = universal
@@ -71,7 +71,7 @@ Equalizer->Coequalizer : ∀ {A B} {f g : A ⇒ B} -> Equalizer ℂ f g -> Coequ
 Equalizer->Coequalizer e = record
   { Ob        = Ob
   ; π         = ι
-  ; _↗        = ↙_
+  ; _↗⟨_⟩     = ↙_⟨_⟩
   ; comm      = comm
   ; ↗-inj     = ↙-inj
   ; universal = universal
@@ -81,7 +81,7 @@ Coequalizer->Equalizer : ∀ {A B} {f g : A ⇒ B} -> Coequalizer ℂ f g -> Equ
 Coequalizer->Equalizer e = record
   { Ob        = Ob
   ; ι         = π
-  ; ↙_        = _↗
+  ; ↙_⟨_⟩     = _↗⟨_⟩
   ; comm      = comm
   ; ↙-inj     = ↗-inj
   ; universal = universal

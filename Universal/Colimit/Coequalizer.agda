@@ -7,36 +7,40 @@ open import Categories.Morphism.Morphism
 open IEqReasoningWith ℂ
 
 record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
-  infixl 5 _↗
+  infix 5 _↗⟨_⟩
 
   field
-    Ob : Obj
-    π  : B ⇒ Ob
-    _↗ : ∀ {C} -> B ⇒ C -> Ob ⇒ C
+    Ob    : Obj
+    π     : B ⇒ Ob
+    _↗⟨_⟩ : ∀ {C} -> (p : B ⇒ C) -> .(p ∘ f ≈ p ∘ g) -> Ob ⇒ C
     
-    comm      : π ∘ f ≈ π ∘ g
-    ↗-inj     : ∀ {C} {p q : B ⇒ C} -> p ↗ ≈ q ↗ -> p ≈ q
-    universal : ∀ {C} {p : B ⇒ C} {u : Ob ⇒ C} -> u ∘ π ≈ p -> p ↗ ≈ u
+    .comm      : π ∘ f ≈ π ∘ g
+    .↗-inj     : ∀ {C} {p q : B ⇒ C} {r : p ∘ f ≈ p ∘ g} {s : q ∘ f ≈ q ∘ g}
+               -> p ↗⟨ r ⟩ ≈ q ↗⟨ s ⟩ -> p ≈ q
+    .universal : ∀ {C} {p : B ⇒ C} {u : Ob ⇒ C}
+               -> (r : u ∘ π ≈ p) -> p ↗⟨ r ⌈ ∘²-resp-≈ˡ comm ⌉ˡ r ⟩ ≈ u
 
-  η : π ↗ ≈ id
+  .η : π ↗⟨ _ ⟩ ≈ id
   η = universal idˡ
 
-  ∘-η : ∀ {C} {u : Ob ⇒ C} -> (u ∘ π) ↗ ≈ u
+  .∘-η : ∀ {C} {u : Ob ⇒ C} -> (u ∘ π) ↗⟨ _ ⟩ ≈ u
   ∘-η = universal refl
 
-  ↗-π : ∀ {C} {p : B ⇒ C} -> (p ↗) ∘ π ≈ p
+  .↗-π : ∀ {C} {p : B ⇒ C} {r : p ∘ f ≈ p ∘ g} -> (p ↗⟨ r ⟩) ∘ π ≈ p
   ↗-π = ↗-inj ∘-η
-    
-  ↗-resp-≈ : ∀ {C} {p q : B ⇒ C} -> p ≈ q -> p ↗ ≈ q ↗
-  ↗-resp-≈ r = universal (left ↗-π r)
 
-  ∘-↗ : ∀ {C D} {q : C ⇒ D} {p : B ⇒ C} -> (q ∘ p) ↗ ≈ q ∘ (p ↗)
+  .∘-↗ : ∀ {C D} {q : C ⇒ D} {p : B ⇒ C} {r : p ∘ f ≈ p ∘ g}
+       -> (q ∘ p) ↗⟨ _ ⟩ ≈ q ∘ (p ↗⟨ r ⟩)
   ∘-↗ = universal (∘ˡ-resp-≈ˡ ↗-π)
 
-  π-epi : Epi ℂ π
+  .↗-resp-≈ : ∀ {C} {p q : B ⇒ C} {r : p ∘ f ≈ p ∘ g}
+            -> (s : p ≈ q) -> p ↗⟨ r ⟩ ≈ q ↗⟨ s ⌈ r ⌉ˡ s ⟩
+  ↗-resp-≈ r = universal (left ↗-π r)
+
+  .π-epi : Epi ℂ π
   π-epi = λ {_ p q} r ->
     begin
-      p         ←⟨ universal r ⟩
-      (q ∘ π) ↗ →⟨ ∘-η         ⟩
+      p              ←⟨ universal r ⟩
+      (q ∘ π) ↗⟨ _ ⟩ →⟨ ∘-η         ⟩
       q
     ∎

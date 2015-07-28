@@ -4,8 +4,8 @@ open import Function
 open import Relation.Binary.PropositionalEquality
 open import Data.Product
 
-open import Categories.Category
 open import Categories.Utilities.Product
+open import Categories.Category
 
 Agda : ∀ {α} -> Category (suc α) α α
 Agda {α} = record
@@ -30,8 +30,8 @@ module _ {α} where
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
     { Ob        = A × B
-    ; π₁        = proj₁
-    ; π₂        = proj₂
+    ; π¹        = proj₁
+    ; π²        = proj₂
     ; _↑_       = λ f g x -> f x , g x
     ; ↑-inj     = λ p -> proj₁ ∘ ,′-inj ∘ p , proj₂ ∘ ,′-inj ∘ p
     ; universal = λ p q x -> cong₂ _,_ (sym (p x)) (sym (q x))
