@@ -1,10 +1,10 @@
-module Categories.Category where
+module Categories.Category.Category where
 
 open import Level public
 open import Function using (flip; _∘′_; _$_; case_of_) renaming (id to id→) public
 open import Data.Product using (_,_) public
 
-open import Categories.Setoid public
+open import Categories.Setoid.Base public
 
 record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
   infix  3 _⇒_
@@ -17,6 +17,7 @@ record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
     id     : ∀ {A}     -> A ⇒ A
     _∘_    : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
 
+  -- Bad idea.
   open ISetoid setoid public; open ITools public
 
   field

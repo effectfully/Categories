@@ -1,4 +1,4 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Limit.Pullback {α β γ} (ℂ : Category α β γ) where
 
@@ -6,7 +6,7 @@ open import Data.Product
 
 open import Categories.Morphism.Morphism ℂ
 
-open IEqReasoningWith ℂ
+open Category ℂ
 
 record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
   infix 5 _↘_⟨_⟩
@@ -31,12 +31,7 @@ record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ �
 
   .π-inj : ∀ {D} {p : D ⇒ Ob} {q : D ⇒ Ob}
          -> π¹ ∘ p ≈ π¹ ∘ q -> π² ∘ p ≈ π² ∘ q -> p ≈ q
-  π-inj {_} {p} {q} r s =
-    begin
-      p                     ←⟨ universal r s ⟩
-      π¹ ∘ q ↘ π² ∘ q ⟨ _ ⟩ →⟨ ∘-η           ⟩
-      q
-    ∎
+  π-inj r s = right (universal r s) ∘-η
 
   .π¹-↘ : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} {r : f ∘ p ≈ g ∘ q} -> π¹ ∘ (p ↘ q ⟨ r ⟩) ≈ p
   π¹-↘ = proj₁ (↘-inj ∘-η)
@@ -87,15 +82,7 @@ glue {h = h} {f} {g} p₂ p₁ = record
   ; π¹        = π¹₁
   ; π²        = π²₂ ∘ π²₁
   ; _↘_⟨_⟩    = λ p q r -> p ↘₁ h ∘ p ↘₂ q ⟨ reassocˡ r ⟩ ⟨ sym π¹-↘₂ ⟩
-  ; comm      =
-      begin
-        (f ∘ h) ∘ π¹₁   →⟨ assoc           ⟩
-        f ∘ h ∘ π¹₁     →⟨ ∘-resp-≈ˡ comm₁ ⟩
-        f ∘ π¹₂ ∘ π²₁   ←⟨ assoc           ⟩
-        (f ∘ π¹₂) ∘ π²₁ →⟨ ∘-resp-≈ʳ comm₂ ⟩
-        (g ∘ π²₂) ∘ π²₁ →⟨ assoc           ⟩
-        g ∘ π²₂ ∘ π²₁
-      ∎
+  ; comm      = ∘ˡ-resp-≈ˡ comm₁ ⋯ ∘²-resp-≈ʳ comm₂
   ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of
       λ{ (s₁ , s₂) -> s₁ , proj₂ (↘-inj₂ s₂) }
   ; universal = λ r s -> universal₁ r (sym (universal₂ (∘²-resp-≈ʳ (sym comm₁) ⋯ ∘-resp-≈ˡ r)
@@ -117,3 +104,5 @@ unglue {h = h} {f} {g} p₂ mono p₁ = record
   ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
   ; universal = λ r s -> universal₁ r (∘-resp-≈ʳ (sym π²-↘₂) ⋯ ∘ˡ-resp-≈ˡ s)
   } where open Pullback₁ p₁; open Pullback₂ p₂
+
+Pullbacks = ∀ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g

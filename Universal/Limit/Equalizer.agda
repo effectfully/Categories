@@ -1,4 +1,4 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Limit.Equalizer {α β γ} (ℂ : Category α β γ) where
 
@@ -38,11 +38,6 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   ↙-resp-≈ s = universal (left ι-↙ s)
 
   .ι-mono : Mono ℂ ι
-  ι-mono = λ {_ p q} r ->
-    begin
-      p               ←⟨ universal r ⟩
-      ↙ (ι ∘ q) ⟨ _ ⟩ →⟨ ∘-η         ⟩
-      q
-    ∎
+  ι-mono = λ r -> right (universal r) ∘-η
 
 Equalizers = ∀ {A B : Obj} {f g : A ⇒ B} -> Equalizer f g

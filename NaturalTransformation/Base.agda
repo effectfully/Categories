@@ -1,0 +1,3 @@
+module Categories.NaturalTransformation.Base where
+
+open import Categories.NaturalTransformation.NaturalTransformation public

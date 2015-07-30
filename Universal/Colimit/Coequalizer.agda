@@ -1,10 +1,10 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Colimit.Coequalizer {α β γ} (ℂ : Category α β γ) where
 
 open import Categories.Morphism.Morphism
 
-open IEqReasoningWith ℂ
+open Category ℂ
 
 record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   infix 5 _↗⟨_⟩
@@ -38,9 +38,4 @@ record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   ↗-resp-≈ r = universal (left ↗-π r)
 
   .π-epi : Epi ℂ π
-  π-epi = λ {_ p q} r ->
-    begin
-      p              ←⟨ universal r ⟩
-      (q ∘ π) ↗⟨ _ ⟩ →⟨ ∘-η         ⟩
-      q
-    ∎
+  π-epi = λ r -> right (universal r) ∘-η

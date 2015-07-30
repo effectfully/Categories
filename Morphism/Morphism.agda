@@ -1,4 +1,4 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Morphism.Morphism {α β γ} (ℂ : Category α β γ) where
 

@@ -1,4 +1,4 @@
-module Categories.Setoid where
+module Categories.Setoid.Base where
 
 open import Categories.Setoid.Equivalence public
 open import Categories.Setoid.Setoid      public

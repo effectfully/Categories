@@ -1,7 +1,7 @@
-module Categories.NaturalTransformation where
+module Categories.NaturalTransformation.NaturalTransformation where
 
-open import Categories.Category
-open import Categories.Functor
+open import Categories.Category.Base
+open import Categories.Functor.Base
 
 infixr 9 _∘ⁿ_
 

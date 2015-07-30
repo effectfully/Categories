@@ -1,8 +1,8 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Colimit.Initial {α β γ} (ℂ : Category α β γ) where
 
-open IEqReasoningWith ℂ
+open Category ℂ
 
 record Initial (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
   field
@@ -10,9 +10,4 @@ record Initial (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
     universal : ∀ {A} {f : Ob ⇒ A} -> f ≈ ↜
 
   η : ∀ {A} {f g : Ob ⇒ A} -> f ≈ g
-  η {_} {f} {g} =
-    begin
-      f →⟨ universal ⟩
-      ↜ ←⟨ universal ⟩
-      g
-    ∎
+  η = left universal universal

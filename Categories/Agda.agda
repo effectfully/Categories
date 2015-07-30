@@ -5,7 +5,7 @@ open import Relation.Binary.PropositionalEquality
 open import Data.Product
 
 open import Categories.Utilities.Product
-open import Categories.Category
+open import Categories.Category.Base
 
 Agda : ∀ {α} -> Category (suc α) α α
 Agda {α} = record
@@ -26,6 +26,8 @@ Agda {α} = record
 module _ {α} where
   open import Categories.Universal.Limit.Product   (Agda {α})
   open import Categories.Universal.Limit.Equalizer (Agda {α})
+  open import Categories.Universal.Limit.Pullback  (Agda {α})
+  open import Categories.Universal.Limit.Relations (Agda {α})
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
@@ -46,3 +48,6 @@ module _ {α} where
     ; ↙-inj     = λ p x -> ,ᵢ-inj₁ (p x)
     ; universal = λ r x -> ∃ᵢ-η (r x)
     }
+
+  pullbacks : Pullbacks
+  pullbacks = Product&Equalizer->Pullback binaryProducts equalizers 

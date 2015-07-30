@@ -3,7 +3,7 @@ module Categories.Categories.Discrete where
 open import Relation.Binary.PropositionalEquality
 open import Data.Unit.Base
 
-open import Categories.Category
+open import Categories.Category.Base
 
 Discrete : ∀ {α} -> Set α -> Category α α zero
 Discrete A = record

@@ -1,9 +1,9 @@
-module Categories.Functor where
+module Categories.Functor.Functor where
 
 open import Data.Product hiding (_×_)
 
-open import Categories.Category
-open import Categories.Product
+open import Categories.Category.Base
+open import Categories.Category.Product
 
 infixr 9 _∘ᶠ_
 infixr 2 _⁂_

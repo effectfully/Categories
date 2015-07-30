@@ -1,8 +1,8 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Limit.Terminal {α β γ} (ℂ : Category α β γ) where
 
-open IEqReasoningWith ℂ
+open Category ℂ
 
 record Terminal (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
   field
@@ -10,9 +10,4 @@ record Terminal (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
     universal : ∀ {A} {f : A ⇒ Ob} -> f ≈ ↝
 
   η : ∀ {A} {f g : A ⇒ Ob} -> f ≈ g
-  η {_} {f} {g} =
-    begin
-      f →⟨ universal ⟩
-      ↝ ←⟨ universal ⟩
-      g
-    ∎
+  η = left universal universal

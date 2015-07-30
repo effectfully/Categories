@@ -1,4 +1,4 @@
-open import Categories.Category
+open import Categories.Category.Base
 
 module Categories.Universal.Colimit.Pushout {α β γ} (ℂ : Category α β γ) where
 
