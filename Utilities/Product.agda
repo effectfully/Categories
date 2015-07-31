@@ -2,7 +2,7 @@ module Categories.Utilities.Product where
 
 open import Level
 open import Relation.Binary.PropositionalEquality
-open import Data.Product public
+open import Data.Product
 
 ,′-inj : ∀ {α β} {A : Set α} {B : Set β} {x x' : A} {y y' : B}
        -> (x , y) ≡ (x' , y') -> x ≡ x' × y ≡ y'
@@ -30,7 +30,7 @@ open ∃ᵢ public
         -> (x ,ᵢ y) ≡ (x' ,ᵢ y') -> x ≡ x'
 ,ᵢ-inj₁ refl = refl
 
--- This looks like a half of the η-rule, but it has the same power and more convenient actually.
+-- This looks like a half of the η-rule, but it has the same power and is more convenient actually.
 ∃ᵢ-η : ∀ {α β} {A : Set α} {B : A -> Set β} {x : A} {p : ∃ᵢ B}
      -> (r : iproj₁ p ≡ x) -> (x ,ᵢ subst B r (iproj₂ p)) ≡ p
 ∃ᵢ-η refl = refl

@@ -30,6 +30,7 @@ module _ {A B} (p : Coproduct A B) where
     { Ob        = Ob
     ; ι¹        = π ∘ ι¹
     ; ι²        = π ∘ ι²
+    -- This should be rewritten as (↓-ι¹ ʳ⌊ r ⌋ˡ ↓-ι²), but I'm tired with these aliases.
     ; _↖_⟨_⟩    = λ p q r -> (p ↓ q) ↗⟨ sym ↓-ι¹ ʳ⌈ r ⌉ˡ sym ↓-ι² ⟩
     ; comm      = unreassoc² comm
     ; ↖-inj     = ↓-inj ∘′ ↗-inj

@@ -29,7 +29,7 @@ open import Categories.Setoid.Setoid
   }
 
 ≡-Setoid : ∀ {α} {A : Set α} -> Setoid A α
-≡-Setoid = ISetoid.inst ≡-ISetoid tt
+≡-Setoid = inst tt where open ISetoid ≡-ISetoid
 
 →-ISetoid₂ : ∀ {α} -> ISetoid₂ (λ (A B : Set α) -> A -> B) α
 →-ISetoid₂ = record
@@ -47,13 +47,13 @@ module HIEquality where
   syntax heq A x y = x [ A ]≅ y
   open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-ISetoid {A = A}) public
 
-module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
+-- module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
 
-module Test where
-  open import Data.Nat
-  open import Data.Nat.Properties.Simple
-  open import Data.Fin hiding (_+_)
-  open HEquality renaming (refl to hrefl)
+-- module Test where
+--   open import Data.Nat
+--   open import Data.Nat.Properties.Simple
+--   open import Data.Fin hiding (_+_)
+--   open HEquality; open HSetoid hsetoid
 
-  test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
-  test n m rewrite +-comm n m = hrefl
+--   test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
+--   test n m rewrite +-comm n m = hrefl

@@ -6,8 +6,8 @@ open import Data.Product
 
 open Category C
 
-slice : Obj -> Category (α ⊔ β) (β ⊔ γ) γ
-slice C = record
+Slice : Obj -> Category (α ⊔ β) (β ⊔ γ) γ
+Slice C = record
   { Obj      = ∃ (_⇒ C)
   ; _⇒_      = λ{ (A , f) (B , g) -> ∃ λ h -> g ∘ h ≈ f }
   ; setoid   = record

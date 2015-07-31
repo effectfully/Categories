@@ -50,8 +50,8 @@ record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ �
   .π¹-Mono : Mono g -> Mono π¹
   π¹-Mono mono = λ r -> π-inj r (mono (comm ²⌈ ∘-resp-≈ˡ r ⌉ˡ comm))
 
-flip-Product : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g -> Pullback g f
-flip-Product p = record
+flip-Pullback : ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g -> Pullback g f
+flip-Pullback p = record
   { Ob        = Ob
   ; π¹        = π²
   ; π²        = π¹
@@ -85,7 +85,7 @@ glue {h = h} {f} {g} p₂ p₁ = record
   ; comm      = ∘ˡ-resp-≈ˡ comm₁ ⋯ ∘²-resp-≈ʳ comm₂
   ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of
       λ{ (s₁ , s₂) -> s₁ , proj₂ (↘-inj₂ s₂) }
-  ; universal = λ r s -> universal₁ r (sym (universal₂ (∘²-resp-≈ʳ (sym comm₁) ⋯ ∘-resp-≈ˡ r)
+  ; universal = λ r s -> universal₁ r (sym (universal₂ (right (∘²-resp-≈ʳ comm₁) (∘-resp-≈ˡ r))
                                                        (reassocˡ s)))
   } where open Pullback₁ p₁; open Pullback₂ p₂
 
@@ -102,7 +102,7 @@ unglue {h = h} {f} {g} p₂ mono p₁ = record
   ; _↘_⟨_⟩    = λ p q r -> p ↘₁ π²₂ ∘ q ⟨ ∘ˡ-resp-≈ˡ r ⋯ ∘²-resp-≈ʳ comm₂ ⟩
   ; comm      = sym π¹-↘₂
   ; ↘-inj     = λ {_ p₁ p₂ q₁ q₂} r -> case ↘-inj₁ r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
-  ; universal = λ r s -> universal₁ r (∘-resp-≈ʳ (sym π²-↘₂) ⋯ ∘ˡ-resp-≈ˡ s)
+  ; universal = λ r s -> universal₁ r (right (∘-resp-≈ʳ π²-↘₂) (∘ˡ-resp-≈ˡ s))
   } where open Pullback₁ p₁; open Pullback₂ p₂
 
 Pullbacks = ∀ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g

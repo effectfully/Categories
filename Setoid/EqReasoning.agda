@@ -19,13 +19,13 @@ module HEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid
   begin (relTo x≈y) = x≈y
 
   _→⟨_⟩_ : ∀ {i j k} {y : A j} {z : A k} -> (x : A i) -> x ≈ y -> y IsRelatedTo z -> x IsRelatedTo z
-  x →⟨ x≈y ⟩ (relTo y≈z) = relTo (trans x≈y y≈z)
+  x →⟨ x≈y ⟩ (relTo y≈z) = relTo (htrans x≈y y≈z)
 
   _←⟨_⟩_ : ∀ {i j k} {y : A j} {z : A k} -> (x : A i) -> y ≈ x -> y IsRelatedTo z -> x IsRelatedTo z
-  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ sym y≈x ⟩ y-irt-z
+  x ←⟨ y≈x ⟩ y-irt-z = x →⟨ hsym y≈x ⟩ y-irt-z
 
   _∎ : ∀ {i} -> (x : A i) -> x IsRelatedTo x
-  x ∎ = relTo refl
+  x ∎ = relTo hrefl
 
 module IEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
   open module I = ISetoid isetoid; open Hetero isetoid

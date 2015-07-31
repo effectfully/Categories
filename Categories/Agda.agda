@@ -34,7 +34,7 @@ module _ {α} where
     { Ob        = A × B
     ; π¹        = proj₁
     ; π²        = proj₂
-    ; _↑_       = λ f g x -> f x , g x
+    ; _↑_       = <_,_>
     ; ↑-inj     = λ p -> proj₁ ∘ ,′-inj ∘ p , proj₂ ∘ ,′-inj ∘ p
     ; universal = λ p q x -> cong₂ _,_ (sym (p x)) (sym (q x))
     }

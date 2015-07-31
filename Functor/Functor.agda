@@ -128,9 +128,9 @@ Functor-ISetoid = record
                                  ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
                       }
   ; isIEquivalence = record
-      { refl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in refl      }    
-      ; sym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in sym   p   }
-      ; trans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in trans p q }
+      { refl  = λ{ {C₁ , C₂}     -> let open Heterogeneous C₂ in hrefl      }    
+      ; sym   = λ{ {C₁ , C₂} p   -> let open Heterogeneous C₂ in hsym   p   }
+      ; trans = λ{ {C₁ , C₂} p q -> let open Heterogeneous C₂ in htrans p q }
       }
   }
 
@@ -141,9 +141,9 @@ Cat {α} {β} {γ} = record
   ; setoid   = Functor-ISetoid
   ; id       = idᶠ
   ; _∘_      = _∘ᶠ_
-  ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in refl
-  ; idʳ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in refl
-  ; assoc    = λ {C₁ C₂ C₃ C₄} -> let open Heterogeneous C₄ in refl
+  ; idˡ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
+  ; idʳ      = λ {C₁ C₂}       -> let open Heterogeneous C₂ in hrefl
+  ; assoc    = λ {C₁ C₂ C₃ C₄} -> let open Heterogeneous C₄ in hrefl
   ; ∘-resp-≈ = λ {C₁ C₂ C₃ G₁ G₂ F₁ F₂} q p {A B f} ->
       let open Functor; open Heterogeneousᶠ G₂; open MixedEqReasoningFrom C₃ in
         begin
