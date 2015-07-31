@@ -47,13 +47,15 @@ module HIEquality where
   syntax heq A x y = x [ A ]≅ y
   open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-ISetoid {A = A}) public
 
--- module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_)
+module HEquality {α} where
+  open Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_) public
+  open HSetoid hsetoid public
 
--- module Test where
---   open import Data.Nat
---   open import Data.Nat.Properties.Simple
---   open import Data.Fin hiding (_+_)
---   open HEquality; open HSetoid hsetoid
+module Test where
+  open import Data.Nat
+  open import Data.Nat.Properties.Simple
+  open import Data.Fin hiding (_+_)
+  open HEquality
 
---   test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
---   test n m rewrite +-comm n m = hrefl
+  test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
+  test n m rewrite +-comm n m = hrefl

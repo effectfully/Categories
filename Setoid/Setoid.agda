@@ -111,39 +111,39 @@ module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β)
 
 module _ {α β} {A : Set α} (setoid : Setoid A β) where
   module Setoid₁ where
-    open Setoid setoid renaming (_≈_ to _≈₁_) public
+    open Just-Setoid setoid renaming (_≈_ to _≈₁_) public
     open IsEquivalence₁ isEquivalence public
     
   module Setoid₂ where
-    open Setoid setoid renaming (_≈_ to _≈₂_) public
+    open Just-Setoid setoid renaming (_≈_ to _≈₂_) public
     open IsEquivalence₂ isEquivalence public
     
   module Setoid₃ where
-    open Setoid setoid renaming (_≈_ to _≈₃_) public
+    open Just-Setoid setoid renaming (_≈_ to _≈₃_) public
     open IsEquivalence₃ isEquivalence public
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
   module ISetoid₁ where
-    open ISetoid isetoid renaming (_≈_ to _≈₁_) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₁_) public
     open IsIEquivalence₁ isIEquivalence hiding (inst) public
     
   module ISetoid₂ where
-    open ISetoid isetoid renaming (_≈_ to _≈₂_) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₂_) public
     open IsIEquivalence₂ isIEquivalence hiding (inst) public
     
   module ISetoid₃ where
-    open ISetoid isetoid renaming (_≈_ to _≈₃_) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₃_) public
     open IsIEquivalence₃ isIEquivalence hiding (inst) public
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
   module HSetoid₁ where
-    open HSetoid hsetoid renaming (_≈_ to _≈₁_) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₁_) public
     open IsHEquivalence₁ isHEquivalence hiding (hinst) public
     
   module HSetoid₂ where
-    open HSetoid hsetoid renaming (_≈_ to _≈₂_) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₂_) public
     open IsHEquivalence₂ isHEquivalence hiding (hinst) public
     
   module HSetoid₃ where
-    open HSetoid hsetoid renaming (_≈_ to _≈₃_) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₃_) public
     open IsHEquivalence₃ isHEquivalence hiding (hinst) public

@@ -23,16 +23,12 @@ Comma = record
           ; trans = zip trans₁ trans₂
           }
       }
-  ; id       = record
-      { f    = id₁
-      ; g    = id₂
-      ; comm = {!!}
-      }
-  ; _∘_      = {!!}
-  ; idˡ      = {!!}
-  ; idʳ      = {!!}
-  ; assoc    = {!!}
-  ; ∘-resp-≈ = {!!}
+  ; id       = id
+  ; _∘_      = _∘_
+  ; idˡ      = idˡ₁ , idˡ₂
+  ; idʳ      = idʳ₁ , idʳ₂
+  ; assoc    = assoc₁ , assoc₂
+  ; ∘-resp-≈ = zip ∘-resp-≈₁ ∘-resp-≈₂
   } where
       record Obj : Set (α₁ ⊔ α₂ ⊔ β₃) where
         field
@@ -60,9 +56,16 @@ Comma = record
       h₁ ≈ h₂ = f₁ ≈₁ f₂ × g₁ ≈₂ g₂
         where open Arr₁ h₁; open Arr₂ h₂
 
-      setoid : ISetoid₂ _⇒_ (γ₁ ⊔ γ₂)
-      setoid = {!!}
-
       id : ∀ {A} -> A ⇒ A
-      id = record { f = {!!} ; g = {!!} ; comm = {!!} }
+      id = record
+        { f    = id₁
+        ; g    = id₂
+        ; comm = ?
+        }
       
+      _∘_ : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
+      h₂ ∘ h₁ = record
+        { f    = f₂ ∘₁ f₁
+        ; g    = g₂ ∘₂ g₁
+        ; comm = {!!}
+        } where open Arr₁ h₁; open Arr₂ h₂
