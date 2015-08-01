@@ -10,6 +10,7 @@ open import Data.Product
 
 open Category₁ C₁; open Category₂ C₂; open Category₃ C₃
 open Functor₁ F₁; open Functor₂ F₂
+open IEqReasoningFrom C₃
 
 Comma : Category (α₁ ⊔ α₂ ⊔ β₃) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₃) (γ₁ ⊔ γ₂)
 Comma = record
@@ -39,6 +40,7 @@ Comma = record
       module _ (A : Obj) where
         module Obj₁ where open Obj A renaming (A to A₁; B to B₁; h to h₁) public
         module Obj₂ where open Obj A renaming (A to A₂; B to B₂; h to h₂) public
+        module Obj₃ where open Obj A renaming (A to A₃; B to B₃; h to h₃) public
 
       record _⇒_ (A B : Obj) : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₃) where
         open Obj₁ A; open Obj₂ B
@@ -53,19 +55,38 @@ Comma = record
         module Arr₂ where open _⇒_ f renaming (f to f₂; g to g₂; comm to comm₂) public
 
       _≈_ : ∀ {A B} -> A ⇒ B -> A ⇒ B -> Set (γ₁ ⊔ γ₂)
-      h₁ ≈ h₂ = f₁ ≈₁ f₂ × g₁ ≈₂ g₂
-        where open Arr₁ h₁; open Arr₂ h₂
+      a₁ ≈ a₂ = f₁ ≈₁ f₂ × g₁ ≈₂ g₂
+        where open Arr₁ a₁; open Arr₂ a₂
 
       id : ∀ {A} -> A ⇒ A
-      id = record
+      id {A} = record
         { f    = id₁
         ; g    = id₂
-        ; comm = ?
-        }
+        ; comm =
+            begin
+              h ∘₃ F⇒₁ id₁ →⟨ ∘-resp-≈ˡ F-id₁ ⟩
+              h ∘₃ id₃     →⟨ idʳ₃            ⟩
+              h            ←⟨ idˡ₃            ⟩
+              id₃ ∘₃ h     ←⟨ ∘-resp-≈ʳ F-id₂ ⟩
+              F⇒₂ id₂ ∘₃ h
+            ∎
+        } where open Obj A; open Tools₃
       
       _∘_ : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
-      h₂ ∘ h₁ = record
+      _∘_ {A} {B} {C} a₂ a₁ = record
         { f    = f₂ ∘₁ f₁
         ; g    = g₂ ∘₂ g₁
-        ; comm = {!!}
-        } where open Arr₁ h₁; open Arr₂ h₂
+        ; comm =
+            begin
+              h₃ ∘₃ F⇒₁ (f₂ ∘₁ f₁)     →⟨ ∘-resp-≈ˡ F-∘₁  ⟩ 
+              h₃ ∘₃ F⇒₁ f₂ ∘₃ F⇒₁ f₁   ←⟨ assoc₃          ⟩
+              (h₃ ∘₃ F⇒₁ f₂) ∘₃ F⇒₁ f₁ →⟨ ∘-resp-≈ʳ comm₂ ⟩
+              (F⇒₂ g₂ ∘₃ h₂) ∘₃ F⇒₁ f₁ →⟨ assoc₃          ⟩
+              F⇒₂ g₂ ∘₃ h₂ ∘₃ F⇒₁ f₁   →⟨ ∘-resp-≈ˡ comm₁ ⟩
+              F⇒₂ g₂ ∘₃ F⇒₂ g₁ ∘₃ h₁   ←⟨ assoc₃          ⟩              
+              (F⇒₂ g₂ ∘₃ F⇒₂ g₁) ∘₃ h₁ ←⟨ ∘-resp-≈ʳ F-∘₂  ⟩
+              F⇒₂ (g₂ ∘₂ g₁) ∘₃ h₁
+            ∎
+        } where open Arr₁ a₁; open Arr₂ a₂
+                open Obj₁ A; open Obj₂ B; open Obj₃ C
+                open Tools₃

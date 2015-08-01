@@ -169,7 +169,8 @@ module _ {α β γ} (C : Category α β γ) where
   module Category₁ where
     open Just-Category C renaming
       (Obj to Obj₁; _⇒_ to _⇒₁_; id to id₁; _∘_ to _∘₁_; setoid to setoid₁;
-       idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁) public
+       idˡ to idˡ₁; idʳ to idʳ₁; assoc to assoc₁; ∘-resp-≈ to ∘-resp-≈₁;
+       module Tools to Tools₁) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₁) public
     open ISetoid₁ setoid₁ public
     private open module H = Hetero setoid₁
@@ -179,7 +180,8 @@ module _ {α β γ} (C : Category α β γ) where
   module Category₂ where
     open Just-Category C renaming
       (Obj to Obj₂; _⇒_ to _⇒₂_; id to id₂; _∘_ to _∘₂_; setoid to setoid₂;
-       idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂) public
+       idˡ to idˡ₂; idʳ to idʳ₂; assoc to assoc₂; ∘-resp-≈ to ∘-resp-≈₂;
+       module Tools to Tools₂) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₂) public
     open ISetoid₂ setoid₂ public
     private open module H = Hetero setoid₂
@@ -189,7 +191,8 @@ module _ {α β γ} (C : Category α β γ) where
   module Category₃ where
     open Just-Category C renaming
       (Obj to Obj₃; _⇒_ to _⇒₃_; id to id₃; _∘_ to _∘₃_; setoid to setoid₃;
-       idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃) public
+       idˡ to idˡ₃; idʳ to idʳ₃; assoc to assoc₃; ∘-resp-≈ to ∘-resp-≈₃;
+       module Tools to Tools₃) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₃) public
     open ISetoid₃ setoid₃ public
     private open module H = Hetero setoid₃

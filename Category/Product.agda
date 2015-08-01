@@ -1,6 +1,6 @@
 module Categories.Category.Product where
 
-open import Data.Product as P hiding (_×_)
+open import Data.Product as P hiding (_×_) public
 
 open import Categories.Utilities.Product
 open import Categories.Category.Base
@@ -24,5 +24,4 @@ C₁ × C₂ = record
   ; idʳ      = idʳ₁ , idʳ₂
   ; assoc    = assoc₁ , assoc₂
   ; ∘-resp-≈ = zip ∘-resp-≈₁ ∘-resp-≈₂
-  }
-  where open Category₁ C₁; open Category₂ C₂
+  } where open Category₁ C₁; open Category₂ C₂
