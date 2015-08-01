@@ -78,13 +78,10 @@ Comma = record
         ; g    = g₂ ∘₂ g₁
         ; comm =
             begin
-              h₃ ∘₃ F⇒₁ (f₂ ∘₁ f₁)     →⟨ ∘-resp-≈ˡ F-∘₁  ⟩ 
-              h₃ ∘₃ F⇒₁ f₂ ∘₃ F⇒₁ f₁   ←⟨ assoc₃          ⟩
-              (h₃ ∘₃ F⇒₁ f₂) ∘₃ F⇒₁ f₁ →⟨ ∘-resp-≈ʳ comm₂ ⟩
-              (F⇒₂ g₂ ∘₃ h₂) ∘₃ F⇒₁ f₁ →⟨ assoc₃          ⟩
-              F⇒₂ g₂ ∘₃ h₂ ∘₃ F⇒₁ f₁   →⟨ ∘-resp-≈ˡ comm₁ ⟩
-              F⇒₂ g₂ ∘₃ F⇒₂ g₁ ∘₃ h₁   ←⟨ assoc₃          ⟩              
-              (F⇒₂ g₂ ∘₃ F⇒₂ g₁) ∘₃ h₁ ←⟨ ∘-resp-≈ʳ F-∘₂  ⟩
+              h₃ ∘₃ F⇒₁ (f₂ ∘₁ f₁)     →⟨ ∘ʳ-resp-≈ˡ F-∘₁  ⟩ 
+              (h₃ ∘₃ F⇒₁ f₂) ∘₃ F⇒₁ f₁ →⟨ ∘ʳ-resp-≈ʳ comm₂ ⟩
+              F⇒₂ g₂ ∘₃ h₂ ∘₃ F⇒₁ f₁   →⟨ ∘ʳ-resp-≈ˡ comm₁ ⟩          
+              (F⇒₂ g₂ ∘₃ F⇒₂ g₁) ∘₃ h₁ ←⟨ ∘-resp-≈ʳ F-∘₂   ⟩
               F⇒₂ (g₂ ∘₂ g₁) ∘₃ h₁
             ∎
         } where open Arr₁ a₁; open Arr₂ a₂

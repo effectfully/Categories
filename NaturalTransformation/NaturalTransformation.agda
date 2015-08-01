@@ -30,13 +30,8 @@ idⁿ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ �
     -> NaturalTransformation F F
 idⁿ {C₂ = C₂} {F} = record
   { η          = id
-  ; naturality = λ {A B f} ->
-      begin
-        id ∘ F⇒ f →⟨ idˡ ⟩
-        F⇒ f      ←⟨ idʳ ⟩
-        F⇒ f ∘ id
-      ∎
-  } where open Functor F; open IEqReasoningWith C₂
+  ; naturality = left idˡ idʳ
+  } where open Functor F
 
 _∘ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          {Ψ : Functor C₁ C₂} {Φ : Functor C₁ C₂} {Ξ : Functor C₁ C₂}
@@ -45,11 +40,8 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   { η          = λ {O} -> η₁ {O} ∘ η₂ {O}
   ; naturality = λ {A B f} ->
       begin
-        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ assoc                 ⟩
-        η₁ ∘ (η₂ ∘ F⇒₁ f) →⟨ ∘-resp-≈ˡ naturality₂ ⟩
-        η₁ ∘ (F⇒₂ f ∘ η₂) ←⟨ assoc                 ⟩
-        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘-resp-≈ʳ naturality₁ ⟩
-        (F⇒₃ f ∘ η₁) ∘ η₂ →⟨ assoc                 ⟩
+        (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ ∘²-resp-≈ˡ naturality₂ ⟩
+        (η₁ ∘ F⇒₂ f) ∘ η₂ →⟨ ∘ʳ-resp-≈ʳ naturality₁ ⟩
         F⇒₃ f ∘ (η₁ ∘ η₂)
       ∎
   } where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
