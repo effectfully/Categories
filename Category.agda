@@ -1,3 +1,3 @@
-module Categories.Category.Base where
+module Categories.Category where
 
 open import Categories.Category.Category public

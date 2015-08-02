@@ -1,12 +1,11 @@
 module Categories.Setoid.Instances where
 
-open import Level
-open import Function
-open import Relation.Binary.PropositionalEquality
 open import Data.Unit.Base
 
+open import Categories.Utilities.Prelude
 open import Categories.Setoid.Equivalence
 open import Categories.Setoid.Setoid
+open import Categories.Setoid.Function
 
 ⊤-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A zero
 ⊤-ISetoid = record
@@ -22,10 +21,10 @@ open import Categories.Setoid.Setoid
 ≡-ISetoid = record
   { _≈_            = _≡_
   ; isIEquivalence = record
-      { refl  = refl
-      ; sym   = sym
-      ; trans = trans
-       }
+      { refl  = prefl
+      ; sym   = psym
+      ; trans = ptrans
+      }
   }
 
 ≡-Setoid : ∀ {α} {A : Set α} -> Setoid A α
@@ -33,29 +32,44 @@ open import Categories.Setoid.Setoid
 
 →-ISetoid₂ : ∀ {α} -> ISetoid₂ (λ (A B : Set α) -> A -> B) α
 →-ISetoid₂ = record
-      { _≈_            = λ f g -> ∀ x -> f x ≡ g x
+      { _≈_            = _≗ₚ_
       ; isIEquivalence = record
-          { refl  = λ     x -> refl
-          ; sym   = λ p   x -> sym   (p x)
-          ; trans = λ p q x -> trans (p x) (q x)
+          { refl  = λ     x -> prefl
+          ; sym   = λ p   x -> psym   (p x)
+          ; trans = λ p q x -> ptrans (p x) (q x)
           }
       }
 
+─>-ISetoid₂ : ∀ {α γ}
+            -> ISetoid₂ (λ (Aˢ Bˢ : Setoid A γ , A ∈ Set α) -> struct Aˢ ─> struct Bˢ) (α ⊔ γ)
+─>-ISetoid₂ = record
+      { _≈_            = _≗_
+      ; isIEquivalence = record
+          { refl  = λ {_ f} r -> ⟨⟩-resp-≈ f r
+          ; sym   = λ{ {Aˢ , Bˢ} p   r ->
+              Setoid.sym   (struct Bˢ) (p (Setoid.sym  (struct Aˢ) r))     }
+          ; trans = λ{ {Aˢ , Bˢ} p q r ->
+              Setoid.trans (struct Bˢ) (p (Setoid.refl (struct Aˢ))) (q r) }
+          }
+      } where open Π
+
 module HIEquality where
-  open module  Heq {ι α} {I : Set ι} (A : I -> Set α) = Hetero (≡-ISetoid {A = A}) using (_≋_)
+  private open module  Heq {ι α} {I : Set ι} (A : I -> Set α) =
+                         Hetero (≡-ISetoid {A = A}) using (_≋_)
   heq = _≋_
   syntax heq A x y = x [ A ]≅ y
-  open module IHeq {ι α} {I : Set ι} {A : I -> Set α} = Hetero (≡-ISetoid {A = A}) public
+  private open module IHeq {ι α} {I : Set ι} {A : I -> Set α} =
+                         Hetero (≡-ISetoid {A = A}) hiding (_≋_) public
+                         
+module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id′}) renaming (_≋_ to _≅_)
 
-module HEquality {α} where
-  open Hetero (≡-ISetoid {α = α} {A = id}) renaming (_≋_ to _≅_) public
-  open HSetoid hsetoid public
+private
+  module Test where
+    open import Function
+    open import Data.Nat
+    open import Data.Nat.Properties.Simple
+    open import Data.Fin hiding (_+_)
+    open HEquality
 
-module Test where
-  open import Data.Nat
-  open import Data.Nat.Properties.Simple
-  open import Data.Fin hiding (_+_)
-  open HEquality
-
-  test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
-  test n m rewrite +-comm n m = hrefl
+    test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
+    test n m rewrite +-comm n m = hrefl

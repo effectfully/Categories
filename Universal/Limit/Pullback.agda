@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Universal.Limit.Pullback {α β γ} (ℂ : Category α β γ) where
-
-open import Data.Product
 
 open import Categories.Morphism.Morphism ℂ
 
@@ -19,7 +17,7 @@ record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ �
 
     .comm      : f ∘ π¹ ≈ g ∘ π²
     .↘-inj     : ∀ {D} {p₁ p₂ : D ⇒ A} {q₁ q₂ : D ⇒ B} {r : f ∘ p₁ ≈ g ∘ q₁} {s : f ∘ p₂ ≈ g ∘ q₂}
-               -> p₁ ↘ q₁ ⟨ r ⟩ ≈ p₂ ↘ q₂ ⟨ s ⟩ -> p₁ ≈ p₂ × q₁ ≈ q₂
+               -> p₁ ↘ q₁ ⟨ r ⟩ ≈ p₂ ↘ q₂ ⟨ s ⟩ -> p₁ ≈ p₂ ×ₚ q₁ ≈ q₂
     .universal : ∀ {D} {p : D ⇒ A} {q : D ⇒ B} {u : D ⇒ Ob}
                -> (r : π¹ ∘ u ≈ p) -> (s : π² ∘ u ≈ q) -> p ↘ q ⟨ r ⌈ ∘²-resp-≈ʳ comm ⌉ʳ s ⟩ ≈ u
 

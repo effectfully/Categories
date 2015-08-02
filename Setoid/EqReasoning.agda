@@ -28,7 +28,7 @@ module HEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid
   x ∎ = relTo hrefl
 
 module IEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
-  open module I = ISetoid isetoid; open Hetero isetoid
+  open module I = ISetoid isetoid; open Just-Hetero isetoid
   private open module HER = HEqReasoning hsetoid hiding (begin_; _→⟨_⟩_; _←⟨_⟩_) public
 
   infix  1 begin_
@@ -48,4 +48,4 @@ module EqReasoning {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid; open Indexed setoid; open IEqReasoning {I = ⊤} isetoid public
 
 module MixedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
-  open Hetero isetoid; open HEqReasoning hsetoid public
+  open Just-Hetero isetoid; open HEqReasoning hsetoid public

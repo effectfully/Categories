@@ -6,11 +6,8 @@ module Categories.Category.Comma
   {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
   (F₁ : Functor C₁ C₃) (F₂ : Functor C₂ C₃) where
 
-open import Data.Product
-
-open Category₁ C₁; open Category₂ C₂; open Category₃ C₃
 open Functor₁ F₁; open Functor₂ F₂
-open IEqReasoningFrom C₃
+open Category₁ C₁; open Category₂ C₂; open Category₃ C₃; open IEqReasoningFrom C₃
 
 Comma : Category (α₁ ⊔ α₂ ⊔ β₃) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₃) (γ₁ ⊔ γ₂)
 Comma = record
@@ -55,7 +52,7 @@ Comma = record
         module Arr₂ where open _⇒_ f renaming (f to f₂; g to g₂; comm to comm₂) public
 
       _≈_ : ∀ {A B} -> A ⇒ B -> A ⇒ B -> Set (γ₁ ⊔ γ₂)
-      a₁ ≈ a₂ = f₁ ≈₁ f₂ × g₁ ≈₂ g₂
+      a₁ ≈ a₂ = f₁ ≈₁ f₂ ×ₚ g₁ ≈₂ g₂
         where open Arr₁ a₁; open Arr₂ a₂
 
       id : ∀ {A} -> A ⇒ A

@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Morphism.Relations {α β γ} (ℂ : Category α β γ) where
-
-open import Data.Product
 
 open import Categories.Morphism.Morphism
 
@@ -21,7 +19,7 @@ Iso->Iso i = record
   ; isoʳ = isoˡ
   } where open Iso ℂ i
 
-Iso->Mono&Epi : ∀ {A B} {f : A ⇒ B} -> Iso ℂ f -> Mono ℂ f × Epi ℂ f
+Iso->Mono&Epi : ∀ {A B} {f : A ⇒ B} -> Iso ℂ f -> Mono ℂ f ×ₚ Epi ℂ f
 Iso->Mono&Epi {f = f} i =
   ( λ {C g h} p ->
       begin

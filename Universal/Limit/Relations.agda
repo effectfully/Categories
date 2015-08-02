@@ -1,4 +1,4 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Universal.Limit.Relations {α β γ} (ℂ : Category α β γ) where
 
@@ -17,7 +17,7 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
     ; ι         = id
     ; ↙_⟨_⟩     = λ p r -> p
     ; comm      = ∘-resp-≈ʳ comm
-    ; ↙-inj     = id→
+    ; ↙-inj     = id′
     ; universal = flip right idˡ
     }
 

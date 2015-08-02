@@ -1,3 +1,3 @@
-module Categories.NaturalTransformation.Base where
+module Categories.NaturalTransformation where
 
 open import Categories.NaturalTransformation.NaturalTransformation public

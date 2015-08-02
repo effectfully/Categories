@@ -1,7 +1,7 @@
 module Categories.NaturalTransformation.NaturalTransformation where
 
-open import Categories.Category.Base
-open import Categories.Functor.Base
+open import Categories.Category
+open import Categories.Functor
 
 infixr 9 _∘ⁿ_
 
@@ -14,24 +14,23 @@ record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Categ
     
     naturality : ∀ {A B} {f : A [ C₁ ]⇒ B} -> η ∘ F⇒₁ f ≈ F⇒₂ f ∘ η
 
-module NaturalTransformation₁ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-                              {Ψ Φ : Functor C₁ C₂} (N : NaturalTransformation Ψ Φ) where
-  open NaturalTransformation N renaming (η to η₁; naturality to naturality₁) public
+module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+         {Ψ Φ : Functor C₁ C₂} (N : NaturalTransformation Ψ Φ) where
+  module NaturalTransformation₁ where
+    open NaturalTransformation N renaming (η to η₁; naturality to naturality₁) public
 
-module NaturalTransformation₂ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-                              {Ψ Φ : Functor C₁ C₂} (N : NaturalTransformation Ψ Φ) where
-  open NaturalTransformation N renaming (η to η₂; naturality to naturality₂) public
+  module NaturalTransformation₂ where
+    open NaturalTransformation N renaming (η to η₂; naturality to naturality₂) public
 
-module NaturalTransformation₃ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-                              {Ψ Φ : Functor C₁ C₂} (N : NaturalTransformation Ψ Φ) where
-  open NaturalTransformation N renaming (η to η₃; naturality to naturality₃) public
+  module NaturalTransformation₃ where
+    open NaturalTransformation N renaming (η to η₃; naturality to naturality₃) public
 
 idⁿ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {F : Functor C₁ C₂}
     -> NaturalTransformation F F
 idⁿ {C₂ = C₂} {F} = record
   { η          = id
   ; naturality = left idˡ idʳ
-  } where open Functor F
+  } where open Functor F; open Category C₂
 
 _∘ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          {Ψ : Functor C₁ C₂} {Φ : Functor C₁ C₂} {Ξ : Functor C₁ C₂}
@@ -60,19 +59,3 @@ NaturalTransformation-ISetoid {C₂ = C₂} = record
       ; trans = λ p q -> trans p q
       }
   } where open Category C₂
-
-Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-    -> Category α₁ β₁ γ₁
-    -> Category α₂ β₂ γ₂
-    -> Category (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ γ₂)
-Fun C₁ C₂ = record
-  { Obj      = Functor C₁ C₂
-  ; _⇒_      = NaturalTransformation
-  ; setoid   = NaturalTransformation-ISetoid
-  ; id       = idⁿ
-  ; _∘_      = _∘ⁿ_
-  ; idˡ      = idˡ
-  ; idʳ      = idʳ
-  ; assoc    = assoc
-  ; ∘-resp-≈ = λ q p -> ∘-resp-≈ q p
-  } where open NaturalTransformation; open Category C₂

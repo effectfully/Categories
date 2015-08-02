@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Universal.Colimit.Pushout {α β γ} (ℂ : Category α β γ) where
-
-open import Data.Product
 
 open Category ℂ
 
@@ -17,7 +15,7 @@ record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ
 
     .comm      : ι¹ ∘ f ≈ ι² ∘ g
     .↖-inj     : ∀ {D} {p₁ p₂ : A ⇒ D} {q₁ q₂ : B ⇒ D} {r : p₁ ∘ f ≈ q₁ ∘ g} {s : p₂ ∘ f ≈ q₂ ∘ g}
-               -> p₁ ↖ q₁ ⟨ r ⟩ ≈ p₂ ↖ q₂ ⟨ s ⟩ -> p₁ ≈ p₂ × q₁ ≈ q₂
+               -> p₁ ↖ q₁ ⟨ r ⟩ ≈ p₂ ↖ q₂ ⟨ s ⟩ -> p₁ ≈ p₂ ×ₚ q₁ ≈ q₂
     .universal : ∀ {D} {p : A ⇒ D} {q : B ⇒ D} {u : Ob ⇒ D}
                -> (r : u ∘ ι¹ ≈ p) -> (s : u ∘ ι² ≈ q) -> p ↖ q ⟨ r ⌈ ∘²-resp-≈ˡ comm ⌉ˡ s ⟩ ≈ u
 

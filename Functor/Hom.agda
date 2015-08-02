@@ -1,14 +1,10 @@
 module Categories.Functor.Hom where
 
-open import Relation.Binary.PropositionalEquality as PE hiding (refl)
-
-open import Data.Product
-
-open import Categories.Category.Base
-open import Categories.Functor.Base
+open import Categories.Category
+open import Categories.Functor
 open import Categories.Categories.Agda
 
-Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Bifunctor (C ᵒᵖ) C Agda
+Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Bifunctor (C ᵒᵖ) C Sets
 Hom[-,-] {C = C} = record
   { F·       = uncurry _⇒_
   ; F⇒       = Hom[_]
@@ -19,7 +15,7 @@ Hom[-,-] {C = C} = record
       open IEqReasoningWith C
       postulate really : ∀ {A B} {f g : A ⇒ B} -> f ≈ g -> f ≡ g
 
-      Hom[_] : ∀ {A B C D} -> C ⇒ A × B ⇒ D -> A ⇒ B -> C ⇒ D
+      Hom[_] : ∀ {A B C D} -> C ⇒ A ×ₚ B ⇒ D -> A ⇒ B -> C ⇒ D
       Hom[ f , g ] h = g ∘ h ∘ f
 
       F-id : ∀ {A B} {h : A ⇒ B} -> Hom[ id , id ] h ≈ h
@@ -37,5 +33,5 @@ Hom[-,-] {C = C} = record
         ∎
 
       F-resp-≈ : ∀ {A B C D} {f₂ f₁ : C ⇒ A} {g₂ g₁ : B ⇒ D} {h : A ⇒ B}
-               -> f₁ ≈ f₂ × g₁ ≈ g₂ -> Hom[ f₁ , g₁ ] h ≈ Hom[ f₂ , g₂ ] h
+               -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂ -> Hom[ f₁ , g₁ ] h ≈ Hom[ f₂ , g₂ ] h
       F-resp-≈ (p₁ , p₂) = ∘-resp-≈ p₂ (∘-resp-≈ˡ p₁)

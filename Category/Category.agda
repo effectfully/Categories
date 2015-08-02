@@ -1,10 +1,7 @@
 module Categories.Category.Category where
 
-open import Level public
-open import Function using (flip; _∘′_; _$_; case_of_) renaming (id to id→) public
-open import Data.Product using (_,_) public
-
-open import Categories.Setoid.Base public
+open import Categories.Utilities.Prelude public
+open import Categories.Setoid public
 
 module Category-Module where
   record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
@@ -150,14 +147,14 @@ module _ {α β γ} (C : Category α β γ) where
   module IEqReasoningFrom = IEqReasoning setoid
 
   module Just-Heterogeneous where
-    open Hetero setoid
+    open Just-Hetero setoid
 
     ∘-resp-≋ : ∀ {A A' B B' C C'} {g₁ : B ⇒ C} {g₂ : B' ⇒ C'} {f₁ : A ⇒ B} {f₂ : A' ⇒ B'}
              -> g₁ ≋ g₂ -> f₁ ≋ f₂ -> g₁ ∘ f₁ ≋ g₂ ∘ f₂
     ∘-resp-≋ (hetero g₁≈g₂) (hetero f₁≈f₂) = hetero (∘-resp-≈ g₁≈g₂ f₁≈f₂)
 
   module Heterogeneous where
-    open Hetero setoid public; open HSetoid hsetoid public; open Just-Heterogeneous public
+    open Hetero setoid public; open Just-Heterogeneous public
 
   module MixedEqReasoningFrom where
     open Heterogeneous public; open MixedEqReasoning setoid public
@@ -173,7 +170,7 @@ module _ {α β γ} (C : Category α β γ) where
        module Tools to Tools₁) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₁) public
     open ISetoid₁ setoid₁ public
-    private open module H = Hetero setoid₁
+    private open module H = Just-Hetero setoid₁
                               renaming (hetero to hetero₁; homo to homo₁) using () public
     open HSetoid₁ H.hsetoid renaming (_≈₁_ to _≋₁_) public
 
@@ -184,7 +181,7 @@ module _ {α β γ} (C : Category α β γ) where
        module Tools to Tools₂) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₂) public
     open ISetoid₂ setoid₂ public
-    private open module H = Hetero setoid₂
+    private open module H = Just-Hetero setoid₂
                               renaming (hetero to hetero₂; homo to homo₂) using () public
     open HSetoid₂ H.hsetoid renaming (_≈₂_ to _≋₂_) public
 
@@ -195,7 +192,7 @@ module _ {α β γ} (C : Category α β γ) where
        module Tools to Tools₃) public
     open Just-Heterogeneous C renaming (∘-resp-≋ to ∘-resp-≋₃) public
     open ISetoid₃ setoid₃ public
-    private open module H = Hetero setoid₃
+    private open module H = Just-Hetero setoid₃
                               renaming (hetero to hetero₃; homo to homo₃) using () public
     open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_) public
 

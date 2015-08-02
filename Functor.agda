@@ -1,0 +1,4 @@
+module Categories.Functor where
+
+open import Categories.Functor.Functor public
+open import Categories.Functor.Variety public

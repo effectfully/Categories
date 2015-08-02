@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Universal.Colimit.Coproduct {α β γ} (ℂ : Category α β γ) where
-
-open import Data.Product
 
 open Category ℂ
 
@@ -16,7 +14,7 @@ record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
     _↓_ : ∀ {C} -> A ⇒ C -> B ⇒ C -> Ob ⇒ C
 
     ↓-inj     : ∀ {C} {f₁ f₂ : A ⇒ C} {g₁ g₂ : B ⇒ C}
-              -> f₁ ↓ g₁ ≈ f₂ ↓ g₂ -> f₁ ≈ f₂ × g₁ ≈ g₂
+              -> f₁ ↓ g₁ ≈ f₂ ↓ g₂ -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂
     universal : ∀ {C} {f : A ⇒ C} {g : B ⇒ C} {u : Ob ⇒ C}
               -> u ∘ ι¹ ≈ f -> u ∘ ι² ≈ g -> f ↓ g ≈ u
 

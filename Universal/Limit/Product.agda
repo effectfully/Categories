@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Universal.Limit.Product {α β γ} (ℂ : Category α β γ) where
-
-open import Data.Product
 
 open Category ℂ
 
@@ -16,7 +14,7 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
     _↑_ : ∀ {C} -> C ⇒ A -> C ⇒ B -> C ⇒ Ob
 
     ↑-inj    : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
-             -> f₁ ↑ g₁ ≈ f₂ ↑ g₂ -> f₁ ≈ f₂ × g₁ ≈ g₂
+             -> f₁ ↑ g₁ ≈ f₂ ↑ g₂ -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂
     universal : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob}
               -> π¹ ∘ u ≈ f -> π² ∘ u ≈ g -> f ↑ g ≈ u
 

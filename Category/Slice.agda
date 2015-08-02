@@ -1,8 +1,6 @@
-open import Categories.Category.Base
+open import Categories.Category
 
 module Categories.Category.Slice {α β γ} (C : Category α β γ) where
-
-open import Data.Product
 
 open Category C
 

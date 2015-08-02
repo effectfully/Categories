@@ -1,13 +1,9 @@
 module Categories.Setoid.Setoid where
 
-open import Level
-open import Function
-open import Data.Product
+open import Data.Unit.Base
 
+open import Categories.Utilities.Prelude
 open import Categories.Setoid.Equivalence
-
-infixl 10 _%
-_% = _∘_
 
 module Setoid-Module where
   record Setoid {α} (A : Set α) β : Set (α ⊔ suc β) where
@@ -74,7 +70,18 @@ module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
         }
     }
 
-module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  -- We can define `hsetoid' in terms of `isetoid', but this breaks some definitional equalities.
+  hsetoid : ∀ {ι} {I : Set ι} -> HSetoid (λ (_ : I) -> A) β
+  hsetoid = record
+    { _≈_            = _≈_
+    ; isHEquivalence = record
+        { hrefl  = refl
+        ; hsym   = sym
+        ; htrans = trans
+        }
+    }
+    
+module Just-Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
   open ISetoid isetoid
 
   infix 4 _≋_
@@ -102,12 +109,13 @@ module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β)
     { _≈_            = λ x y -> x ≋ y
     ; isHEquivalence = record
         { hrefl  = hetero refl
-        ; hsym   = hlift₁ (hetero ∘ sym)
-        ; htrans = hlift₂ (hetero % ∘ trans)
+        ; hsym   = hlift₁ (hetero ∘′ sym)
+        ; htrans = hlift₂ (hetero % ∘′ trans)
         }
     }
 
-  -- open HSetoid hsetoid public hiding (_≈_)
+module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  open Just-Hetero isetoid public; open HSetoid hsetoid hiding (_≈_) public
 
 module _ {α β} {A : Set α} (setoid : Setoid A β) where
   module Setoid₁ where

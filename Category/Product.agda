@@ -1,17 +1,16 @@
 module Categories.Category.Product where
 
-open import Data.Product as P hiding (_×_) public
-
+open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
-open import Categories.Category.Base
+open import Categories.Category
 
 _×_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
     -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category (α₁ ⊔ α₂) (β₁ ⊔ β₂) (γ₁ ⊔ γ₂)
 C₁ × C₂ = record
-  { Obj      = Obj₁ P.× Obj₂
-  ; _⇒_      = _⇒₁_ -< P._×_ >- _⇒₂_
+  { Obj      = Obj₁ ×ₚ Obj₂
+  ; _⇒_      = _⇒₁_ -< _×ₚ_ >- _⇒₂_
   ; setoid   = record
-      { _≈_            = _≈₁_ -< P._×_ >- _≈₂_
+      { _≈_            = _≈₁_ -< _×ₚ_ >- _≈₂_
       ; isIEquivalence = record
           { refl  = refl₁ , refl₂
           ; sym   = map sym₁ sym₂
