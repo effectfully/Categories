@@ -12,8 +12,8 @@ _% = _∘′_
 
 record Struct {α β} (A : Set α) (B : A -> Set β) : Set (α ⊔ β) where
   field
-    {carrier} : A
-    struct    : B carrier
+    carrier : A
+    struct  : B carrier
 open Struct public
 
 syntax Struct A (λ x -> B) = B , x ∈ A

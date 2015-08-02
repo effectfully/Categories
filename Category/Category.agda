@@ -32,6 +32,10 @@ module Category-Module where
       ∘-resp-≈ʳ : ∀ {A B C} {g₁ g₂ : B ⇒ C} {f : A ⇒ B} -> g₁ ≈ g₂ -> g₁ ∘ f ≈ g₂ ∘ f
       ∘-resp-≈ʳ p = ∘-resp-≈ p refl
 
+      ∘-resp-≈² : ∀ {A B C D} {h : C ⇒ D} {g₁ g₂ : B ⇒ C} {f : A ⇒ B}
+                -> g₁ ≈ g₂ -> h ∘ g₁ ∘ f ≈ h ∘ g₂ ∘ f
+      ∘-resp-≈² = ∘-resp-≈ˡ ∘′ ∘-resp-≈ʳ
+
       reassocˡ : ∀ {A B C D} {h : C ⇒ D} {g : B ⇒ C} {f : A ⇒ B} {i : A ⇒ D}
                -> (h ∘ g) ∘ f ≈ i -> h ∘ g ∘ f ≈ i
       reassocˡ = right assoc

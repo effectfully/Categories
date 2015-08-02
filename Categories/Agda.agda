@@ -59,10 +59,5 @@ Setoids {α} {γ} = record
   ; idˡ      = λ {Aˢ Bˢ f}           r -> ⟨⟩-resp-≈ f r
   ; idʳ      = λ {Aˢ Bˢ f}           r -> ⟨⟩-resp-≈ f r
   ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> ⟨⟩-resp-≈ (h ∘ˢ g ∘ˢ f) r
-  ; ∘-resp-≈ = λ {Aˢ Bˢ Cˢ g₁ g₂ f₁ f₂} q p {x y} r -> let open EqReasoning (struct Cˢ) in
-      begin
-        g₁ ⟨$⟩ (f₁ ⟨$⟩ x) →⟨ q (⟨⟩-resp-≈ f₁ (Setoid.refl (struct Aˢ))) ⟩
-        g₂ ⟨$⟩ (f₁ ⟨$⟩ x) →⟨ ⟨⟩-resp-≈ g₂ (p r)                         ⟩
-        g₂ ⟨$⟩ (f₂ ⟨$⟩ y)
-      ∎
+  ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open Π
