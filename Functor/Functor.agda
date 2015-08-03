@@ -4,7 +4,7 @@ open import Categories.Category
 open import Categories.Category.Product
 
 infixr 9 _∘ᶠ_
-infixr 2 _⁂_
+infixr 6 _⁂_ _※_
 
 record Functor {α₁ α₂ β₁ β₂ γ₁ γ₂} (C₁ : Category α₁ β₁ γ₁) (C₂ : Category α₂ β₂ γ₂)
                : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) where

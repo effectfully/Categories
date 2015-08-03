@@ -5,19 +5,21 @@ open import Categories.Functor
 open import Categories.NaturalTransformation
 open import Categories.Categories.Agda
 
-Hom[_][-,-] : ∀ {α β γ} -> (C : Category α β γ) -> Profunctor C C
-Hom[ C ][-,-] = record
-  { F·       = λ o -> record
-      { carrier = uncurry _⇒_ o
-      ; struct  = inst o
+Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Profunctor C C
+Hom[-,-] {C = C} = record
+  { bifunctor = record
+      { F·       = λ o -> record
+          { carrier = uncurry _⇒_ o
+          ; struct  = inst o
+          }
+      ; F⇒       = λ o -> record
+          { ⟨_⟩       = Hom[ o ]
+          ; ⟨⟩-resp-≈ = ∘-resp-≈ʳˡ
+          }
+      ; F-id     = F-id
+      ; F-∘      = F-∘
+      ; F-resp-≈ = λ p r -> F-resp-≈ p r
       }
-  ; F⇒       = λ o -> record
-      { ⟨_⟩       = Hom[ o ]
-      ; ⟨⟩-resp-≈ = ∘-resp-≈ʳˡ
-      }
-  ; F-id     = F-id
-  ; F-∘      = F-∘
-  ; F-resp-≈ = λ p r -> F-resp-≈ p r
   } where
       open IEqReasoningWith C
 
@@ -43,14 +45,17 @@ Hom[ C ][-,-] = record
                -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂ -> h₁ ≈ h₂ -> Hom[ f₁ , g₁ ] h₁ ≈ Hom[ f₂ , g₂ ] h₂
       F-resp-≈ (p , q) r = ∘-resp-≈ q (∘-resp-≈ r p)
 
+Hom[_][-,-] : ∀ {α β γ} -> (C : Category α β γ) -> Profunctor C C
+Hom[ _ ][-,-] = Hom[-,-]
+
 module _ {α β γ} {C : Category α β γ} where
   open IEqReasoningWith C
 
   Hom[_,-] : Obj -> Copresheaf C
-  Hom[ A ,-] = reduceˡ Hom[ C ][-,-] (constᶠ {C₂ = C ᵒᵖ} A)
+  Hom[_,-] = applyˡ Hom[-,-]
 
   Hom[-,_] : Obj -> Presheaf   C
-  Hom[-, B ] = reduceʳ Hom[ C ][-,-] (constᶠ {C₂ = C   } B)
+  Hom[-,_] = applyʳ Hom[ C ][-,-]
 
   Hom-NaturalTransformation₁ : ∀ {A₁ A₂} -> A₂ ⇒ A₁ -> NaturalTransformation Hom[ A₁ ,-] Hom[ A₂ ,-]
   Hom-NaturalTransformation₁ f = record

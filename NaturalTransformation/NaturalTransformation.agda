@@ -10,7 +10,7 @@ record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Categ
   open Category C₂; open Functor₁ F₁; open Functor₂ F₂ 
   
   field
-    η          : ∀ {O} -> F·₁ O ⇒ F·₂ O
+    η : ∀ {A} -> F·₁ A ⇒ F·₂ A
     
     naturality : ∀ {A B} {f : A [ C₁ ]⇒ B} -> η ∘ F⇒₁ f ≈ F⇒₂ f ∘ η
 
@@ -36,7 +36,7 @@ _∘ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β�
          {Ψ : Functor C₁ C₂} {Φ : Functor C₁ C₂} {Ξ : Functor C₁ C₂}
      -> NaturalTransformation Φ Ξ -> NaturalTransformation Ψ Φ -> NaturalTransformation Ψ Ξ
 _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
-  { η          = λ {O} -> η₁ {O} ∘ η₂ {O}
+  { η          = λ {A} -> η₁ {A} ∘ η₂ {A}
   ; naturality = λ {A B f} ->
       begin
         (η₁ ∘ η₂) ∘ F⇒₁ f →⟨ ∘²-resp-≈ˡ naturality₂ ⟩
@@ -51,7 +51,7 @@ NaturalTransformation-ISetoid :
   -> ISetoid₂ (NaturalTransformation {C₁ = C₁} {C₂ = C₂}) (α₁ ⊔ γ₂)
 NaturalTransformation-ISetoid {C₂ = C₂} = record
   { _≈_            = λ{ N₁ N₂ -> let open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
-                                 in ∀ {O} -> η₁ {O} ≈ η₂ {O}
+                                 in ∀ {A} -> η₁ {A} ≈ η₂ {A}
                       }
   ; isIEquivalence = record
       { refl  =          refl   
