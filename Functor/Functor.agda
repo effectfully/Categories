@@ -89,6 +89,29 @@ _∘ᶠ_ {C₁ = C₁} {C₂ = C₂} {C₃ = C₃} F₂ F₁ = record
   } where open Functor₁ F₁; open Functor₂ F₂
           open Category₁ C₁; open Category₂ C₂; open Category₃ C₃; open IEqReasoningFrom C₃
 
+module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} where
+  open Category C₂
+  
+  constᶠ : Obj -> Functor C₁ C₂
+  constᶠ B = record
+    { F·       = const B
+    ; F⇒       = const id
+    ; F-id     = refl
+    ; F-∘      = sym idʳ
+    ; F-resp-≈ = λ _ -> refl
+    }
+
+_※_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
+        {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
+    -> Functor C₁ C₂ -> Functor C₁ C₃ -> Functor C₁ (C₂ × C₃)
+F₁ ※ F₂ = record
+  { F·       = < F·₁ , F·₂ >
+  ; F⇒       = < F⇒₁ , F⇒₂ >
+  ; F-id     = F-id₁ , F-id₂
+  ; F-∘      = F-∘₁ , F-∘₂
+  ; F-resp-≈ = < F-resp-≈₁ , F-resp-≈₂ >
+  } where open Functor₁ F₁; open Functor₂ F₂
+
 _⁂_ : ∀ {α₁ α₂ α₃ α₄ β₁ β₂ β₃ β₄ γ₁ γ₂ γ₃ γ₄}
         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
         {C₃ : Category α₃ β₃ γ₃} {C₄ : Category α₄ β₄ γ₄}

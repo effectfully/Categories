@@ -4,8 +4,8 @@ open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Agda
 
-Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Bifunctor (C ᵒᵖ) C Setoids 
-Hom[-,-] {C = C} = record
+Hom[_][-,-] : ∀ {α β γ} -> (C : Category α β γ) -> Profunctor C C
+Hom[ C ][-,-] = record
   { F·       = λ o -> record
       { carrier = uncurry _⇒_ o
       ; struct  = inst o
@@ -41,3 +41,12 @@ Hom[-,-] {C = C} = record
       F-resp-≈ : ∀ {A B C D} {f₂ f₁ : C ⇒ A} {g₂ g₁ : B ⇒ D} {h₁ h₂ : A ⇒ B}
                -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂ -> h₁ ≈ h₂ -> Hom[ f₁ , g₁ ] h₁ ≈ Hom[ f₂ , g₂ ] h₂
       F-resp-≈ (p , q) r = ∘-resp-≈ q (∘-resp-≈ r p)
+
+module _ {α β γ} {C : Category α β γ} where
+  open Category C
+
+  Hom[_,-] : Obj -> Copresheaf C
+  Hom[ A ,-] = reduceˡ Hom[ C ][-,-] (constᶠ {C₂ = C ᵒᵖ} A)
+
+  Hom[-,_] : Obj -> Presheaf   C
+  Hom[-, B ] = reduceʳ Hom[ C ][-,-] (constᶠ {C₂ = C   } B)
