@@ -6,20 +6,18 @@ open import Categories.NaturalTransformation
 open import Categories.Categories.Agda
 
 Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Profunctor C C
-Hom[-,-] {C = C} = record
-  { bifunctor = record
-      { F·       = λ o -> record
-          { carrier = uncurry _⇒_ o
-          ; struct  = inst o
-          }
-      ; F⇒       = λ o -> record
-          { ⟨_⟩       = Hom[ o ]
-          ; ⟨⟩-resp-≈ = ∘-resp-≈ʳˡ
-          }
-      ; F-id     = F-id
-      ; F-∘      = F-∘
-      ; F-resp-≈ = λ p r -> F-resp-≈ p r
+Hom[-,-] {C = C} = tag record
+  { F·       = λ o -> record
+      { carrier = uncurry _⇒_ o
+      ; struct  = inst o
       }
+  ; F⇒       = λ o -> record
+      { ⟨_⟩       = Hom[ o ]
+      ; ⟨⟩-resp-≈ = ∘-resp-≈ʳˡ
+      }
+  ; F-id     = F-id
+  ; F-∘      = F-∘
+  ; F-resp-≈ = λ p r -> F-resp-≈ p r
   } where
       open IEqReasoningWith C
 
@@ -62,3 +60,6 @@ module _ {α β γ} {C : Category α β γ} where
 
   Hom-NaturalTransformation₂ : ∀ {B₁ B₂} -> B₁ ⇒ B₂ -> NaturalTransformation Hom[-, B₁ ] Hom[-, B₂ ]
   Hom-NaturalTransformation₂ = Nat-applyʳ Hom[-,-]
+
+Hom[_][-,_] : ∀ {α β γ} -> (C : Category α β γ) -> _ -> Presheaf C
+Hom[ C ][-, B ] = Hom[-,_] {C = C} B

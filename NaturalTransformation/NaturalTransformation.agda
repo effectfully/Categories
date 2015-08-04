@@ -15,7 +15,7 @@ record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Categ
     naturality : ∀ {A B} {f : A [ C₁ ]⇒ B} -> η ∘ F⇒₁ f ≈ F⇒₂ f ∘ η
 
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-         {Ψ Φ : Functor C₁ C₂} (N : NaturalTransformation Ψ Φ) where
+         {F₁ F₂ : Functor C₁ C₂} (N : NaturalTransformation F₁ F₂) where
   module NaturalTransformation₁ where
     open NaturalTransformation N renaming (η to η₁; naturality to naturality₁) public
 
@@ -33,8 +33,8 @@ idⁿ {C₂ = C₂} {F} = record
   } where open Functor F; open Category C₂
 
 _∘ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-         {Ψ : Functor C₁ C₂} {Φ : Functor C₁ C₂} {Ξ : Functor C₁ C₂}
-     -> NaturalTransformation Φ Ξ -> NaturalTransformation Ψ Φ -> NaturalTransformation Ψ Ξ
+         {F₁ : Functor C₁ C₂} {F₂ : Functor C₁ C₂} {F₃ : Functor C₁ C₂}
+     -> NaturalTransformation F₂ F₃ -> NaturalTransformation F₁ F₂ -> NaturalTransformation F₁ F₃
 _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   { η          = λ {A} -> η₁ {A} ∘ η₂ {A}
   ; naturality = λ {A B f} ->
@@ -62,7 +62,7 @@ NaturalTransformation-ISetoid {C₂ = C₂} = record
 
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          (F : Bifunctor (C₁ ᵒᵖ) C₁ C₂)  where
-  open Functor (bifunctor F); open Category₁ C₁; open Category₂ C₂; open IEqReasoningFrom C₂
+  open Functor (detag F); open Category₁ C₁; open Category₂ C₂; open IEqReasoningFrom C₂
 
   Nat-applyˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyˡ F A₁) (applyˡ F B₁)
   Nat-applyˡ f₁ = record

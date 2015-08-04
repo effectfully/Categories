@@ -21,11 +21,9 @@ Full : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ
 Full {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒₂ F· B) -> ∃ λ f -> F⇒ f ≈₂ g
   where open Functor F; open Category₁ C₁; open Category₂ C₂
 
-record Bifunctor {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
-                 (C₁ : Category α₁ β₁ γ₁) (C₂ : Category α₂ β₂ γ₂) (C₃ : Category α₃ β₃ γ₃)
-                 : Set (α₁ ⊔ α₂ ⊔ α₃ ⊔ β₁ ⊔ β₂ ⊔ β₃ ⊔ γ₁ ⊔ γ₂ ⊔ γ₃) where
-  field bifunctor : Functor (C₁ × C₂) C₃
-open Bifunctor public
+Bifunctor : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
+          -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category α₃ β₃ γ₃ -> Set _
+Bifunctor = Tag₃ λ C₁ C₂ C₃ -> Functor (C₁ × C₂) C₃
 
 Presheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
 Presheaf {α} {γ} C = Contravariant C (Setoids {α} {γ})
@@ -40,7 +38,7 @@ reduce : ∀ {α₁ α₂ α₃ α₄ β₁ β₂ β₃ β₄ γ₁ γ₂ γ₃ 
            {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
            {C₃ : Category α₃ β₃ γ₃} {C₄ : Category α₄ β₄ γ₄}
        -> Bifunctor C₁ C₂ C₃ -> Functor C₄ C₁ -> Functor C₄ C₂ -> Functor C₄ C₃
-reduce F₁ F₂ F₃ = bifunctor F₁ ∘ᶠ (F₂ ※ F₃)
+reduce F₁ F₂ F₃ = detag F₁ ∘ᶠ (F₂ ※ F₃)
 
 reduceˡ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
             {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
@@ -66,4 +64,4 @@ compose : ∀ {α₁ α₂ α₃ α₄ α₅ β₁ β₂ β₃ β₄ β₅ γ₁
             {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
             {C₄ : Category α₄ β₄ γ₄} {C₅ : Category α₅ β₅ γ₅}
         -> Bifunctor C₁ C₂ C₃ -> Functor C₄ C₁ -> Functor C₅ C₂ -> Bifunctor C₄ C₅ C₃
-compose F₁ F₂ F₃ = record { bifunctor = bifunctor F₁ ∘ᶠ (F₂ ⁂ F₃) }
+compose F₁ F₂ F₃ = tag (detag F₁ ∘ᶠ (F₂ ⁂ F₃))

@@ -43,6 +43,16 @@ Fun C₁ C₂ = record
   ; ∘-resp-≈ = λ q p -> ∘-resp-≈ q p
   } where open NaturalTransformation; open Category C₂
 
+eval : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+     -> Bifunctor (Fun C₁ C₂) C₁ C₂
+eval {C₁ = C₁} {C₂ = C₂} = tag record
+  { F·       = λ{ (F , A) -> let open Functor F in F· A }
+  ; F⇒       = λ{ (N , f) -> let open NaturalTransformation N in {!!} }
+  ; F-id     = {!!}
+  ; F-∘      = {!!}
+  ; F-resp-≈ = {!!}
+  }
+
 1-Cat-Terminal : Terminal 1-Cat One
 1-Cat-Terminal = record
   { ↝         = record
