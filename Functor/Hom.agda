@@ -49,7 +49,7 @@ Hom[_][-,-] : ∀ {α β γ} -> (C : Category α β γ) -> Profunctor C C
 Hom[ _ ][-,-] = Hom[-,-]
 
 module _ {α β γ} {C : Category α β γ} where
-  open IEqReasoningWith C
+  open Category C
 
   Hom[_,-] : Obj -> Copresheaf C
   Hom[_,-] = applyˡ Hom[-,-]
@@ -58,35 +58,7 @@ module _ {α β γ} {C : Category α β γ} where
   Hom[-,_] = applyʳ Hom[ C ][-,-]
 
   Hom-NaturalTransformation₁ : ∀ {A₁ A₂} -> A₂ ⇒ A₁ -> NaturalTransformation Hom[ A₁ ,-] Hom[ A₂ ,-]
-  Hom-NaturalTransformation₁ f = record
-    { η          = record
-        { ⟨_⟩       = λ g -> g ∘ f
-        ; ⟨⟩-resp-≈ = ∘-resp-≈ʳ
-        }
-    ; naturality = λ {_ _ h g₁ g₂} q ->
-        begin
-          (h ∘ g₁ ∘ id) ∘ f   ←⟨ ∘-resp-≈ʳ assoc ⟩
-          ((h ∘ g₁) ∘ id) ∘ f →⟨ ∘-resp-≈ʳ idʳ   ⟩
-          (h ∘ g₁) ∘ f        →⟨ ∘-resp-≈ˡʳ q    ⟩
-          (h ∘ g₂) ∘ f        →⟨ assoc           ⟩
-          h ∘ g₂ ∘ f          ←⟨ idʳ             ⟩
-          (h ∘ g₂ ∘ f) ∘ id   →⟨ assoc           ⟩
-          h ∘ (g₂ ∘ f) ∘ id
-        ∎
-    }
+  Hom-NaturalTransformation₁ = Nat-applyˡ Hom[-,-]
 
   Hom-NaturalTransformation₂ : ∀ {B₁ B₂} -> B₁ ⇒ B₂ -> NaturalTransformation Hom[-, B₁ ] Hom[-, B₂ ]
-  Hom-NaturalTransformation₂ g = record
-    { η          = record
-        { ⟨_⟩       = λ f -> g ∘ f
-        ; ⟨⟩-resp-≈ = ∘-resp-≈ˡ
-        }
-    ; naturality = λ {_ _ h f₁ f₂} p ->
-        begin
-          g ∘ id ∘ f₁ ∘ h   →⟨ ∘-resp-≈ˡ idˡ ⟩
-          g ∘ f₁ ∘ h        →⟨ ∘-resp-≈ʳˡ p  ⟩
-          g ∘ f₂ ∘ h        ←⟨ assoc         ⟩
-          (g ∘ f₂) ∘ h      ←⟨ idˡ           ⟩
-          id ∘ (g ∘ f₂) ∘ h
-        ∎
-    }
+  Hom-NaturalTransformation₂ = Nat-applyʳ Hom[-,-]

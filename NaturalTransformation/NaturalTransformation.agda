@@ -59,3 +59,33 @@ NaturalTransformation-ISetoid {C₂ = C₂} = record
       ; trans = λ p q -> trans p q
       }
   } where open Category C₂
+
+module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+         (F : Bifunctor (C₁ ᵒᵖ) C₁ C₂)  where
+  open Functor (bifunctor F); open Category₁ C₁; open Category₂ C₂; open IEqReasoningFrom C₂
+
+  Nat-applyˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyˡ F A₁) (applyˡ F B₁)
+  Nat-applyˡ f₁ = record
+    { η          = F⇒ (f₁ , id₁)
+    ; naturality = λ {_ _ f₂} ->
+        begin
+          F⇒ (f₁ , id₁) ∘₂ F⇒ (id₁ , f₂) ←⟨ F-∘                    ⟩
+          F⇒ (id₁ ∘₁ f₁ , id₁ ∘₁ f₂)     →⟨ F-resp-≈ (idˡ₁ , idˡ₁) ⟩
+          F⇒ (f₁ , f₂)                   ←⟨ F-resp-≈ (idʳ₁ , idʳ₁) ⟩
+          F⇒ (f₁ ∘₁ id₁ , f₂ ∘₁ id₁)     →⟨ F-∘                    ⟩
+          F⇒ (id₁ , f₂) ∘₂ F⇒ (f₁ , id₁)
+        ∎
+    }
+
+  Nat-applyʳ : ∀ {A₂ B₂} -> A₂ ⇒₁ B₂ -> NaturalTransformation (applyʳ F A₂) (applyʳ F B₂)
+  Nat-applyʳ f₂ = record
+    { η          = F⇒ (id₁ , f₂)
+    ; naturality = λ {_ _ f₁} ->
+        begin
+          F⇒ (id₁ , f₂) ∘₂ F⇒ (f₁ , id₁) ←⟨ F-∘                    ⟩
+          F⇒ (f₁ ∘₁ id₁ , f₂ ∘₁ id₁)     →⟨ F-resp-≈ (idʳ₁ , idʳ₁) ⟩
+          F⇒ (f₁ , f₂)                   ←⟨ F-resp-≈ (idˡ₁ , idˡ₁) ⟩
+          F⇒ (id₁ ∘₁ f₁ , id₁ ∘₁ f₂)     →⟨ F-∘                    ⟩
+          F⇒ (f₁ , id₁) ∘₂ F⇒ (id₁ , f₂)
+        ∎
+    }
