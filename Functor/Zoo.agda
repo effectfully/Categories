@@ -3,7 +3,6 @@ module Categories.Functor.Zoo where
 open import Categories.Category
 open import Categories.Category.Product
 open import Categories.Functor.Functor
-open import Categories.Categories.Agda
 
 Endofunctor : ∀ {α β γ} -> Category α β γ -> Set _
 Endofunctor C = Functor C C
@@ -24,15 +23,6 @@ Full {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒₂ F· B) -> �
 Bifunctor : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
           -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category α₃ β₃ γ₃ -> Set _
 Bifunctor = Tag₃ λ C₁ C₂ C₃ -> Functor (C₁ × C₂) C₃
-
-Presheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
-Presheaf {α} {γ} C = Contravariant C (Setoids {α} {γ})
-
-Copresheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
-Copresheaf {α} {γ} C = Functor C (Setoids {α} {γ})
-
-Profunctor : ∀ {α γ α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Set _
-Profunctor {α} {γ} C₁ C₂ = Bifunctor (C₁ ᵒᵖ) C₂ (Setoids {α} {γ})
 
 reduce : ∀ {α₁ α₂ α₃ α₄ β₁ β₂ β₃ β₄ γ₁ γ₂ γ₃ γ₄}
            {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}

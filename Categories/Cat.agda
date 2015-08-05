@@ -4,7 +4,6 @@ open import Relation.Binary.PropositionalEquality
 
 open import Categories.Category
 open import Categories.Functor
-open import Categories.NaturalTransformation
 open import Categories.Categories.Discrete
 open import Categories.Universal.Limit.Terminal
 
@@ -25,32 +24,6 @@ open import Categories.Universal.Limit.Terminal
           F⇒ G₂ (F⇒ F₁ f) →⟨ F-resp-≋ p ⟩
           F⇒ G₂ (F⇒ F₂ f)
         ∎
-  }
-
-Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-    -> Category α₁ β₁ γ₁
-    -> Category α₂ β₂ γ₂
-    -> Category (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ γ₂)
-Fun C₁ C₂ = record
-  { Obj      = Functor C₁ C₂
-  ; _⇒_      = NaturalTransformation
-  ; setoid   = NaturalTransformation-ISetoid
-  ; id       = idⁿ
-  ; _∘_      = _∘ⁿ_
-  ; idˡ      = idˡ
-  ; idʳ      = idʳ
-  ; assoc    = assoc
-  ; ∘-resp-≈ = λ q p -> ∘-resp-≈ q p
-  } where open NaturalTransformation; open Category C₂
-
-eval : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-     -> Bifunctor (Fun C₁ C₂) C₁ C₂
-eval {C₁ = C₁} {C₂ = C₂} = tag record
-  { F·       = λ{ (F , A) -> let open Functor F in F· A }
-  ; F⇒       = λ{ (N , f) -> let open NaturalTransformation N in {!!} }
-  ; F-id     = {!!}
-  ; F-∘      = {!!}
-  ; F-resp-≈ = {!!}
   }
 
 1-Cat-Terminal : Terminal 1-Cat One

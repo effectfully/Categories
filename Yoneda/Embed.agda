@@ -1,13 +1,13 @@
-module Categories.Yoneda where
+module Categories.Yoneda.Embed where
 
 open import Categories.Category
 open import Categories.Functor
 open import Categories.Functor.Hom
 open import Categories.NaturalTransformation
-open import Categories.Categories.Cat
+open import Categories.Categories.Fun
 open import Categories.Categories.Agda
 
-Embed : ∀ {α β γ} {C : Category α β γ} -> Functor C (Fun (C ᵒᵖ) Setoids)
+Embed : ∀ {α β γ} {C : Category α β γ} -> Functor C (Presheaves C)
 Embed {C = C} = record
   { F·       = Hom[ C ][-,_]
   ; F⇒       = Hom-NaturalTransformation₂

@@ -6,7 +6,7 @@ open import Categories.Functor
 record DinaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
                                (F₁ F₂ : Bifunctor (C₁ ᵒᵖ) C₁ C₂) : Set (α₁ ⊔ β₁ ⊔ β₂ ⊔ γ₂) where
   open Category₁ C₁; open Category₂ C₂
-  open Functor₁ (bifunctor F₁); open Functor₂ (bifunctor F₂)
+  open Functor₁ (detag F₁); open Functor₂ (detag F₂)
 
   field
 --     α : ∀ {A} -> F·₁ (A , A) ⇒₂ F·₂ (A , A)
@@ -33,5 +33,5 @@ idᵈ {C₁ = C₁} {C₂ = C₂} F = record
         F⇒ (f₁ , id₁) ∘₂ F⇒ (id₁ , f₂)        ←⟨ ∘-resp-≈ˡ idˡ₂         ⟩
         F⇒ (f₁ , id₁) ∘₂ id₂ ∘₂ F⇒ (id₁ , f₂)
       ∎
-  } where open Functor (bifunctor F); open Category₁ C₁; open Category₂ C₂
+  } where open Functor (detag F); open Category₁ C₁; open Category₂ C₂
           open IEqReasoningFrom C₂; open Tools₂

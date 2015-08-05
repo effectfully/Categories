@@ -3,6 +3,8 @@ module Categories.Categories.Agda where
 open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Category
+open import Categories.Functor
+open import Categories.Categories.Fun
 
 Sets : ∀ {α} -> Category (suc α) α α
 Sets {α} = record
@@ -61,3 +63,15 @@ Setoids {α} {γ} = record
   ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> ⟨⟩-resp-≈ (h ∘ˢ g ∘ˢ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open Π
+
+Presheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
+Presheaf {α} {γ} C = Contravariant C (Setoids {α} {γ})
+
+Copresheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
+Copresheaf {α} {γ} C = Functor C (Setoids {α} {γ})
+
+Profunctor : ∀ {α γ α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Set _
+Profunctor {α} {γ} C₁ C₂ = Bifunctor (C₁ ᵒᵖ) C₂ (Setoids {α} {γ})
+
+Presheaves : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Category _ _ _
+Presheaves {α} {γ} C = Fun (C ᵒᵖ) (Setoids {α} {γ})
