@@ -49,3 +49,33 @@ module EqReasoning {α β} {A : Set α} (setoid : Setoid A β) where
 
 module MixedEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
   open Just-Hetero isetoid; open HEqReasoning hsetoid public
+
+module _ {α β} {A : Set α} (setoid : Setoid A β) where
+  module EqReasoning₁ = EqReasoning setoid
+    renaming (begin_ to begin₁_; _→⟨_⟩_ to _→⟨_⟩₁_; _←⟨_⟩_ to _←⟨_⟩₁_; _∎ to _∎₁)
+
+  module EqReasoning₂ = EqReasoning setoid
+    renaming (begin_ to begin₂_; _→⟨_⟩_ to _→⟨_⟩₂_; _←⟨_⟩_ to _←⟨_⟩₂_; _∎ to _∎₂)
+
+  module EqReasoning₃ = EqReasoning setoid
+    renaming (begin_ to begin₃_; _→⟨_⟩_ to _→⟨_⟩₃_; _←⟨_⟩_ to _←⟨_⟩₃_; _∎ to _∎₃)
+
+module _ {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
+  module IEqReasoning₁ = IEqReasoning isetoid
+    renaming (begin_ to begin₁_; _→⟨_⟩_ to _→⟨_⟩₁_; _←⟨_⟩_ to _←⟨_⟩₁_; _∎ to _∎₁)
+
+  module IEqReasoning₂ = IEqReasoning isetoid
+    renaming (begin_ to begin₂_; _→⟨_⟩_ to _→⟨_⟩₂_; _←⟨_⟩_ to _←⟨_⟩₂_; _∎ to _∎₂)
+
+  module IEqReasoning₃ = IEqReasoning isetoid
+    renaming (begin_ to begin₃_; _→⟨_⟩_ to _→⟨_⟩₃_; _←⟨_⟩_ to _←⟨_⟩₃_; _∎ to _∎₃)
+
+module _ {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
+  module HEqReasoning₁ = HEqReasoning hsetoid
+    renaming (begin_ to begin₁_; _→⟨_⟩_ to _→⟨_⟩₁_; _←⟨_⟩_ to _←⟨_⟩₁_; _∎ to _∎₁)
+
+  module HEqReasoning₂ = HEqReasoning hsetoid
+    renaming (begin_ to begin₂_; _→⟨_⟩_ to _→⟨_⟩₂_; _←⟨_⟩_ to _←⟨_⟩₂_; _∎ to _∎₂)
+
+  module HEqReasoning₃ = HEqReasoning hsetoid
+    renaming (begin_ to begin₃_; _→⟨_⟩_ to _→⟨_⟩₃_; _←⟨_⟩_ to _←⟨_⟩₃_; _∎ to _∎₃)

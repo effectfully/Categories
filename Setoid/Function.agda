@@ -5,20 +5,20 @@ open import Level
 open import Categories.Utilities.Prelude
 open import Categories.Setoid.Setoid
 
+infixr 5 _⟨$⟩_
 infixr 9 _∘ˢ_
 
 record Π {α β γ δ} {A : Set α} {B : A -> Set β}
          (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
   open Setoid₁ Aˢ; open HSetoid₂ Bˢ
 
-  infixl 5 _⟨$⟩_
-
   field
     ⟨_⟩       : ∀ x -> B x
     ⟨⟩-resp-≈ : ∀ {x y} -> x ≈₁ y -> ⟨ x ⟩ ≈₂ ⟨ y ⟩
-
-  _⟨$⟩_ = ⟨_⟩
-open Π using (_⟨$⟩_)
+    
+_⟨$⟩_ : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
+      -> Π Aˢ Bˢ -> ∀ x -> B x
+f ⟨$⟩ x = ⟨ x ⟩ where open Π f
 
 module _ {α β γ δ} {A : Set α} {B : A -> Set β}
          {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ} (f : Π Aˢ Bˢ) where

@@ -12,8 +12,8 @@ Epi  {B = B} f = ∀ {C} {g h : B ⇒ C} -> g ∘ f ≈ h ∘ f -> g ≈ h
 
 record Iso  {A B} (f : A ⇒ B) (f⁻¹ : B ⇒ A) : Set (α ⊔ β ⊔ γ) where
   field
-    isoˡ : f ∘ f⁻¹ ≈ id
-    isoʳ : f⁻¹ ∘ f ≈ id
+    isoˡ : f⁻¹ ∘ f ≈ id
+    isoʳ : f ∘ f⁻¹ ≈ id
 
 record _≃_ A B : Set (α ⊔ β ⊔ γ) where
   field
