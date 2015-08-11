@@ -40,7 +40,7 @@ record IsIEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i}
     ; trans = trans
     }
 
-  module IEqTools where
+  module EqTools where
     infix  5 _⌈_⌉_ _⌊_⌋_
     infixl 6 _⋯_
 
@@ -72,7 +72,7 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
     ; trans = htrans
     }
 
-  module HEqTools where
+  module EqTools where
     infix  5 _⌈_⌉_ _⌊_⌋_
     infixl 6 _⋯_
 
@@ -110,26 +110,26 @@ module _ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i} -> A i -> A 
          (isIEquivalence : IsIEquivalence A _≈_) where
   module IsIEquivalence₁ where
     open IsIEquivalence isIEquivalence renaming (refl to refl₁; sym to sym₁; trans to trans₁;
-                                                 module IEqTools to IEqTools₁) public
+                                                 module EqTools to EqTools₁) public
 
   module IsIEquivalence₂ where
     open IsIEquivalence isIEquivalence renaming (refl to refl₂; sym to sym₂; trans to trans₂;
-                                                 module IEqTools to IEqTools₂) public
+                                                 module EqTools to EqTools₂) public
 
   module IsIEquivalence₃ where
     open IsIEquivalence isIEquivalence renaming (refl to refl₃; sym to sym₃; trans to trans₃;
-                                                 module IEqTools to IEqTools₃) public
+                                                 module EqTools to EqTools₃) public
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i j} -> A i -> A j -> Set β}
          (isHEquivalence : IsHEquivalence A _≈_) where
   module IsHEquivalence₁ where
     open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₁; hsym to  hsym₁; htrans to htrans₁;
-                                                 module HEqTools to HEqTools₁) public
+                                                 module EqTools to EqTools₁) public
                                                  
   module IsHEquivalence₂ where
     open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₂; hsym to  hsym₂; htrans to htrans₂;
-                                                 module HEqTools to HEqTools₂) public
+                                                 module EqTools to EqTools₂) public
 
   module IsHEquivalence₃ where
     open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₃; hsym to  hsym₃; htrans to htrans₃;
-                                                 module HEqTools to HEqTools₃) public
+                                                 module EqTools to EqTools₃) public

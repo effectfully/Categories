@@ -25,15 +25,11 @@ record ThinCategory α β : Set (Level.suc (α Level.⊔ β)) where
 
 thin : ∀ {α β} -> ThinCategory α β -> Category α β _
 thin C = record
-  { Obj      = Obj
-  ; _⇒_      = _⇒_
-  ; setoid   = ⊤-ISetoid
-  ; id       = id
-  ; _∘_      = _∘_
-  ; idˡ      = _
-  ; idʳ      = _
-  ; assoc    = _
-  ; ∘-resp-≈ = _
+  { Obj    = Obj
+  ; _⇒_    = _⇒_
+  ; setoid = ⊤-ISetoid
+  ; id     = id
+  ; _∘_    = _∘_
   } where open ThinCategory C
 
 Discrete : ∀ {α} -> Set α -> Category α α _
@@ -69,12 +65,10 @@ module _ where
 
   Le-binaryProducts : BinaryProducts
   Le-binaryProducts {n} {m} = record
-    { Ob        = n ⊓ m
-    ; π¹        = m⊓n≤m n m
-    ; π²        = m⊓n≤n n m
-    ; _↑_       = p≤m⊓n
-    ; ↑-inj     = _
-    ; universal = _
+    { Ob  = n ⊓ m
+    ; π¹  = m⊓n≤m n m
+    ; π²  = m⊓n≤n n m
+    ; _↑_ = p≤m⊓n
     } where
         m⊓n≤n : ∀ m n -> m ⊓ n ≤ n
         m⊓n≤n  0       n      = z≤n
@@ -100,12 +94,10 @@ module _ where
 
   Mul-binaryProducts : BinaryProducts
   Mul-binaryProducts {n} {m} = record
-    { Ob        = d
-    ; π¹        = π¹
-    ; π²        = π²
-    ; _↑_       = _↑_
-    ; ↑-inj     = _
-    ; universal = _
+    { Ob  = d
+    ; π¹  = π¹
+    ; π²  = π²
+    ; _↑_ = _↑_
     } where
         p : ∃ (GCD n m)
         p = gcd n m

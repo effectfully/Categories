@@ -9,14 +9,7 @@ open import Categories.Setoid.Function
 open import Categories.Setoid.EqReasoning
 
 ⊤-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A zero
-⊤-ISetoid = record
-  { _≈_            = λ _ _ -> ⊤
-  ; isIEquivalence = record
-      { refl  = _
-      ; sym   = _
-      ; trans = _
-       }
-  }
+⊤-ISetoid = record { _≈_ = λ _ _ -> ⊤ }
 
 ≡-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A α
 ≡-ISetoid = record

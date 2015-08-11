@@ -15,7 +15,7 @@ module Category-Module where
       id     : ∀ {A}     -> A ⇒ A
       _∘_    : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
 
-    open ISetoid setoid; open IEqTools
+    open ISetoid setoid
 
     field
       idˡ      : ∀ {A B} {f : A ⇒ B} -> id ∘ f ≈ f
@@ -127,7 +127,7 @@ module Category-Module where
 open Category-Module renaming (module Category to Just-Category) public
 
 module Category {α β γ} (C : Category α β γ) where
-  open Just-Category C public; open ISetoid setoid public; open IEqTools public; open Tools public
+  open Just-Category C public; open ISetoid setoid public; open Tools public
 
 _ᵒᵖ : ∀ {α β γ} -> Category α β γ -> Category α β γ
 C ᵒᵖ = record 
@@ -180,7 +180,7 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₁ setoid₁ public
     private open module H = Just-Hetero setoid₁
                               renaming (hetero to hetero₁; homo to homo₁) using () public
-    open HSetoid₁ H.hsetoid renaming (_≈₁_ to _≋₁_) public
+    open HSetoid₁ H.hsetoid renaming (_≈₁_ to _≋₁_; module EqTools₁ to HEqTools₁) public
 
   module Category₂ where
     open Just-Category C renaming
@@ -191,7 +191,7 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₂ setoid₂ public
     private open module H = Just-Hetero setoid₂
                               renaming (hetero to hetero₂; homo to homo₂) using () public
-    open HSetoid₂ H.hsetoid renaming (_≈₂_ to _≋₂_) public
+    open HSetoid₂ H.hsetoid renaming (_≈₂_ to _≋₂_; module EqTools₂ to HEqTools₂) public
 
   module Category₃ where
     open Just-Category C renaming
@@ -202,7 +202,7 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₃ setoid₃ public
     private open module H = Just-Hetero setoid₃
                               renaming (hetero to hetero₃; homo to homo₃) using () public
-    open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_) public
+    open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_; module EqTools₃ to HEqTools₃) public
 
 module _ where
   open Category

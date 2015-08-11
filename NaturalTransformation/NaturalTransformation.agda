@@ -69,8 +69,8 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
          (F : Bifunctor (C₁ ᵒᵖ) C₁ C₂)  where
   open Functor (detag F); open Category₁ C₁; open Category₂ C₂; open IEqReasoningFrom C₂
 
-  Nat-applyˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyˡ F A₁) (applyˡ F B₁)
-  Nat-applyˡ f₁ = record
+  applyⁿˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyˡ F A₁) (applyˡ F B₁)
+  applyⁿˡ f₁ = record
     { ηₑ         = λ _ -> F⇒ (f₁ , id₁)
     ; naturality = λ {_ _ f₂} ->
         begin
@@ -82,8 +82,8 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
         ∎
     }
 
-  Nat-applyʳ : ∀ {A₂ B₂} -> A₂ ⇒₁ B₂ -> NaturalTransformation (applyʳ F A₂) (applyʳ F B₂)
-  Nat-applyʳ f₂ = record
+  applyⁿʳ : ∀ {A₂ B₂} -> A₂ ⇒₁ B₂ -> NaturalTransformation (applyʳ F A₂) (applyʳ F B₂)
+  applyⁿʳ f₂ = record
     { ηₑ         = λ _ -> F⇒ (id₁ , f₂)
     ; naturality = λ {_ _ f₁} ->
         begin

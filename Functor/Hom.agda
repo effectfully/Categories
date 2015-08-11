@@ -56,10 +56,10 @@ module _ {α β γ} {C : Category α β γ} where
   Hom[-,_] = applyʳ Hom[ C ][-,-]
 
   Hom-NaturalTransformation₁ : ∀ {A₁ A₂} -> A₂ ⇒ A₁ -> NaturalTransformation Hom[ A₁ ,-] Hom[ A₂ ,-]
-  Hom-NaturalTransformation₁ = Nat-applyˡ Hom[-,-]
+  Hom-NaturalTransformation₁ = applyⁿˡ Hom[-,-]
 
   Hom-NaturalTransformation₂ : ∀ {B₁ B₂} -> B₁ ⇒ B₂ -> NaturalTransformation Hom[-, B₁ ] Hom[-, B₂ ]
-  Hom-NaturalTransformation₂ = Nat-applyʳ Hom[-,-]
+  Hom-NaturalTransformation₂ = applyⁿʳ Hom[-,-]
 
 Hom[_][-,_] : ∀ {α β γ} -> (C : Category α β γ) -> _ -> Presheaf C
 Hom[ C ][-, B ] = Hom[-,_] {C = C} B

@@ -15,7 +15,9 @@ module Setoid-Module where
 open Setoid-Module renaming (module Setoid to Just-Setoid) public
 
 module Setoid {α β} {A : Set α} (setoid : Setoid A β) where
-  open Just-Setoid setoid public; open IsEquivalence isEquivalence public
+  open Just-Setoid setoid          public
+  open IsEquivalence isEquivalence public
+  open EqTools                     public
 
 module ISetoid-Module where
   record ISetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
@@ -33,7 +35,9 @@ module ISetoid-Module where
 open ISetoid-Module renaming (module ISetoid to Just-ISetoid) public
 
 module ISetoid {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
-  open Just-ISetoid isetoid public; open IsIEquivalence isIEquivalence hiding (inst) public
+  open Just-ISetoid isetoid                        public
+  open IsIEquivalence isIEquivalence hiding (inst) public
+  open EqTools                                     public
 
 module HSetoid-Module where
   record HSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
@@ -51,7 +55,9 @@ module HSetoid-Module where
 open HSetoid-Module renaming (module HSetoid to Just-HSetoid) public
 
 module HSetoid {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
-  open Just-HSetoid hsetoid public; open IsHEquivalence isHEquivalence hiding (hinst) public
+  open Just-HSetoid hsetoid                         public
+  open IsHEquivalence isHEquivalence hiding (hinst) public
+  open EqTools                                      public
 
 ISetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
