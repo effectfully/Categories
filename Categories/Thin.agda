@@ -82,18 +82,18 @@ module _ where
 module _ where
   open Poset poset
   
-  Mul : Category _ _ _
-  Mul = thin record
+  Div : Category _ _ _
+  Div = thin record
     { Obj = ℕ
     ; _⇒_ = _∣_
     ; id  = reflexive prefl
     ; _∘_ = flip trans
     } 
 
-  open Product Mul
+  open Product Div
 
-  Mul-binaryProducts : BinaryProducts
-  Mul-binaryProducts {n} {m} = record
+  Div-binaryProducts : BinaryProducts
+  Div-binaryProducts {n} {m} = record
     { Ob  = d
     ; π¹  = π¹
     ; π²  = π²
