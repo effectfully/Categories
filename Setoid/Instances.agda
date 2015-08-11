@@ -6,6 +6,7 @@ open import Categories.Utilities.Prelude
 open import Categories.Setoid.Equivalence
 open import Categories.Setoid.Setoid
 open import Categories.Setoid.Function
+open import Categories.Setoid.EqReasoning
 
 ⊤-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A zero
 ⊤-ISetoid = record
@@ -62,6 +63,12 @@ module HIEquality where
                          Hetero (≡-ISetoid {A = A}) hiding (_≋_) public
                          
 module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id′}) renaming (_≋_ to _≅_)
+
+module ≡-Reasoning {α} {A : Set α} = EqReasoning (≡-Setoid {A = A})
+
+-- Doesn't work.
+module ≅-Reasoning {α} where
+  open HEquality {α}; open HEqReasoning hsetoid public
 
 private
   module Test where

@@ -80,8 +80,8 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
                                 F⇒ f₂ ⟨$⟩ x
                               ∎₂
                             ⟩₁
-                           F⇒ g ⟨$⟩ (F⇒ f₂ ⟨$⟩ x)
-                         ∎₁         
+                          F⇒ g ⟨$⟩ (F⇒ f₂ ⟨$⟩ x)
+                        ∎₁         
                   }
                 }
             ; ⟨⟩-resp-≈ = λ p q -> F-resp-≈ q (lower p)
