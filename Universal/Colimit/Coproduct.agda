@@ -36,3 +36,5 @@ record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   ↓-resp-≈ : ∀ {C} {f₁ f₂ : A ⇒ C} {g₁ g₂ : B ⇒ C}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↓ g₁ ≈ f₂ ↓ g₂
   ↓-resp-≈ p q = universal (left ↓-ι¹ p) (left ↓-ι² q)
+
+BinaryCoproducts = ∀ {A B} -> Coproduct A B
