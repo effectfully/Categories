@@ -12,8 +12,8 @@ Hom[-,-] {C = C} = tag record
       ; struct  = inst o
       }
   ; F⇒       = λ o -> record
-      { ⟨_⟩       = Hom[ o ]
-      ; ⟨⟩-resp-≈ = ∘-resp-≈ʳˡ
+      { f·       = Hom[ o ]
+      ; f-resp-≈ = ∘-resp-≈ʳˡ
       }
   ; F-id     = F-id
   ; F-∘      = F-∘

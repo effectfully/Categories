@@ -39,7 +39,7 @@ open import Categories.Setoid.EqReasoning
 ─>-ISetoid₂ = record
       { _≈_            = _≗_
       ; isIEquivalence = record
-          { refl  = λ {_ f} r -> ⟨⟩-resp-≈ f r
+          { refl  = λ {_ f} r -> f-resp-≈ f r
           ; sym   = λ{ {Aˢ , Bˢ} p   r ->
               Setoid.sym   (struct Bˢ) (p (Setoid.sym  (struct Aˢ) r))     }
           ; trans = λ{ {Aˢ , Bˢ} p q r ->

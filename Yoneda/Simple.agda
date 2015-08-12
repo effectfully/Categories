@@ -56,16 +56,16 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
 
           f : nat ⇒₂ set
           f = record
-            { ⟨_⟩       = λ N -> let open NaturalTransformation N in lift (η ⟨$⟩ id)
-            ; ⟨⟩-resp-≈ = λ p -> lift (p refl)
+            { f·       = λ N -> let open NaturalTransformation N in lift (η ⟨$⟩ id)
+            ; f-resp-≈ = λ p -> lift (p refl)
             }
 
           f⁻¹ : set ⇒₂ nat
           f⁻¹ = record
-            { ⟨_⟩       = λ{ (lift x) -> record
+            { f·       = λ{ (lift x) -> record
                   { ηₑ         = λ B -> record
-                      { ⟨_⟩       = λ f -> F⇒ f ⟨$⟩ x
-                      ; ⟨⟩-resp-≈ = λ p -> F-resp-≈ p refl₁
+                      { f·       = λ f -> F⇒ f ⟨$⟩ x
+                      ; f-resp-≈ = λ p -> F-resp-≈ p refl₁
                       }
                   ; naturality = λ {B C g f₁ f₂} p ->
                       let open Π₁ (F⇒ g)
@@ -73,7 +73,7 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
                           open EqReasoning₂ (struct (F· B)) in
                         begin₁
                           F⇒ (g ∘ f₁ ∘ id) ⟨$⟩ x      →⟨ F-∘ refl₁ ⟩₁
-                          F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ ⟨⟩-resp-≈₁ $
+                          F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ f-resp-≈₁ $
                               begin₂
                                 F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ F-resp-≈ idʳ refl₁ ⟩₂
                                 F⇒ f₁ ⟨$⟩ x        →⟨ F-resp-≈ p   refl₁ ⟩₂
@@ -84,7 +84,7 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
                         ∎₁         
                   }
                 }
-            ; ⟨⟩-resp-≈ = λ p q -> F-resp-≈ q (lower p)
+            ; f-resp-≈ = λ p q -> F-resp-≈ q (lower p)
             } where open Π
 
           isoʳ : f ∘₂ f⁻¹ ≈₂ id₂

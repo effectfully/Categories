@@ -4,8 +4,9 @@ module Categories.Universal.Colimit.Initial {α β γ} (ℂ : Category α β γ)
 
 open Category ℂ
 
-record Initial (Ob : Obj) : Set (α ⊔ β ⊔ γ) where
+record Initial : Set (α ⊔ β ⊔ γ) where
   field
+    Ob        : Obj
     ↜         : ∀ {A} -> Ob ⇒ A
     universal : ∀ {A} {f : Ob ⇒ A} -> f ≈ ↜
 

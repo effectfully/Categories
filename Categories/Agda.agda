@@ -1,5 +1,9 @@
 module Categories.Categories.Agda where
 
+open import Data.Empty
+open import Data.Unit.Base
+open import Data.Sum
+
 open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Category
@@ -23,10 +27,16 @@ Sets {α} = record
       ∘′-resp-≡ q p x rewrite p x = q _
 
 module _ {α} where
-  open import Categories.Universal.Limit.Product   (Sets {α})
-  open import Categories.Universal.Limit.Equalizer (Sets {α})
-  open import Categories.Universal.Limit.Pullback  (Sets {α})
-  open import Categories.Universal.Limit.Relations (Sets {α})
+  open import Categories.Universal.Limit.Terminal    (Sets {α})
+  open import Categories.Universal.Limit.Product     (Sets {α})
+  open import Categories.Universal.Limit.Equalizer   (Sets {α})
+  open import Categories.Universal.Limit.Pullback    (Sets {α})
+  open import Categories.Universal.Limit.Relations   (Sets {α})
+  open import Categories.Universal.Colimit.Initial   (Sets {α})
+  open import Categories.Universal.Colimit.Coproduct (Sets {α})
+
+  terminal : Terminal
+  terminal = record { Ob = Lift ⊤ ; universal = λ _ -> prefl }
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
@@ -51,6 +61,22 @@ module _ {α} where
   pullbacks : Pullbacks
   pullbacks = Product&Equalizer->Pullback binaryProducts equalizers
 
+  initial : Initial
+  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; universal = λ{ (lift ()) } }
+
+  binaryCoproducts : BinaryCoproducts
+  binaryCoproducts {A} {B} = record
+    { Ob        = A ⊎ B
+    ; ι¹        = inj₁
+    ; ι²        = inj₂
+    ; _↓_       = [_,_]′
+    ; ↓-inj     = < proj₁ ∘′ []-inj , proj₂ ∘′ []-inj >
+    ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
+    } where
+        []-inj : ∀ {α β γ} {A : Set α} {B : Set β} {C : Set γ} {f₁ f₂ : A -> C} {g₁ g₂ : B -> C}
+               -> [ f₁ , g₁ ]′ ≗ₚ [ f₂ , g₂ ]′ -> f₁ ≗ₚ f₂ ×ₚ g₁ ≗ₚ g₂
+        []-inj p = p ∘′ inj₁ , p ∘′ inj₂
+
 Setoids : ∀ {α γ} -> Category (suc (α ⊔ γ)) (α ⊔ γ) (α ⊔ γ)
 Setoids {α} {γ} = record
   { Obj      = Setoid A γ , A ∈ Set α
@@ -58,9 +84,9 @@ Setoids {α} {γ} = record
   ; setoid   = ─>-ISetoid₂
   ; id       = idˢ
   ; _∘_      = _∘ˢ_
-  ; idˡ      = λ {Aˢ Bˢ f}           r -> ⟨⟩-resp-≈ f r
-  ; idʳ      = λ {Aˢ Bˢ f}           r -> ⟨⟩-resp-≈ f r
-  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> ⟨⟩-resp-≈ (h ∘ˢ g ∘ˢ f) r
+  ; idˡ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
+  ; idʳ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
+  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ˢ g ∘ˢ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open Π
 

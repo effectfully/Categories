@@ -12,21 +12,21 @@ record Π {α β γ δ} {A : Set α} {B : A -> Set β}
   open Setoid₁ Aˢ; open HSetoid₂ Bˢ
 
   field
-    ⟨_⟩       : ∀ x -> B x
-    ⟨⟩-resp-≈ : ∀ {x y} -> x ≈₁ y -> ⟨ x ⟩ ≈₂ ⟨ y ⟩
+    f·       : ∀ x -> B x
+    f-resp-≈ : ∀ {x y} -> x ≈₁ y -> f· x ≈₂ f· y
 
 module _ where
   open Π
   infixr 5 _⟨$⟩_
-  _⟨$⟩_ = ⟨_⟩
+  _⟨$⟩_ = f·
 
 module _ {α β γ δ} {A : Set α} {B : A -> Set β}
          {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ} (f : Π Aˢ Bˢ) where
   module Π₁ where
-    open Π f renaming (⟨_⟩ to ⟨_⟩₁; ⟨⟩-resp-≈ to ⟨⟩-resp-≈₁) public
+    open Π f renaming (f· to f·₁; f-resp-≈ to f-resp-≈₁) public
 
   module Π₂ where
-    open Π f renaming (⟨_⟩ to ⟨_⟩₂; ⟨⟩-resp-≈ to ⟨⟩-resp-≈₂) public
+    open Π f renaming (f· to f·₂; f-resp-≈ to f-resp-≈₂) public
 
 _─>_ : ∀ {α β γ δ} {A : Set α} {B : Set β} -> Setoid A γ -> Setoid B δ -> Set (α ⊔ β ⊔ γ ⊔ δ)
 Aˢ ─> Bˢ = Π Aˢ hBˢ
@@ -34,16 +34,16 @@ Aˢ ─> Bˢ = Π Aˢ hBˢ
 
 idˢ : ∀ {α γ} {A : Set α} {Aˢ : Setoid A γ} -> Aˢ ─> Aˢ
 idˢ = record
-  { ⟨_⟩       = id′
-  ; ⟨⟩-resp-≈ = id′
+  { f·       = id′
+  ; f-resp-≈ = id′
   }
 
 _∘ˢ_ : ∀ {α β γ δ ε ζ} {A : Set α} {B : Set β} {C : Set γ}
          {Aˢ : Setoid A δ} {Bˢ : Setoid B ε} {Cˢ : Setoid C ζ}
      -> Bˢ ─> Cˢ -> Aˢ ─> Bˢ -> Aˢ ─> Cˢ
 g ∘ˢ f = record
-  { ⟨_⟩       = ⟨_⟩₂ ∘′ ⟨_⟩₁
-  ; ⟨⟩-resp-≈ = ⟨⟩-resp-≈₂ ∘′ ⟨⟩-resp-≈₁
+  { f·       = f·₂ ∘′ f·₁
+  ; f-resp-≈ = f-resp-≈₂ ∘′ f-resp-≈₁
   } where open Π₁ f; open Π₂ g
 
 _≗_ : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}

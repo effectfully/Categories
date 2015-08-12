@@ -13,15 +13,17 @@ open import Categories.Universal.Colimit.Pushout
 
 open Category ℂ
 
-Terminal->Initial : ∀ {A} -> Terminal ℂ A -> Initial (ℂ ᵒᵖ) A
+Terminal->Initial : Terminal ℂ -> Initial (ℂ ᵒᵖ)
 Terminal->Initial t = record
-  { ↜         = ↝
+  { Ob        = Ob
+  ; ↜         = ↝
   ; universal = universal
   } where open Terminal ℂ t
 
-Initial->Terminal : ∀ {A} -> Initial ℂ A -> Terminal (ℂ ᵒᵖ) A
+Initial->Terminal : Initial ℂ -> Terminal (ℂ ᵒᵖ)
 Initial->Terminal i = record
-  { ↝         = ↜
+  { Ob        = Ob
+  ; ↝         = ↜
   ; universal = universal
   } where open Initial ℂ i
 

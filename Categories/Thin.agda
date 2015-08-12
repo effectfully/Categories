@@ -11,6 +11,7 @@ open import Data.Fin as F hiding (_≤_)
 
 open import Categories.Category renaming (suc to lsuc; _⊔_ to _⊔ₗ_)
 import Categories.Universal.Limit.Product     as Product
+import Categories.Universal.Colimit.Initial   as Initial
 import Categories.Universal.Colimit.Coproduct as Coproduct
 
 record ThinCategory α β : Set (lsuc (α ⊔ₗ β)) where
@@ -61,7 +62,10 @@ module _ where
     ; _∘_ = flip trans
     }
 
-  open Product Le; open Coproduct Le
+  open Product Le; open Initial Le; open Coproduct Le
+
+  Le-initial : Initial
+  Le-initial = record { ↜ = z≤n }
 
   Le-binaryProducts : BinaryProducts
   Le-binaryProducts {n} {m} = record
@@ -107,7 +111,10 @@ module _ where
     ; _∘_ = flip trans
     } 
 
-  open Product Div; open Coproduct Div
+  open Product Div; open Initial Div; open Coproduct Div
+
+  Div-initial : Initial
+  Div-initial = record { ↜ = 1∣ _ }
 
   Div-binaryProducts : BinaryProducts
   Div-binaryProducts {n} {m} = record
