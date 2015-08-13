@@ -180,7 +180,7 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₁ setoid₁ public
     private open module H = Just-Hetero setoid₁
                               renaming (hetero to hetero₁; homo to homo₁) using () public
-    open HSetoid₁ H.hsetoid renaming (_≈₁_ to _≋₁_; module EqTools₁ to HEqTools₁) public
+    open HSetoid₁ H.hsetoid renaming (_≈₁_ to _≋₁_) public
 
   module Category₂ where
     open Just-Category C renaming
@@ -191,7 +191,7 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₂ setoid₂ public
     private open module H = Just-Hetero setoid₂
                               renaming (hetero to hetero₂; homo to homo₂) using () public
-    open HSetoid₂ H.hsetoid renaming (_≈₂_ to _≋₂_; module EqTools₂ to HEqTools₂) public
+    open HSetoid₂ H.hsetoid renaming (_≈₂_ to _≋₂_) public
 
   module Category₃ where
     open Just-Category C renaming
@@ -202,14 +202,14 @@ module _ {α β γ} (C : Category α β γ) where
     open ISetoid₃ setoid₃ public
     private open module H = Just-Hetero setoid₃
                               renaming (hetero to hetero₃; homo to homo₃) using () public
-    open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_; module EqTools₃ to HEqTools₃) public
+    open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_) public
 
 module _ {α₁ β γ} (C : Category α₁ β γ) where
   open Category₁ C
 
   Category-via-Injection : ∀ {α₂ β₁ β₂} {Obj₂ : Set α₂}
                              {Obj-setoid₁ : Setoid Obj₁ β₁} {Obj-setoid₂ : Setoid Obj₂ β₂}
-                         -> Injection Obj-setoid₂ Obj-setoid₁ -> Category _ _ _
+                         -> Injection Obj-setoid₂ Obj-setoid₁ -> Category α₂ β γ
   Category-via-Injection {Obj₂ = Obj₂} injection = record
     { Obj      = Obj₂
     ; _⇒_      = λ A B -> f· ⟨$⟩ A ⇒₁ f· ⟨$⟩ B

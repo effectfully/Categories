@@ -58,7 +58,7 @@ open HSetoid-Module renaming (module HSetoid to Just-HSetoid) public
 module HSetoid {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
   open Just-HSetoid hsetoid                         public
   open IsHEquivalence isHEquivalence hiding (hinst) public
-  open EqTools                                      public
+  open HEqTools                                     public
 
 ISetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)

@@ -72,7 +72,7 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
     ; trans = htrans
     }
 
-  module EqTools where
+  module HEqTools where
     infix  5 _⌈_⌉_ _⌊_⌋_
     infixl 6 _⋯_
 
@@ -94,42 +94,33 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
 
 module _ {α β} {A : Set α} {_≈_ : A -> A -> Set β}
          (isEquivalence : IsEquivalence _≈_) where
-  module IsEquivalence₁ where
-    open IsEquivalence isEquivalence renaming (refl to refl₁; sym to sym₁; trans to trans₁;
-                                               module EqTools to EqTools₁) public
+  module IsEquivalence₁ = IsEquivalence isEquivalence
+    renaming (refl to refl₁; sym to sym₁; trans to trans₁; module EqTools to EqTools₁)
 
-  module IsEquivalence₂ where
-    open IsEquivalence isEquivalence renaming (refl to refl₂; sym to sym₂; trans to trans₂;
-                                               module EqTools to EqTools₂) public
+  module IsEquivalence₂ = IsEquivalence isEquivalence
+    renaming (refl to refl₂; sym to sym₂; trans to trans₂; module EqTools to EqTools₂)
 
-  module IsEquivalence₃ where
-    open IsEquivalence isEquivalence renaming (refl to refl₃; sym to sym₃; trans to trans₃;
-                                               module EqTools to EqTools₃) public
+  module IsEquivalence₃ = IsEquivalence isEquivalence
+    renaming (refl to refl₃; sym to sym₃; trans to trans₃; module EqTools to EqTools₃)
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i} -> A i -> A i -> Set β}
          (isIEquivalence : IsIEquivalence A _≈_) where
-  module IsIEquivalence₁ where
-    open IsIEquivalence isIEquivalence renaming (refl to refl₁; sym to sym₁; trans to trans₁;
-                                                 module EqTools to EqTools₁) public
+  module IsIEquivalence₁ = IsIEquivalence isIEquivalence
+    renaming (refl to refl₁; sym to sym₁; trans to trans₁; module EqTools to EqTools₁)
 
-  module IsIEquivalence₂ where
-    open IsIEquivalence isIEquivalence renaming (refl to refl₂; sym to sym₂; trans to trans₂;
-                                                 module EqTools to EqTools₂) public
+  module IsIEquivalence₂ = IsIEquivalence isIEquivalence
+    renaming (refl to refl₂; sym to sym₂; trans to trans₂; module EqTools to EqTools₂)
 
-  module IsIEquivalence₃ where
-    open IsIEquivalence isIEquivalence renaming (refl to refl₃; sym to sym₃; trans to trans₃;
-                                                 module EqTools to EqTools₃) public
+  module IsIEquivalence₃ = IsIEquivalence isIEquivalence
+    renaming (refl to refl₃; sym to sym₃; trans to trans₃; module EqTools to EqTools₃)
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i j} -> A i -> A j -> Set β}
          (isHEquivalence : IsHEquivalence A _≈_) where
-  module IsHEquivalence₁ where
-    open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₁; hsym to  hsym₁; htrans to htrans₁;
-                                                 module EqTools to EqTools₁) public
+  module IsHEquivalence₁ = IsHEquivalence isHEquivalence
+    renaming (hrefl to hrefl₁; hsym to  hsym₁; htrans to htrans₁; module HEqTools to HEqTools₁)
                                                  
-  module IsHEquivalence₂ where
-    open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₂; hsym to  hsym₂; htrans to htrans₂;
-                                                 module EqTools to EqTools₂) public
+  module IsHEquivalence₂ = IsHEquivalence isHEquivalence
+    renaming (hrefl to hrefl₂; hsym to  hsym₂; htrans to htrans₂; module HEqTools to HEqTools₂)
 
-  module IsHEquivalence₃ where
-    open IsHEquivalence isHEquivalence renaming (hrefl to hrefl₃; hsym to  hsym₃; htrans to htrans₃;
-                                                 module EqTools to EqTools₃) public
+  module IsHEquivalence₃ = IsHEquivalence isHEquivalence
+    renaming (hrefl to hrefl₃; hsym to  hsym₃; htrans to htrans₃; module HEqTools to HEqTools₃)
