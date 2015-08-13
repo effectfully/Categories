@@ -3,10 +3,13 @@ module Categories.Setoid.Instances where
 open import Data.Unit.Base
 
 open import Categories.Utilities.Prelude
+open import Categories.Utilities.Product
 open import Categories.Setoid.Equivalence
 open import Categories.Setoid.Setoid
 open import Categories.Setoid.Function
 open import Categories.Setoid.EqReasoning
+
+infix 3 _↣ₕ_ _↣_
 
 ⊤-ISetoid : ∀ {ι α} {I : Set ι} {A : I -> Set α} -> ISetoid A zero
 ⊤-ISetoid = record { _≈_ = λ _ _ -> ⊤ }
@@ -54,14 +57,31 @@ module HIEquality where
   syntax heq A x y = x [ A ]≅ y
   private open module IHeq {ι α} {I : Set ι} {A : I -> Set α} =
                          Hetero (≡-ISetoid {A = A}) hiding (_≋_) public
-                         
-module HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id′}) renaming (_≋_ to _≅_)
+
+module Just-HEquality {α} = Hetero (≡-ISetoid {α = α} {A = id′}) renaming (_≋_ to _≅_)
+
+module HEquality where
+  open Just-HEquality hiding (hrefl) public
+
+  pattern hrefl = hetero prefl
+
+  hcong : ∀ {α β} {A : Set α} {B : A -> Set β} {x y} -> (f : ∀ x -> B x) -> x ≅ y -> f x ≅ f y
+  hcong f hrefl = hrefl
+
+  hsubst : ∀ {α β} {A : Set α} {x y} -> (B : A -> Set β) -> x ≅ y -> B x -> B y
+  hsubst B hrefl = id′
+
+_↣ₕ_ : ∀ {α β} -> (A : Set α) -> (A -> Set β) -> Set (α ⊔ β)
+A ↣ₕ B = HInjection (≡-Setoid {A = A}) (≡-HSetoid {A = B})
+  where open HIEquality renaming (hsetoid to ≡-HSetoid)
+
+_↣_ : ∀ {α β} -> Set α -> Set β -> Set (α ⊔ β)
+A ↣ B = A ↣ₕ λ _ -> B
 
 module ≡-Reasoning {α} {A : Set α} = EqReasoning (≡-Setoid {A = A})
 
--- Doesn't work.
 module ≅-Reasoning {α} where
-  open HEquality {α}; open HEqReasoning hsetoid public
+  open Just-HEquality {α}; open HEqReasoning hsetoid public
 
 private
   module Test where
@@ -69,7 +89,13 @@ private
     open import Data.Nat
     open import Data.Nat.Properties.Simple
     open import Data.Fin hiding (_+_)
+    
     open HEquality
+    open ≅-Reasoning
 
     test : ∀ n m -> (Fin (ℕ.suc n + m) ∋ Fin.zero) ≅ (Fin (ℕ.suc m + n) ∋ Fin.zero)
-    test n m rewrite +-comm n m = hrefl
+    test n m =
+      begin
+        Fin.zero →⟨ hcong (λ n -> Fin (ℕ.suc n) ∋ Fin.zero) (hetero (+-comm n m)) ⟩
+        Fin.zero
+      ∎

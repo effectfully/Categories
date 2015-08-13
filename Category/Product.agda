@@ -1,6 +1,5 @@
 module Categories.Category.Product where
 
-open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Category
 
@@ -9,6 +8,7 @@ _×_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
 C₁ × C₂ = record
   { Obj      = Obj₁ ×ₚ Obj₂
   ; _⇒_      = _⇒₁_ -< _×ₚ_ >- _⇒₂_
+  -- Why the hell doesn't (setoid₁ ×ˢᵢ setoid₂) work?
   ; setoid   = record
       { _≈_            = _≈₁_ -< _×ₚ_ >- _≈₂_
       ; isIEquivalence = record

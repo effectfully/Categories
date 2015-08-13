@@ -204,6 +204,24 @@ module _ {α β γ} (C : Category α β γ) where
                               renaming (hetero to hetero₃; homo to homo₃) using () public
     open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_; module EqTools₃ to HEqTools₃) public
 
+module _ {α₁ β γ} (C : Category α₁ β γ) where
+  open Category₁ C
+
+  Category-via-Injection : ∀ {α₂ β₁ β₂} {Obj₂ : Set α₂}
+                             {Obj-setoid₁ : Setoid Obj₁ β₁} {Obj-setoid₂ : Setoid Obj₂ β₂}
+                         -> Injection Obj-setoid₂ Obj-setoid₁ -> Category _ _ _
+  Category-via-Injection {Obj₂ = Obj₂} injection = record
+    { Obj      = Obj₂
+    ; _⇒_      = λ A B -> f· ⟨$⟩ A ⇒₁ f· ⟨$⟩ B
+    ; setoid   = ISetoid-via-Injection setoid₁ (injection ×ⁱ injection)
+    ; id       = id₁
+    ; _∘_      = _∘₁_
+    ; idˡ      = idˡ₁
+    ; idʳ      = idʳ₁
+    ; assoc    = assoc₁
+    ; ∘-resp-≈ = ∘-resp-≈₁
+    } where open HInjection injection
+
 module _ where
   open Category
 

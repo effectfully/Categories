@@ -22,11 +22,9 @@ module _ where
 
 module _ {α β γ δ} {A : Set α} {B : A -> Set β}
          {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ} (f : Π Aˢ Bˢ) where
-  module Π₁ where
-    open Π f renaming (f· to f·₁; f-resp-≈ to f-resp-≈₁) public
+  module Π₁ = Π f renaming (f· to f·₁; f-resp-≈ to f-resp-≈₁)
 
-  module Π₂ where
-    open Π f renaming (f· to f·₂; f-resp-≈ to f-resp-≈₂) public
+  module Π₂ = Π f renaming (f· to f·₂; f-resp-≈ to f-resp-≈₂)
 
 _─>_ : ∀ {α β γ δ} {A : Set α} {B : Set β} -> Setoid A γ -> Setoid B δ -> Set (α ⊔ β ⊔ γ ⊔ δ)
 Aˢ ─> Bˢ = Π Aˢ hBˢ
@@ -46,12 +44,71 @@ g ∘ˢ f = record
   ; f-resp-≈ = f-resp-≈₂ ∘′ f-resp-≈₁
   } where open Π₁ f; open Π₂ g
 
+_×ʳ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}
+         {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
+     -> Aˢ₁ ─> Bˢ₁ -> Aˢ₂ ─> Bˢ₂ -> (Aˢ₁ ×ˢ Aˢ₂) ─> (Bˢ₁ ×ˢ Bˢ₂)
+f₁ ×ʳ f₂ = record
+  { f·       = map f·₁ f·₂
+  ; f-resp-≈ = map f-resp-≈₁ f-resp-≈₂
+  } where open Π₁ f₁; open Π₂ f₂
+
 _≗_ : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
     -> Π Aˢ Bˢ -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
 _≗_ {Aˢ = Aˢ} {Bˢ = Bˢ} f g = ∀ {x y} -> x ≈₁ y -> f ⟨$⟩ x ≈₂ g ⟨$⟩ y
   where open Setoid₁ Aˢ; open HSetoid₂ Bˢ
 
-Injective : ∀ {α β γ δ} {A : Set α} {B : Set β} {Aˢ : Setoid A γ} {Bˢ : Setoid B δ}
-          -> Aˢ ─> Bˢ -> Set (α ⊔ γ ⊔ δ)
+Injective : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
+          -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
 Injective {Aˢ = Aˢ} {Bˢ = Bˢ} f = ∀ {x y} -> f ⟨$⟩ x ≈₂ f ⟨$⟩ y -> x ≈₁ y
-  where open Setoid₁ Aˢ; open Setoid₂ Bˢ
+  where open Setoid₁ Aˢ; open HSetoid₂ Bˢ
+
+record HInjection {α β γ δ} {A : Set α} {B : A -> Set β}
+                  (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
+  field
+    f·          : Π Aˢ Bˢ
+    f-injective : Injective f·
+
+Injection : ∀ {α β γ δ} {A : Set α} {B : Set β}
+          -> Setoid A γ -> Setoid B δ -> Set (α ⊔ β ⊔ γ ⊔ δ)
+Injection Aˢ Bˢ = HInjection Aˢ hBˢ
+  where open Indexed Bˢ renaming (hsetoid to hBˢ)
+
+module _ {ι₁ ι₂ κ₁ κ₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₁ -> Set α}
+         {Iˢ₁ : Setoid I₁ κ₁} {Iˢ₂ : Setoid I₂ κ₂}
+         (Aˢ : ISetoid A β) (injection : Injection Iˢ₂ Iˢ₁) where
+  open HInjection injection; open ISetoid Aˢ
+ 
+  ISetoid-via-Injection : ISetoid (λ i -> A (f· ⟨$⟩ i)) _
+  ISetoid-via-Injection = record
+    { _≈_            = _≈_
+    ; isIEquivalence = record
+        { refl  = refl
+        ; sym   = sym
+        ; trans = trans
+        }
+    }
+
+module _ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
+         (injection : HInjection Aˢ Bˢ) where
+  module HInjection₁ = HInjection injection renaming (f· to f·₁; f-injective to f-injective₁)
+
+  module HInjection₂ = HInjection injection renaming (f· to f·₂; f-injective to f-injective₂)
+
+_×ⁱ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}
+         {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
+     -> Injection Aˢ₁ Bˢ₁ -> Injection Aˢ₂ Bˢ₂ -> Injection (Aˢ₁ ×ˢ Aˢ₂) (Bˢ₁ ×ˢ Bˢ₂)
+injection₁ ×ⁱ injection₂ = record
+  { f·          = f·₁ ×ʳ f·₂
+  ; f-injective = map f-injective₁ f-injective₂
+  } where open HInjection₁ injection₁; open HInjection₂ injection₂
+  
+-- postulate
+--   _×ˢₕ_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
+--             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
+--         -> HSetoid A₁ β₁ -> HSetoid A₂ β₂ -> HSetoid₂ (λ i₁ i₂ -> A₁ i₁ ×ₚ A₂ i₂) (β₁ ⊔ β₂)
+
+--   ×-HInjection : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂}
+--                    {B₁ : A₁ -> Set β₁} {B₂ : A₂ -> Set β₂}
+--                    {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂}
+--                    {Bˢ₁ : HSetoid B₁ δ₁} {Bˢ₂ : HSetoid B₂ δ₂}
+--                -> HInjection Aˢ₁ Bˢ₁ -> HInjection Aˢ₂ Bˢ₂ -> HInjection (Aˢ₁ ×ˢ Aˢ₂) (Bˢ₁ ×ˢₕ Bˢ₂)
