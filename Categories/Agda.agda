@@ -79,8 +79,8 @@ module _ {α} where
 
 Setoids : ∀ {α γ} -> Category (suc (α ⊔ γ)) (α ⊔ γ) (α ⊔ γ)
 Setoids {α} {γ} = record
-  { Obj      = Setoid A γ , A ∈ Set α
-  ; _⇒_      = λ s₁ s₂ -> struct s₁ ─> struct s₂
+  { Obj      = [ Setoid A γ ∣ A ∈ Set α ]
+  ; _⇒_      = λ s₁ s₂ -> unwrap s₁ ─> unwrap s₂
   ; setoid   = ─>-ISetoid₂
   ; id       = idˢ
   ; _∘_      = _∘ˢ_

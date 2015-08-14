@@ -38,17 +38,15 @@ infix 3 _↣ₕ_ _↣_
       }
 
 ─>-ISetoid₂ : ∀ {α γ}
-            -> ISetoid₂ (λ (Aˢ Bˢ : Setoid A γ , A ∈ Set α) -> struct Aˢ ─> struct Bˢ) (α ⊔ γ)
+            -> ISetoid₂ (λ (Aˢ Bˢ : [ Setoid A γ ∣ A ∈ Set α ]) -> unwrap Aˢ ─> unwrap Bˢ) (α ⊔ γ)
 ─>-ISetoid₂ = record
       { _≈_            = _≗_
       ; isIEquivalence = record
-          { refl  = λ {_ f} r -> f-resp-≈ f r
-          ; sym   = λ{ {Aˢ , Bˢ} p   r ->
-              Setoid.sym   (struct Bˢ) (p (Setoid.sym  (struct Aˢ) r))     }
-          ; trans = λ{ {Aˢ , Bˢ} p q r ->
-              Setoid.trans (struct Bˢ) (p (Setoid.refl (struct Aˢ))) (q r) }
+          { refl  = λ {_ f} r -> Π.f-resp-≈ f r
+          ; sym   = λ{ {wrap Aˢ , wrap Bˢ} p   r -> Setoid.sym   Bˢ (p (Setoid.sym  Aˢ r))     }
+          ; trans = λ{ {wrap Aˢ , wrap Bˢ} p q r -> Setoid.trans Bˢ (p (Setoid.refl Aˢ)) (q r) }
           }
-      } where open Π
+      }
 
 module HIEquality where
   private open module  Heq {ι α} {I : Set ι} (A : I -> Set α) =

@@ -2,7 +2,7 @@ open import Categories.Category
 
 module Categories.Universal.Colimit.Coequalizer {α β γ} (ℂ : Category α β γ) where
 
-open import Categories.Morphism.Morphism
+open import Categories.Morphism ℂ
 
 open Category ℂ
 
@@ -37,5 +37,5 @@ record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
             -> (s : p ≈ q) -> p ↗⟨ r ⟩ ≈ q ↗⟨ s ⌈ r ⌉ˡ s ⟩
   ↗-resp-≈ r = universal (left ↗-π r)
 
-  .π-epi : Epi ℂ π
+  .π-epi : Epi π
   π-epi = λ r -> right (universal r) ∘-η

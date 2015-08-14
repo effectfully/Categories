@@ -27,9 +27,10 @@ tagWith : ∀ {α β} {A : Set α} {B : (x : A) -> Set β} -> (x : A) -> B x -> 
 tagWith _ = tag
 
 record Struct {α β} (A : Set α) (B : A -> Set β) : Set (α ⊔ β) where
+  constructor wrap
   field
-    index  : A
-    struct : B index
+    {index} : A
+    unwrap  : B index
 open Struct public
 
-syntax Struct A (λ x -> B) = B , x ∈ A
+syntax Struct A (λ x -> B) = [ B ∣ x ∈ A ]

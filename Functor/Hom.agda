@@ -7,10 +7,7 @@ open import Categories.Categories.Agda
 
 Hom[-,-] : ∀ {α β γ} {C : Category α β γ} -> Profunctor C C
 Hom[-,-] {C = C} = tag record
-  { F·       = λ o -> record
-      { index  = uncurry _⇒_ o
-      ; struct = inst o
-      }
+  { F·       = wrap ∘′ inst
   ; F⇒       = λ o -> record
       { f·       = Hom[ o ]
       ; f-resp-≈ = ∘-resp-≈ʳˡ

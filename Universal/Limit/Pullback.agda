@@ -2,7 +2,7 @@ open import Categories.Category
 
 module Categories.Universal.Limit.Pullback {α β γ} (ℂ : Category α β γ) where
 
-open import Categories.Morphism.Morphism ℂ
+open import Categories.Morphism ℂ
 
 open Category ℂ
 
