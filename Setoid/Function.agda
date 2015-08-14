@@ -6,6 +6,7 @@ open import Categories.Utilities.Prelude
 open import Categories.Setoid.Setoid
 
 infixr 9 _∘ˢ_
+infixr 5 _ˢ⟨$⟩_
 
 record Π {α β γ δ} {A : Set α} {B : A -> Set β}
          (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
@@ -56,6 +57,18 @@ _≗_ : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {B�
     -> Π Aˢ Bˢ -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
 _≗_ {Aˢ = Aˢ} {Bˢ = Bˢ} f g = ∀ {x y} -> x ≈₁ y -> f ⟨$⟩ x ≈₂ g ⟨$⟩ y
   where open Setoid₁ Aˢ; open HSetoid₂ Bˢ
+ 
+_ˢ⟨$⟩_ : ∀ {ι₁ ι₂ κ₁ κ₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₂ -> Set α}
+                   {Iˢ₁ : Setoid I₁ κ₁} {Iˢ₂ : Setoid I₂ κ₂}
+               -> ISetoid A β -> (f : Iˢ₁ ─> Iˢ₂) -> ISetoid (λ i -> A (f ⟨$⟩ i)) β
+Aˢ ˢ⟨$⟩ f = record
+  { _≈_            = _≈_
+  ; isIEquivalence = record
+      { refl  = refl
+      ; sym   = sym
+      ; trans = trans
+      }
+  } where open ISetoid Aˢ
 
 Injective : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
           -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
@@ -65,41 +78,26 @@ Injective {Aˢ = Aˢ} {Bˢ = Bˢ} f = ∀ {x y} -> f ⟨$⟩ x ≈₂ f ⟨$⟩ 
 record HInjection {α β γ δ} {A : Set α} {B : A -> Set β}
                   (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
   field
-    f·          : Π Aˢ Bˢ
-    f-injective : Injective f·
+    π           : Π Aˢ Bˢ
+    π-injective : Injective π
 
 Injection : ∀ {α β γ δ} {A : Set α} {B : Set β}
           -> Setoid A γ -> Setoid B δ -> Set (α ⊔ β ⊔ γ ⊔ δ)
 Injection Aˢ Bˢ = HInjection Aˢ hBˢ
   where open Indexed Bˢ renaming (hsetoid to hBˢ)
 
-module _ {ι₁ ι₂ κ₁ κ₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₁ -> Set α}
-         {Iˢ₁ : Setoid I₁ κ₁} {Iˢ₂ : Setoid I₂ κ₂}
-         (Aˢ : ISetoid A β) (injection : Injection Iˢ₂ Iˢ₁) where
-  open HInjection injection; open ISetoid Aˢ
- 
-  ISetoid-via-Injection : ISetoid (λ i -> A (f· ⟨$⟩ i)) _
-  ISetoid-via-Injection = record
-    { _≈_            = _≈_
-    ; isIEquivalence = record
-        { refl  = refl
-        ; sym   = sym
-        ; trans = trans
-        }
-    }
-
 module _ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
          (injection : HInjection Aˢ Bˢ) where
-  module HInjection₁ = HInjection injection renaming (f· to f·₁; f-injective to f-injective₁)
+  module HInjection₁ = HInjection injection renaming (π to π₁; π-injective to π-injective₁)
 
-  module HInjection₂ = HInjection injection renaming (f· to f·₂; f-injective to f-injective₂)
+  module HInjection₂ = HInjection injection renaming (π to π₂; π-injective to π-injective₂)
 
 _×ⁱ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}
          {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
      -> Injection Aˢ₁ Bˢ₁ -> Injection Aˢ₂ Bˢ₂ -> Injection (Aˢ₁ ×ˢ Aˢ₂) (Bˢ₁ ×ˢ Bˢ₂)
 injection₁ ×ⁱ injection₂ = record
-  { f·          = f·₁ ×ʳ f·₂
-  ; f-injective = map f-injective₁ f-injective₂
+  { π           = π₁ ×ʳ π₂
+  ; π-injective = map π-injective₁ π-injective₂
   } where open HInjection₁ injection₁; open HInjection₂ injection₂
   
 -- postulate

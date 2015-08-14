@@ -28,8 +28,8 @@ tagWith _ = tag
 
 record Struct {α β} (A : Set α) (B : A -> Set β) : Set (α ⊔ β) where
   field
-    carrier : A
-    struct  : B carrier
+    index  : A
+    struct : B index
 open Struct public
 
 syntax Struct A (λ x -> B) = B , x ∈ A

@@ -9,8 +9,8 @@ open import Categories.Morphism
 
 liftStructSetoid : ∀ {α β} α′ β′ -> Setoid S β , S ∈ Set α -> Setoid S (β ⊔ β′) , S ∈ Set (α ⊔ α′)
 liftStructSetoid α′ β′ S = record
-  { carrier = Lift {ℓ = α′} (carrier S)
-  ; struct  = record
+  { index  = Lift {ℓ = α′} (index S)
+  ; struct = record
       { _≈_           = λ x y -> Lift {ℓ = β′} (lower x ≈ lower y)
       ; isEquivalence = record
           { refl  = lift refl
@@ -32,8 +32,8 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
   module _ A where
     nat : Setoid S _ , S ∈ Set _
     nat = record
-      { carrier = NaturalTransformation Hom[ A ,-] F
-      ; struct  = inst _
+      { index  = NaturalTransformation Hom[ A ,-] F
+      ; struct = inst _
       }
 
     set : Setoid S _ , S ∈ Set _
@@ -69,8 +69,8 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
                       }
                   ; naturality = λ {B C g f₁ f₂} p ->
                       let open Π₁ (F⇒ g)
-                          open EqReasoning₁ (struct (F· C))
-                          open EqReasoning₂ (struct (F· B)) in
+                          open EqReasoning₁ (index (F· C))
+                          open EqReasoning₂ (index (F· B)) in
                         begin₁
                           F⇒ (g ∘ f₁ ∘ id) ⟨$⟩ x      →⟨ F-∘ refl₁ ⟩₁
                           F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ f-resp-≈₁ $

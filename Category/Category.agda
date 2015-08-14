@@ -204,23 +204,22 @@ module _ {α β γ} (C : Category α β γ) where
                               renaming (hetero to hetero₃; homo to homo₃) using () public
     open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_) public
 
-module _ {α₁ β γ} (C : Category α₁ β γ) where
-  open Category₁ C
+module _ {α₁ α₂ β γ} {Obj₁ : Set α₁} (C : Category α₂ β γ) where
+  open Category₂ C
 
-  Category-via-Injection : ∀ {α₂ β₁ β₂} {Obj₂ : Set α₂}
-                             {Obj-setoid₁ : Setoid Obj₁ β₁} {Obj-setoid₂ : Setoid Obj₂ β₂}
-                         -> Injection Obj-setoid₂ Obj-setoid₁ -> Category α₂ β γ
-  Category-via-Injection {Obj₂ = Obj₂} injection = record
-    { Obj      = Obj₂
-    ; _⇒_      = λ A B -> f· ⟨$⟩ A ⇒₁ f· ⟨$⟩ B
-    ; setoid   = ISetoid-via-Injection setoid₁ (injection ×ⁱ injection)
-    ; id       = id₁
-    ; _∘_      = _∘₁_
-    ; idˡ      = idˡ₁
-    ; idʳ      = idʳ₁
-    ; assoc    = assoc₁
-    ; ∘-resp-≈ = ∘-resp-≈₁
-    } where open HInjection injection
+  _ᶜ⟨$⟩_ : ∀ {β₁ β₂} {Obj-setoid₁ : Setoid Obj₁ β₁} {Obj-setoid₂ : Setoid Obj₂ β₂}
+         -> (Obj-setoid₁ ─> Obj-setoid₂) -> Category α₁ β γ
+  _ᶜ⟨$⟩_ f = record
+    { Obj      = Obj₁
+    ; _⇒_      = λ A B -> f ⟨$⟩ A ⇒₂ f ⟨$⟩ B
+    ; setoid   = setoid₂ ˢ⟨$⟩ (f ×ʳ f)
+    ; id       = id₂
+    ; _∘_      = _∘₂_
+    ; idˡ      = idˡ₂
+    ; idʳ      = idʳ₂
+    ; assoc    = assoc₂
+    ; ∘-resp-≈ = ∘-resp-≈₂
+    }
 
 module _ where
   open Category
