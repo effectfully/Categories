@@ -198,14 +198,27 @@ _×ⁱˢ_ : ∀ {ι₁ ι₂ ι₃ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {
 Aˢ₁ ×ⁱˢ Aˢ₂ = record { isIEquivalence = isIEquivalence₁ ×ⁱᵉ isIEquivalence₂ }
   where open ISetoid₁ Aˢ₁; open ISetoid₂ Aˢ₂
 
-_×ⁱˢ₁_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
-           {k : I₂ -> I₁} {A₁ : I₁ -> Set α₁} {A₂ : I₁ -> Set α₂}
-       -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ (k i) ×ₚ A₂ (k i)) (β₁ ⊔ β₂)
-_×ⁱˢ₁_ {k = k} Aˢ₁ Aˢ₂ = reduceⁱˢ (_×ⁱˢ_ {k₁ = k ∘′ proj₁} {k₂ = k ∘′ proj₂} Aˢ₁ Aˢ₂)
+_×ⁱˢₖ₂_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
+            {k : I₂ -> I₁} {A₁ : I₁ -> Set α₁} {A₂ : I₁ -> Set α₂}
+        -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid₂ (λ i₁ i₂ -> A₁ (k i₁) ×ₚ A₂ (k i₂)) (β₁ ⊔ β₂)
+_×ⁱˢₖ₂_ = _×ⁱˢ_
+
+_×ⁱˢₖ₁_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
+            {k : I₂ -> I₁} {A₁ : I₁ -> Set α₁} {A₂ : I₁ -> Set α₂}
+        -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ (k i) ×ₚ A₂ (k i)) (β₁ ⊔ β₂)
+_×ⁱˢₖ₁_  = reduceⁱˢ % ∘′ _×ⁱˢₖ₂_
+
+_×ⁱˢ₂_ : ∀ {ι α₁ α₂ β₁ β₂} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂}
+       -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid₂ (λ i₁ i₂ -> A₁ i₁ ×ₚ A₂ i₂) (β₁ ⊔ β₂)
+_×ⁱˢ₂_ = _×ⁱˢₖ₂_
+
+_×ⁱˢ₁_ : ∀ {ι α₁ α₂ β₁ β₂} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂}
+       -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ i ×ₚ A₂ i) (β₁ ⊔ β₂)
+_×ⁱˢ₁_  = _×ⁱˢₖ₁_
 
 _×ˢ_ : ∀ {α₁ α₂ β₁ β₂} {A₁ : Set α₁} {A₂ : Set α₂}
      -> Setoid A₁ β₁ -> Setoid A₂ β₂ -> Setoid (A₁ ×ₚ A₂) (β₁ ⊔ β₂)
 Aˢ₁ ×ˢ Aˢ₂ = inst tt
-  where open Indexed Aˢ₁ renaming (isetoid to Aˢ₁ᵢ)
-        open Indexed Aˢ₂ renaming (isetoid to Aˢ₂ᵢ)
-        open ISetoid (_×ⁱˢ₁_ {k = id′} Aˢ₁ᵢ Aˢ₂ᵢ)
+  where open Indexed Aˢ₁ renaming (isetoid to Aˢᵢ₁)
+        open Indexed Aˢ₂ renaming (isetoid to Aˢᵢ₂)
+        open ISetoid (Aˢᵢ₁ ×ⁱˢ₁ Aˢᵢ₂)
