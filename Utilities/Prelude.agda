@@ -5,6 +5,7 @@ open import Function using (flip; _$_; const; case_of_) renaming (id to id′; _
 open import Relation.Binary.PropositionalEquality
   renaming (refl to prefl; sym to psym; trans to ptrans; _≗_ to _≗ₚ_)
   using (_≡_; subst; subst₂; cong; cong₂) public
+open import Data.Unit.Base using (⊤; tt) public
 open import Data.Product renaming (_×_ to _×ₚ_) public
 
 infixl 10 _%

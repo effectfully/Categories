@@ -1,7 +1,6 @@
 module Categories.Categories.Agda where
 
 open import Data.Empty
-open import Data.Unit.Base
 open import Data.Sum
 
 open import Categories.Utilities.Prelude
@@ -36,7 +35,7 @@ module _ {α} where
   open import Categories.Object.Colimit.Coproduct (Sets {α})
 
   terminal : Terminal
-  terminal = record { Ob = Lift ⊤ ; Object = λ _ -> prefl }
+  terminal = record { Ob = Lift ⊤ ; universal = λ _ -> prefl }
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
@@ -45,7 +44,7 @@ module _ {α} where
     ; π²        = proj₂
     ; _↑_       = <_,_>
     ; ↑-inj     = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
-    ; Object = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
+    ; universal = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
     }
 
   equalizers : Equalizers
@@ -55,14 +54,14 @@ module _ {α} where
     ; ↙_⟨_⟩     = λ p r x -> p x ,ᵢ r x
     ; comm      = iproj₂
     ; ↙-inj     = λ p x -> ,ᵢ-inj₁ (p x)
-    ; Object = λ r x -> ∃ᵢ-η (r x)
+    ; universal = λ r x -> ∃ᵢ-η (r x)
     }
 
   pullbacks : Pullbacks
   pullbacks = Product&Equalizer->Pullback binaryProducts equalizers
 
   initial : Initial
-  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; Object = λ{ (lift ()) } }
+  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; universal = λ{ (lift ()) } }
 
   binaryCoproducts : BinaryCoproducts
   binaryCoproducts {A} {B} = record
@@ -71,7 +70,7 @@ module _ {α} where
     ; ι²        = inj₂
     ; _↓_       = [_,_]′
     ; ↓-inj     = < proj₁ ∘′ []-inj , proj₂ ∘′ []-inj >
-    ; Object = λ p q -> [ psym ∘′ p , psym ∘′ q ]
+    ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
     } where
         []-inj : ∀ {α β γ} {A : Set α} {B : Set β} {C : Set γ} {f₁ f₂ : A -> C} {g₁ g₂ : B -> C}
                -> [ f₁ , g₁ ]′ ≗ₚ [ f₂ , g₂ ]′ -> f₁ ≗ₚ f₂ ×ₚ g₁ ≗ₚ g₂

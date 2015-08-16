@@ -1,14 +1,12 @@
 module Categories.Categories.Cat where
 
-open import Relation.Binary.PropositionalEquality
-
 open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Discrete
 open import Categories.Object.Limit.Terminal
 
-1-Cat : ∀ {α β γ} -> Category (suc (α ⊔ β ⊔ γ)) (α ⊔ β ⊔ γ) (α ⊔ β ⊔ γ)
-1-Cat {α} {β} {γ} = record
+1Cat : ∀ {α β γ} -> Category (suc (α ⊔ β ⊔ γ)) (α ⊔ β ⊔ γ) (α ⊔ β ⊔ γ)
+1Cat {α} {β} {γ} = record
   { Obj      = Category α β γ
   ; _⇒_      = Functor
   ; setoid   = Functor-ISetoid
@@ -26,14 +24,9 @@ open import Categories.Object.Limit.Terminal
         ∎
   }
 
-1-Cat-Terminal : Terminal 1-Cat One
-1-Cat-Terminal = record
-  { ↝         = record
-      { F·       = _
-      ; F⇒       = λ _ -> refl
-      ; F-id     = _
-      ; F-∘      = _
-      ; F-resp-≈ = _
-      }
-  ; Object = Hetero.hetero _
+1Cat-Terminal : Terminal 1Cat
+1Cat-Terminal = record
+  { Ob        = One
+  ; ↝         = record { F⇒ = λ _ -> prefl }
+  ; universal = Hetero.hetero _
   }

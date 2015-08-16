@@ -1,7 +1,5 @@
 module Categories.Setoid.Setoid where
 
-open import Data.Unit.Base
-
 open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Setoid.Equivalence

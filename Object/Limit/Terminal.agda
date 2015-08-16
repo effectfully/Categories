@@ -8,7 +8,7 @@ record Terminal : Set (α ⊔ β ⊔ γ) where
   field
     Ob        : Obj
     ↝         : ∀ {A} -> A ⇒ Ob
-    Object : ∀ {A} {f : A ⇒ Ob} -> f ≈ ↝
+    universal : ∀ {A} {f : A ⇒ Ob} -> f ≈ ↝
 
   η : ∀ {A} {f g : A ⇒ Ob} -> f ≈ g
-  η = left Object Object
+  η = left universal universal

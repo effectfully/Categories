@@ -17,25 +17,25 @@ record Coequalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
     .comm      : π ∘ f ≈ π ∘ g
     .↗-inj     : ∀ {C} {p q : B ⇒ C} {r : p ∘ f ≈ p ∘ g} {s : q ∘ f ≈ q ∘ g}
                -> p ↗⟨ r ⟩ ≈ q ↗⟨ s ⟩ -> p ≈ q
-    .Object : ∀ {C} {p : B ⇒ C} {u : Ob ⇒ C}
+    .universal : ∀ {C} {p : B ⇒ C} {u : Ob ⇒ C}
                -> (r : u ∘ π ≈ p) -> p ↗⟨ r ⌈ ∘²-resp-≈ˡ comm ⌉ˡ r ⟩ ≈ u
 
   .η : π ↗⟨ _ ⟩ ≈ id
-  η = Object idˡ
+  η = universal idˡ
 
   .∘-η : ∀ {C} {u : Ob ⇒ C} -> (u ∘ π) ↗⟨ _ ⟩ ≈ u
-  ∘-η = Object refl
+  ∘-η = universal refl
 
   .↗-π : ∀ {C} {p : B ⇒ C} {r : p ∘ f ≈ p ∘ g} -> (p ↗⟨ r ⟩) ∘ π ≈ p
   ↗-π = ↗-inj ∘-η
 
   .∘-↗ : ∀ {C D} {q : C ⇒ D} {p : B ⇒ C} {r : p ∘ f ≈ p ∘ g}
        -> (q ∘ p) ↗⟨ _ ⟩ ≈ q ∘ (p ↗⟨ r ⟩)
-  ∘-↗ = Object (∘ˡ-resp-≈ˡ ↗-π)
+  ∘-↗ = universal (∘ˡ-resp-≈ˡ ↗-π)
 
   .↗-resp-≈ : ∀ {C} {p q : B ⇒ C} {r : p ∘ f ≈ p ∘ g}
             -> (s : p ≈ q) -> p ↗⟨ r ⟩ ≈ q ↗⟨ s ⌈ r ⌉ˡ s ⟩
-  ↗-resp-≈ r = Object (left ↗-π r)
+  ↗-resp-≈ r = universal (left ↗-π r)
 
   .π-epi : Epi π
-  π-epi = λ r -> right (Object r) ∘-η
+  π-epi = λ r -> right (universal r) ∘-η

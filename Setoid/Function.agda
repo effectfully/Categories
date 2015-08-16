@@ -1,7 +1,5 @@
 module Categories.Setoid.Function where
 
-open import Level
-
 open import Categories.Utilities.Prelude
 open import Categories.Setoid.Setoid
 

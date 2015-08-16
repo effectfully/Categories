@@ -17,27 +17,27 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
     .comm      : f ∘ ι ≈ g ∘ ι
     .↙-inj     : ∀ {C} {p q : C ⇒ A} {r : f ∘ p ≈ g ∘ p} {s : f ∘ q ≈ g ∘ q}
                -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⟩ -> p ≈ q
-    .Object : ∀ {C} {u : C ⇒ Ob} {p : C ⇒ A}
+    .universal : ∀ {C} {u : C ⇒ Ob} {p : C ⇒ A}
                -> (r : ι ∘ u ≈ p) -> ↙ p ⟨ r ⌈ ∘²-resp-≈ʳ comm ⌉ʳ r ⟩ ≈ u
 
   .η : ↙ ι ⟨ _ ⟩ ≈ id
-  η = Object idʳ
+  η = universal idʳ
 
   .∘-η : ∀ {C} {u : C ⇒ Ob} -> ↙ (ι ∘ u) ⟨ _ ⟩ ≈ u
-  ∘-η = Object refl
+  ∘-η = universal refl
 
   .ι-↙ : ∀ {C} {p : C ⇒ A} {r : f ∘ p ≈ g ∘ p} -> ι ∘ ↙ p ⟨ r ⟩ ≈ p
   ι-↙ = ↙-inj ∘-η
 
   .↙-∘ : ∀ {C D} {q : D ⇒ A} {p : C ⇒ D} {s : f ∘ q ≈ g ∘ q}
        -> ↙ (q ∘ p) ⟨ _ ⟩ ≈ (↙ q ⟨ s ⟩) ∘ p
-  ↙-∘ = Object (∘ˡ-resp-≈ʳ ι-↙)
+  ↙-∘ = universal (∘ˡ-resp-≈ʳ ι-↙)
   
   .↙-resp-≈ : ∀ {C} {p q : C ⇒ A} {r : f ∘ p ≈ g ∘ p}
             -> (s : p ≈ q) -> ↙ p ⟨ r ⟩ ≈ ↙ q ⟨ s ⌈ r ⌉ʳ s ⟩
-  ↙-resp-≈ s = Object (left ι-↙ s)
+  ↙-resp-≈ s = universal (left ι-↙ s)
 
   .ι-mono : Mono ι
-  ι-mono = λ r -> right (Object r) ∘-η
+  ι-mono = λ r -> right (universal r) ∘-η
 
 Equalizers = ∀ {A B : Obj} {f g : A ⇒ B} -> Equalizer f g

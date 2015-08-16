@@ -1,7 +1,5 @@
 module Categories.Categories.Mon where
 
-open import Data.Unit.Base
-
 open import Categories.Category
 open import Categories.Functor
 

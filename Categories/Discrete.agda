@@ -1,7 +1,6 @@
 module Categories.Categories.Discrete where
 
 open import Data.Empty
-open import Data.Unit.Base
 open import Categories.Category
 
 Discrete : ∀ {α} -> Set α -> Category α α _

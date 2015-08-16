@@ -6,9 +6,9 @@ open import Data.Fin as F
 
 open DecTotalOrder decTotalOrder
 
-open import Categories.Category
+open import Categories.Category renaming (zero to lzero)
   
-Nat : ℕ -> Category _ _ _
+Nat : ℕ -> Category lzero lzero lzero
 Nat n = record
   { Obj    = Fin n
   ; _⇒_    = F._≤_
