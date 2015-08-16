@@ -8,16 +8,43 @@ open import Data.Product
        -> (x , y) ≡ (x' , y') -> x ≡ x' × y ≡ y'
 ,′-inj refl = refl , refl
 
-_-<_>-_ : ∀ {α β γ δ ε ζ η} {A : Set α} {B : A -> Set β} {C : Set γ} {D : C -> Set δ}
-            {E : A -> C -> Set ε} {F : ∀ {a a' c c'} -> E a' c' -> B a -> D c -> Set ζ}
-            {G : ∀ {a a' c c'} {b : B a'} {d : D c'} -> (e : E a c) -> F e b d -> Set η}
-        -> (f : ∀ a c -> E a c)
-        -> (∀ {a a' c c'} {b : B a'} {d : D c'} -> (e : E a c) -> (f : F e b d) -> G e f)
-        -> (g : ∀ {a c} -> (b : B a) -> (d : D c) -> F (f a c) b d)
-        -> (p : Σ A B)
-        -> (q : Σ C D)
-        -> G (f (proj₁ p) (proj₁ q)) (g (proj₂ p) (proj₂ q))
-(f -< h >- g) (a , b) (c , d) = h (f a c) (g b d)
+-- -- More generic, but less useable.
+-- _-<_>-_ : ∀ {α β γ δ ε ζ η} {A : Set α} {B : A -> Set β} {C : ∀ {a} -> B a -> Set γ}
+--             {D : ∀ {a} {b : B a} -> C b -> Set δ} {E : ∀ {a} {b : B a} -> C b -> Set ε}
+--             {F : ∀ {a a'} {b : B a} {b' : B a'} {c : C b} {c' : C b'} -> D c -> E c' -> Set ζ}
+--             {G : ∀ {a a'} {b : B a} {b' : B a'} {c : C b} {c' : C b'} {d : D c} {e : E c'}
+--                  -> F d e -> Set η}
+--         -> (f : ∀ a -> {b : B a} -> (c : C b) -> E c)
+--         -> (∀ {a a'} {b : B a} {b' : B a'} {c : C b} {c' : C b'} {d' : D c'}
+--             -> (e : E c) -> (f : F d' e) -> G f)
+--         -> (g : ∀ {a} -> (b : B a) -> {c : C b} -> (d : D c) -> F d (f a c))
+--         -> (p : Σ A B)
+--         -> (q : Σ (C _) D)
+--         -> G (g _ _)
+-- (f -< h >- g) (a , b) (c , d) = h (f a c) (g b d)
+
+-- _-<_>-_ : ∀ {α β γ δ ε ζ η} {A : Set α} {B : A -> Set β} {C : A -> Set γ}
+--             {D : ∀ {a a'} -> B a -> C a' -> Set δ} {E : ∀ {a} -> C a -> Set ε}
+--             {F : ∀ {a a' a''} {b : B a} {c : C a'} {c' : C a''} -> D b c -> E c' -> Set ζ}
+--             {G : ∀ {a a' a''} {b : B a} {c : C a'} {c' : C a''} {d : D b c} {e : E c'}
+--                  -> F d e -> Set η}
+--         -> (f : ∀ a -> (c : C a) -> E c)
+--         -> (∀ {a a' a''} {b : B a} {c : C a'} {c' : C a''} {d : D b c}
+--             -> (e : E c') -> (f : F d e) -> G f)
+--         -> (g : ∀ {a a'} {c : C a} -> (b : B a') -> (d : D b c) -> F d (f a c))
+--         -> (p : Σ A B)
+--         -> (q : Σ (C _) (D _))
+--         -> G (g _ _)
+-- (f -< h >- g) (a , b) (c , d) = h (f a c) (g b d)
+
+_<×>_ : ∀ {α β γ δ ε ζ} {A : Set α} {B : A -> Set β} {C : A -> Set γ}
+          {D : ∀ {a a'} -> B a -> C a' -> Set δ}
+      -> (∀ a -> C a -> Set ε)
+      -> (∀ {a a'} {c : C a} -> (b : B a') -> (d : D b c) -> Set ζ)
+      -> (p : Σ A B)
+      -> (q : Σ (C _) (D _))
+      -> Set (ε ⊔ ζ)
+(F <×> G) (a , b) (c , d) = F a c × G b d
 
 record ∃ᵢ {α β} {A : Set α} (B : A -> Set β) : Set (α ⊔ β) where
   constructor _,ᵢ_

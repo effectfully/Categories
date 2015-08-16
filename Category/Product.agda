@@ -7,8 +7,8 @@ _×_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
     -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category (α₁ ⊔ α₂) (β₁ ⊔ β₂) (γ₁ ⊔ γ₂)
 C₁ × C₂ = record
   { Obj      = Obj₁ ×ₚ Obj₂
-  ; _⇒_      = _⇒₁_ -< _×ₚ_ >- _⇒₂_
-  ; setoid   = setoid₁ ×ˢᵢ setoid₂
+  ; _⇒_      = _⇒₁_ <×> _⇒₂_
+  ; setoid   = setoid₁ ×ⁱˢ setoid₂
   ; id       = id₁ , id₂
   ; _∘_      = zip _∘₁_ _∘₂_
   ; idˡ      = idˡ₁ , idˡ₂

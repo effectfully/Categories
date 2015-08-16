@@ -16,14 +16,14 @@ record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Categ
 
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          {F₁ F₂ : Functor C₁ C₂} (N : NaturalTransformation F₁ F₂) where
-  module NaturalTransformation₁ where
-    open NaturalTransformation N renaming (η to η₁; naturality to naturality₁) public
+  module NaturalTransformation₁ = NaturalTransformation N
+    renaming (η to η₁; naturality to naturality₁)
 
-  module NaturalTransformation₂ where
-    open NaturalTransformation N renaming (η to η₂; naturality to naturality₂) public
+  module NaturalTransformation₂ = NaturalTransformation N
+    renaming (η to η₂; naturality to naturality₂)
 
-  module NaturalTransformation₃ where
-    open NaturalTransformation N renaming (η to η₃; naturality to naturality₃) public
+  module NaturalTransformation₃ = NaturalTransformation N
+    renaming (η to η₃; naturality to naturality₃)
 
 idⁿ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {F : Functor C₁ C₂}
     -> NaturalTransformation F F

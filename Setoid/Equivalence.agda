@@ -2,6 +2,9 @@ module Categories.Setoid.Equivalence where
 
 open import Level
 
+open import Categories.Utilities.Prelude
+open import Categories.Utilities.Product
+
 record IsEquivalence {α β} {A : Set α} (_≈_ : A -> A -> Set β) : Set (α ⊔ β) where
   field
     refl  : ∀ {x}     -> x ≈ x
@@ -92,6 +95,42 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
           -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
     p ⌊ r ⌋ q = hsym p ⌈ r ⌉ hsym q
 
+comap∀ⁱᵉₑ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
+              {B : I₁ -> Set β} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
+          -> (f : ∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁))
+          -> IsIEquivalence A₂  _≈_
+          -> IsIEquivalence A₁ (λ x y -> ∀ z -> f z x ≈ f z y)
+comap∀ⁱᵉₑ f isIEquivalence = record
+  { refl  = λ     z -> refl
+  ; sym   = λ p   z -> sym   (p z)
+  ; trans = λ p q z -> trans (p z) (q z)
+  } where open IsIEquivalence isIEquivalence
+
+comap∀ⁱᵉ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
+             {B : I₁ -> Set β} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
+         -> (f : ∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁))
+         -> IsIEquivalence A₂  _≈_
+         -> IsIEquivalence A₁ (λ x y -> ∀ {z} -> f z x ≈ f z y)
+comap∀ⁱᵉ f isIEquivalence = record
+  { refl  =          refl
+  ; sym   = λ p   -> sym   p 
+  ; trans = λ p q -> trans p q
+  } where open IsIEquivalence isIEquivalence
+
+comapⁱᵉ : ∀ {ι₁ ι₂ α₁ α₂ β} {I₁ : Set ι₁} {I₂ : Set ι₂}
+            {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
+            {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set β}
+        -> (f : ∀ {i₁} -> A₁ i₁ -> A₂ (k i₁))
+        -> IsIEquivalence A₂  _≈_
+        -> IsIEquivalence A₁ (λ x y -> f x ≈ f y)
+comapⁱᵉ f isIEquivalence = record
+  { refl  = refl
+  ; sym   = sym
+  ; trans = trans
+  } where open IsIEquivalence isIEquivalence
+
 module _ {α β} {A : Set α} {_≈_ : A -> A -> Set β}
          (isEquivalence : IsEquivalence _≈_) where
   module IsEquivalence₁ = IsEquivalence isEquivalence
@@ -124,3 +163,15 @@ module _ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i j} -> A i -> 
 
   module IsHEquivalence₃ = IsHEquivalence isHEquivalence
     renaming (hrefl to hrefl₃; hsym to  hsym₃; htrans to htrans₃; module HEqTools to HEqTools₃)
+
+_×ⁱᵉ_ : ∀ {ι₁ ι₂ ι₃ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂} {I₃ : Set ι₃}
+          {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k₁ : I₃ -> I₁} {k₂ : I₃ -> I₂}
+          {_≈₁_ : ∀ {i} -> A₁ i -> A₁ i -> Set β₁} {_≈₂_ : ∀ {i} -> A₂ i -> A₂ i -> Set β₂}
+      -> IsIEquivalence A₁ _≈₁_
+      -> IsIEquivalence A₂ _≈₂_
+      -> IsIEquivalence (λ i -> A₁ (k₁ i) ×ₚ A₂ (k₂ i)) (_≈₁_ <×> _≈₂_)
+E₁ ×ⁱᵉ E₂ = record
+  { refl  = refl₁ , refl₂
+  ; sym   = map sym₁ sym₂
+  ; trans = zip trans₁ trans₂
+  } where open IsIEquivalence₁ E₁; open IsIEquivalence₂ E₂

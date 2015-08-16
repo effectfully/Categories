@@ -64,32 +64,34 @@ ISetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} 
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
 ISetoid₂ A = ISetoid (uncurry A)
 
-ISetoid-From₂ : ∀ {ι α β} {I : Set ι} {A : I -> I -> Set α}
-              -> ISetoid₂ A β -> ISetoid (λ i -> A i i) β
-ISetoid-From₂ isetoid = record
-  { _≈_            = _≈_
-  ; isIEquivalence = record
-      { refl  = refl
-      ; sym   = sym
-      ; trans = trans
-      }
-  } where open ISetoid isetoid
+reduceⁱˢ : ∀ {ι α β} {I : Set ι} {A : I -> I -> Set α}
+         -> ISetoid₂ A β -> ISetoid (λ i -> A i i) β
+reduceⁱˢ isetoid = record { isIEquivalence = comapⁱᵉ id′ isIEquivalence }
+  where open ISetoid isetoid
 
 HSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
 HSetoid₂ A = HSetoid (uncurry A)
 
-comap : ∀ {ι₁ ι₂ α β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
-          {A : I₁ -> Set α} {B : I₂ -> Set β} {k : I₂ -> I₁}
-      -> (∀ {i₂} -> B i₂ -> A (k i₂)) -> ISetoid A γ -> ISetoid B γ
-comap f isetoid = record
-  { _≈_            = λ x y -> f x ≈ f y
-  ; isIEquivalence = record
-      { refl  = refl
-      ; sym   = sym
-      ; trans = trans
-      }
-  } where open ISetoid isetoid
+comap∀ⁱˢₑ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β} {k : I₁ -> I₂}
+          -> (∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ (β ⊔ γ)
+comap∀ⁱˢₑ f isetoid = record { isIEquivalence = comap∀ⁱᵉₑ f isIEquivalence }
+  where open ISetoid isetoid
+
+comap∀ⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β} {k : I₁ -> I₂}
+         -> (∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ (β ⊔ γ)
+comap∀ⁱˢ f isetoid = record { isIEquivalence = comap∀ⁱᵉ f isIEquivalence }
+  where open ISetoid isetoid
+
+-- We could write (comapⁱˢ f = comap∀ⁱˢ λ{ tt -> f }),
+-- but then some functions would require η-expansion.
+comapⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+            {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
+        -> (∀ {i₁} -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ γ
+comapⁱˢ f isetoid = record { isIEquivalence = comapⁱᵉ f isIEquivalence }
+  where open ISetoid isetoid
 
 module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid
@@ -153,63 +155,57 @@ module Hetero {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β)
 
 module _ {α β} {A : Set α} (setoid : Setoid A β) where
   module Setoid₁ where
-    open Just-Setoid setoid renaming (_≈_ to _≈₁_) public
-    open IsEquivalence₁ isEquivalence              public
+    open Just-Setoid setoid renaming (_≈_ to _≈₁_; isEquivalence to isEquivalence₁) public
+    open IsEquivalence₁ isEquivalence₁ public
     
   module Setoid₂ where
-    open Just-Setoid setoid renaming (_≈_ to _≈₂_) public
-    open IsEquivalence₂ isEquivalence              public
+    open Just-Setoid setoid renaming (_≈_ to _≈₂_; isEquivalence to isEquivalence₂) public
+    open IsEquivalence₂ isEquivalence₂ public
     
   module Setoid₃ where
-    open Just-Setoid setoid renaming (_≈_ to _≈₃_) public
-    open IsEquivalence₃ isEquivalence              public
+    open Just-Setoid setoid renaming (_≈_ to _≈₃_; isEquivalence to isEquivalence₃) public
+    open IsEquivalence₃ isEquivalence₃ public
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β) where
   module ISetoid₁ where
-    open Just-ISetoid isetoid renaming (_≈_ to _≈₁_)  public
-    open IsIEquivalence₁ isIEquivalence hiding (inst) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₁_; isIEquivalence to isIEquivalence₁) public
+    open IsIEquivalence₁ isIEquivalence₁ hiding (inst) public
     
   module ISetoid₂ where
-    open Just-ISetoid isetoid renaming (_≈_ to _≈₂_)  public
-    open IsIEquivalence₂ isIEquivalence hiding (inst) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₂_; isIEquivalence to isIEquivalence₂) public
+    open IsIEquivalence₂ isIEquivalence₂ hiding (inst) public
     
   module ISetoid₃ where
-    open Just-ISetoid isetoid renaming (_≈_ to _≈₃_)  public
-    open IsIEquivalence₃ isIEquivalence hiding (inst) public
+    open Just-ISetoid isetoid renaming (_≈_ to _≈₃_; isIEquivalence to isIEquivalence₃) public
+    open IsIEquivalence₃ isIEquivalence₃ hiding (inst) public
 
 module _ {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
   module HSetoid₁ where
-    open Just-HSetoid hsetoid renaming (_≈_ to _≈₁_)   public
-    open IsHEquivalence₁ isHEquivalence hiding (hinst) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₁_; isHEquivalence to isHEquivalence₁) public
+    open IsHEquivalence₁ isHEquivalence₁ hiding (hinst) public
     
   module HSetoid₂ where
-    open Just-HSetoid hsetoid renaming (_≈_ to _≈₂_)   public
-    open IsHEquivalence₂ isHEquivalence hiding (hinst) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₂_; isHEquivalence to isHEquivalence₂) public
+    open IsHEquivalence₂ isHEquivalence₂ hiding (hinst) public
     
   module HSetoid₃ where
-    open Just-HSetoid hsetoid renaming (_≈_ to _≈₃_)   public
-    open IsHEquivalence₃ isHEquivalence hiding (hinst) public
+    open Just-HSetoid hsetoid renaming (_≈_ to _≈₃_; isHEquivalence to isHEquivalence₃) public
+    open IsHEquivalence₃ isHEquivalence₃ hiding (hinst) public
 
-_×ˢᵢ_ : ∀ {ι₁ ι₂ ι₃ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂} {I₃ : Set ι₃}
+_×ⁱˢ_ : ∀ {ι₁ ι₂ ι₃ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂} {I₃ : Set ι₃}
           {k₁ : I₃ -> I₁} {k₂ : I₃ -> I₂} {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
       -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i₃ -> A₁ (k₁ i₃) ×ₚ A₂ (k₂ i₃)) (β₁ ⊔ β₂)
-Aˢ₁ ×ˢᵢ Aˢ₂ = record
-  { _≈_            = _≈₁_ -< _×ₚ_ >- _≈₂_
-  ; isIEquivalence = record
-      { refl  = refl₁ , refl₂
-      ; sym   = map sym₁ sym₂
-      ; trans = zip trans₁ trans₂
-      }
-  } where open ISetoid₁ Aˢ₁; open ISetoid₂ Aˢ₂
+Aˢ₁ ×ⁱˢ Aˢ₂ = record { isIEquivalence = isIEquivalence₁ ×ⁱᵉ isIEquivalence₂ }
+  where open ISetoid₁ Aˢ₁; open ISetoid₂ Aˢ₂
 
-_×ˢᵢ₁_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
+_×ⁱˢ₁_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
            {k : I₂ -> I₁} {A₁ : I₁ -> Set α₁} {A₂ : I₁ -> Set α₂}
        -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ (k i) ×ₚ A₂ (k i)) (β₁ ⊔ β₂)
-_×ˢᵢ₁_ {k = k} Aˢ₁ Aˢ₂ = ISetoid-From₂ (_×ˢᵢ_ {k₁ = k ∘′ proj₁} {k₂ = k ∘′ proj₂} Aˢ₁ Aˢ₂)
+_×ⁱˢ₁_ {k = k} Aˢ₁ Aˢ₂ = reduceⁱˢ (_×ⁱˢ_ {k₁ = k ∘′ proj₁} {k₂ = k ∘′ proj₂} Aˢ₁ Aˢ₂)
 
 _×ˢ_ : ∀ {α₁ α₂ β₁ β₂} {A₁ : Set α₁} {A₂ : Set α₂}
      -> Setoid A₁ β₁ -> Setoid A₂ β₂ -> Setoid (A₁ ×ₚ A₂) (β₁ ⊔ β₂)
 Aˢ₁ ×ˢ Aˢ₂ = inst tt
   where open Indexed Aˢ₁ renaming (isetoid to Aˢ₁ᵢ)
         open Indexed Aˢ₂ renaming (isetoid to Aˢ₂ᵢ)
-        open ISetoid (_×ˢᵢ₁_ {k = id′} Aˢ₁ᵢ Aˢ₂ᵢ)
+        open ISetoid (_×ⁱˢ₁_ {k = id′} Aˢ₁ᵢ Aˢ₂ᵢ)
