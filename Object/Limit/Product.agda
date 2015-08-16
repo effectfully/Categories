@@ -1,6 +1,6 @@
 open import Categories.Category
 
-module Categories.Universal.Limit.Product {α β γ} (ℂ : Category α β γ) where
+module Categories.Object.Limit.Product {α β γ} (ℂ : Category α β γ) where
 
 open Category ℂ
 
@@ -15,14 +15,14 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
 
     ↑-inj    : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
              -> f₁ ↑ g₁ ≈ f₂ ↑ g₂ -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂
-    universal : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob}
+    Object : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob}
               -> π¹ ∘ u ≈ f -> π² ∘ u ≈ g -> f ↑ g ≈ u
 
   η : π¹ ↑ π² ≈ id
-  η = universal idʳ idʳ
+  η = Object idʳ idʳ
 
   ∘-η : ∀ {C} {u : C ⇒ Ob} -> π¹ ∘ u ↑ π² ∘ u ≈ u
-  ∘-η = universal refl refl
+  ∘-η = Object refl refl
 
   π¹-↑ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π¹ ∘ (f ↑ g) ≈ f
   π¹-↑ = proj₁ (↑-inj ∘-η)
@@ -31,10 +31,10 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   π²-↑ = proj₂ (↑-inj ∘-η)
 
   ↑-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> (f ∘ h) ↑ (g ∘ h) ≈ (f ↑ g) ∘ h
-  ↑-∘ = universal (∘ˡ-resp-≈ʳ π¹-↑) (∘ˡ-resp-≈ʳ π²-↑)
+  ↑-∘ = Object (∘ˡ-resp-≈ʳ π¹-↑) (∘ˡ-resp-≈ʳ π²-↑)
 
   ↑-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↑ g₁ ≈ f₂ ↑ g₂
-  ↑-resp-≈ p q = universal (left π¹-↑ p) (left π²-↑ q)
+  ↑-resp-≈ p q = Object (left π¹-↑ p) (left π²-↑ q)
 
 BinaryProducts = ∀ {A B} -> Product A B

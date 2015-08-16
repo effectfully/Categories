@@ -8,15 +8,7 @@ _×_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
 C₁ × C₂ = record
   { Obj      = Obj₁ ×ₚ Obj₂
   ; _⇒_      = _⇒₁_ -< _×ₚ_ >- _⇒₂_
-  -- Why the hell doesn't (setoid₁ ×ˢᵢ setoid₂) work?
-  ; setoid   = record
-      { _≈_            = _≈₁_ -< _×ₚ_ >- _≈₂_
-      ; isIEquivalence = record
-          { refl  = refl₁ , refl₂
-          ; sym   = map sym₁ sym₂
-          ; trans = zip trans₁ trans₂
-          }
-      }
+  ; setoid   = setoid₁ ×ˢᵢ setoid₂
   ; id       = id₁ , id₂
   ; _∘_      = zip _∘₁_ _∘₂_
   ; idˡ      = idˡ₁ , idˡ₂

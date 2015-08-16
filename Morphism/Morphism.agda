@@ -20,3 +20,6 @@ record _≃_ A B : Set (α ⊔ β ⊔ γ) where
     {f}   : A ⇒ B
     {f⁻¹} : B ⇒ A
     iso   : Iso f f⁻¹
+
+_≡>_ : ∀ {A B C} -> A ⇒ C -> B ⇒ C -> Set (β ⊔ γ)
+f ≡> g = ∃ λ h -> g ∘ h ≈ f

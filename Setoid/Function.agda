@@ -6,7 +6,6 @@ open import Categories.Utilities.Prelude
 open import Categories.Setoid.Setoid
 
 infixr 9 _∘ˢ_
-infixr 5 _ˢ⟨$⟩_
 
 record Π {α β γ δ} {A : Set α} {B : A -> Set β}
          (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
@@ -57,18 +56,6 @@ _≗_ : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {B�
     -> Π Aˢ Bˢ -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
 _≗_ {Aˢ = Aˢ} {Bˢ = Bˢ} f g = ∀ {x y} -> x ≈₁ y -> f ⟨$⟩ x ≈₂ g ⟨$⟩ y
   where open Setoid₁ Aˢ; open HSetoid₂ Bˢ
- 
-_ˢ⟨$⟩_ : ∀ {ι₁ ι₂ κ₁ κ₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₂ -> Set α}
-                   {Iˢ₁ : Setoid I₁ κ₁} {Iˢ₂ : Setoid I₂ κ₂}
-               -> ISetoid A β -> (f : Iˢ₁ ─> Iˢ₂) -> ISetoid (λ i -> A (f ⟨$⟩ i)) β
-Aˢ ˢ⟨$⟩ f = record
-  { _≈_            = _≈_
-  ; isIEquivalence = record
-      { refl  = refl
-      ; sym   = sym
-      ; trans = trans
-      }
-  } where open ISetoid Aˢ
 
 Injective : ∀ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
           -> Π Aˢ Bˢ -> Set (α ⊔ γ ⊔ δ)
@@ -99,14 +86,3 @@ injection₁ ×ⁱ injection₂ = record
   { π           = π₁ ×ʳ π₂
   ; π-injective = map π-injective₁ π-injective₂
   } where open HInjection₁ injection₁; open HInjection₂ injection₂
-  
--- postulate
---   _×ˢₕ_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
---             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
---         -> HSetoid A₁ β₁ -> HSetoid A₂ β₂ -> HSetoid₂ (λ i₁ i₂ -> A₁ i₁ ×ₚ A₂ i₂) (β₁ ⊔ β₂)
-
---   ×-HInjection : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂}
---                    {B₁ : A₁ -> Set β₁} {B₂ : A₂ -> Set β₂}
---                    {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂}
---                    {Bˢ₁ : HSetoid B₁ δ₁} {Bˢ₂ : HSetoid B₂ δ₂}
---                -> HInjection Aˢ₁ Bˢ₁ -> HInjection Aˢ₂ Bˢ₂ -> HInjection (Aˢ₁ ×ˢ Aˢ₂) (Bˢ₁ ×ˢₕ Bˢ₂)

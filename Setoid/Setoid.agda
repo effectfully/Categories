@@ -79,6 +79,18 @@ HSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} 
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
 HSetoid₂ A = HSetoid (uncurry A)
 
+comap : ∀ {ι₁ ι₂ α β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+          {A : I₁ -> Set α} {B : I₂ -> Set β} {k : I₂ -> I₁}
+      -> (∀ {i₂} -> B i₂ -> A (k i₂)) -> ISetoid A γ -> ISetoid B γ
+comap f isetoid = record
+  { _≈_            = λ x y -> f x ≈ f y
+  ; isIEquivalence = record
+      { refl  = refl
+      ; sym   = sym
+      ; trans = trans
+      }
+  } where open ISetoid isetoid
+
 module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid
 
@@ -178,9 +190,9 @@ module _ {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) wher
     open Just-HSetoid hsetoid renaming (_≈_ to _≈₃_)   public
     open IsHEquivalence₃ isHEquivalence hiding (hinst) public
 
-_×ˢᵢ_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
-         {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
-     -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid₂ (λ i₁ i₂ -> A₁ i₁ ×ₚ A₂ i₂) (β₁ ⊔ β₂)
+_×ˢᵢ_ : ∀ {ι₁ ι₂ ι₃ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂} {I₃ : Set ι₃}
+          {k₁ : I₃ -> I₁} {k₂ : I₃ -> I₂} {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
+      -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i₃ -> A₁ (k₁ i₃) ×ₚ A₂ (k₂ i₃)) (β₁ ⊔ β₂)
 Aˢ₁ ×ˢᵢ Aˢ₂ = record
   { _≈_            = _≈₁_ -< _×ₚ_ >- _≈₂_
   ; isIEquivalence = record
@@ -190,13 +202,14 @@ Aˢ₁ ×ˢᵢ Aˢ₂ = record
       }
   } where open ISetoid₁ Aˢ₁; open ISetoid₂ Aˢ₂
 
-_×ˢᵢ₁_ : ∀ {ι α₁ α₂ β₁ β₂} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂}
-     -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ i ×ₚ A₂ i) (β₁ ⊔ β₂)
-Aˢ₁ ×ˢᵢ₁ Aˢ₂ = ISetoid-From₂ (Aˢ₁ ×ˢᵢ Aˢ₂)
+_×ˢᵢ₁_ : ∀ {ι₁ ι₂ α₁ α₂ β₁ β₂} {I₁ : Set ι₁} {I₂ : Set ι₂}
+           {k : I₂ -> I₁} {A₁ : I₁ -> Set α₁} {A₂ : I₁ -> Set α₂}
+       -> ISetoid A₁ β₁ -> ISetoid A₂ β₂ -> ISetoid (λ i -> A₁ (k i) ×ₚ A₂ (k i)) (β₁ ⊔ β₂)
+_×ˢᵢ₁_ {k = k} Aˢ₁ Aˢ₂ = ISetoid-From₂ (_×ˢᵢ_ {k₁ = k ∘′ proj₁} {k₂ = k ∘′ proj₂} Aˢ₁ Aˢ₂)
 
 _×ˢ_ : ∀ {α₁ α₂ β₁ β₂} {A₁ : Set α₁} {A₂ : Set α₂}
      -> Setoid A₁ β₁ -> Setoid A₂ β₂ -> Setoid (A₁ ×ₚ A₂) (β₁ ⊔ β₂)
 Aˢ₁ ×ˢ Aˢ₂ = inst tt
   where open Indexed Aˢ₁ renaming (isetoid to Aˢ₁ᵢ)
         open Indexed Aˢ₂ renaming (isetoid to Aˢ₂ᵢ)
-        open ISetoid (Aˢ₁ᵢ ×ˢᵢ₁ Aˢ₂ᵢ)
+        open ISetoid (_×ˢᵢ₁_ {k = id′} Aˢ₁ᵢ Aˢ₂ᵢ)

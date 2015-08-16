@@ -38,13 +38,13 @@ infix 3 _↣ₕ_ _↣_
       }
 
 ─>-ISetoid₂ : ∀ {α γ}
-            -> ISetoid₂ (λ (Aˢ Bˢ : [ Setoid A γ ∣ A ∈ Set α ]) -> unwrap Aˢ ─> unwrap Bˢ) (α ⊔ γ)
+            -> ISetoid₂ (λ (Aˢ Bˢ : [ Setoid A γ ∣ A ∈ Set α ]) -> reveal Aˢ ─> reveal Bˢ) (α ⊔ γ)
 ─>-ISetoid₂ = record
       { _≈_            = _≗_
       ; isIEquivalence = record
           { refl  = λ {_ f} r -> Π.f-resp-≈ f r
-          ; sym   = λ{ {wrap Aˢ , wrap Bˢ} p   r -> Setoid.sym   Bˢ (p (Setoid.sym  Aˢ r))     }
-          ; trans = λ{ {wrap Aˢ , wrap Bˢ} p q r -> Setoid.trans Bˢ (p (Setoid.refl Aˢ)) (q r) }
+          ; sym   = λ{ {hide Aˢ , hide Bˢ} p   r -> Setoid.sym   Bˢ (p (Setoid.sym  Aˢ r))     }
+          ; trans = λ{ {hide Aˢ , hide Bˢ} p q r -> Setoid.trans Bˢ (p (Setoid.refl Aˢ)) (q r) }
           }
       }
 

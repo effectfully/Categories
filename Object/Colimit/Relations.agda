@@ -1,10 +1,10 @@
 open import Categories.Category
 
-module Categories.Universal.Colimit.Relations {α β γ} (ℂ : Category α β γ) where
+module Categories.Object.Colimit.Relations {α β γ} (ℂ : Category α β γ) where
 
-open import Categories.Universal.Colimit.Coproduct   ℂ
-open import Categories.Universal.Colimit.Coequalizer ℂ
-open import Categories.Universal.Colimit.Pushout     ℂ
+open import Categories.Object.Colimit.Coproduct   ℂ
+open import Categories.Object.Colimit.Coequalizer ℂ
+open import Categories.Object.Colimit.Pushout     ℂ
 
 open Category ℂ
 
@@ -18,11 +18,11 @@ module _ {A B C} {f : C ⇒ A} {g : C ⇒ B} (p : Pushout f g) where
     ; _↗⟨_⟩     = λ p₁ r -> p₁
     ; comm      = ∘-resp-≈ˡ comm
     ; ↗-inj     = id→
-    ; universal = flip right idʳ
+    ; Object = flip right idʳ
     }
 
 module _ {A B} (p : Coproduct A B) where
-  open Coproduct p renaming (universal to ↓-univ) hiding (Ob)
+  open Coproduct p renaming (Object to ↓-univ) hiding (Ob)
 
   Coproduct&Coequalizer->Pushout : ∀ {C} {f : C ⇒ A} {g : C ⇒ B}
                                  -> Coequalizer (ι¹ ∘ f) (ι² ∘ g) -> Pushout f g
@@ -34,5 +34,5 @@ module _ {A B} (p : Coproduct A B) where
     ; _↖_⟨_⟩    = λ p q r -> (p ↓ q) ↗⟨ sym ↓-ι¹ ʳ⌈ r ⌉ˡ sym ↓-ι² ⟩
     ; comm      = unreassoc² comm
     ; ↖-inj     = ↓-inj ∘′ ↗-inj
-    ; universal = λ r s -> ↗-univ (sym (↓-univ (unreassocˡ r) (unreassocˡ s)))
-    } where open Coequalizer e renaming (universal to ↗-univ)
+    ; Object = λ r s -> ↗-univ (sym (↓-univ (unreassocˡ r) (unreassocˡ s)))
+    } where open Coequalizer e renaming (Object to ↗-univ)

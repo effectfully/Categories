@@ -4,10 +4,7 @@ open import Categories.Category
 open import Categories.Functor
 open import Categories.NaturalTransformation
 
-Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-    -> Category α₁ β₁ γ₁
-    -> Category α₂ β₂ γ₂
-    -> Category (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) (α₁ ⊔ γ₂)
+Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category _ _ _
 Fun C₁ C₂ = record
   { Obj      = Functor C₁ C₂
   ; _⇒_      = NaturalTransformation
@@ -27,7 +24,7 @@ eval : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ
 eval {C₁ = C₁} {C₂ = C₂} = tag record
   { F·       = F·′
   ; F⇒       = F⇒′
-  -- What happend to your pattern unification?
+  -- What happened to your pattern unification?
   ; F-id     = λ{ {F , A} -> F-id′ {F} {A} }
   ; F-∘      = λ{ {F₁ , A} {F₂ , B} {F₃ , C} {N₂ , g} {N₁ , f} ->
                      F-∘′ {F₁} {F₂} {F₃} {A} {B} {C} {g} {f} {N₂} {N₁}

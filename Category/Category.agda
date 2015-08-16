@@ -204,21 +204,20 @@ module _ {α β γ} (C : Category α β γ) where
                               renaming (hetero to hetero₃; homo to homo₃) using () public
     open HSetoid₃ H.hsetoid renaming (_≈₃_ to _≋₃_) public
 
-module _ {α₁ α₂ β γ} {Obj₁ : Set α₁} (C : Category α₂ β γ) where
-  open Category₂ C
+module _ {α₁ α₂ β γ} {Obj₂ : Set α₂} (C : Category α₁ β γ) where
+  open Category₁ C
 
-  _ᶜ⟨$⟩_ : ∀ {β₁ β₂} {Obj-setoid₁ : Setoid Obj₁ β₁} {Obj-setoid₂ : Setoid Obj₂ β₂}
-         -> (Obj-setoid₁ ─> Obj-setoid₂) -> Category α₁ β γ
-  _ᶜ⟨$⟩_ f = record
-    { Obj      = Obj₁
-    ; _⇒_      = λ A B -> f ⟨$⟩ A ⇒₂ f ⟨$⟩ B
-    ; setoid   = setoid₂ ˢ⟨$⟩ (f ×ʳ f)
-    ; id       = id₂
-    ; _∘_      = _∘₂_
-    ; idˡ      = idˡ₂
-    ; idʳ      = idʳ₂
-    ; assoc    = assoc₂
-    ; ∘-resp-≈ = ∘-resp-≈₂
+  comapIn : (Obj₂ -> Obj₁) -> Category α₂ β γ
+  comapIn f = record
+    { Obj      = Obj₂
+    ; _⇒_      = λ A B -> f A ⇒₁ f B
+    ; setoid   = comap id′ setoid₁
+    ; id       = id₁
+    ; _∘_      = _∘₁_
+    ; idˡ      = idˡ₁
+    ; idʳ      = idʳ₁
+    ; assoc    = assoc₁
+    ; ∘-resp-≈ = ∘-resp-≈₁
     }
 
 module _ where

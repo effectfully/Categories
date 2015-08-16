@@ -27,16 +27,16 @@ Sets {α} = record
       ∘′-resp-≡ q p x rewrite p x = q _
 
 module _ {α} where
-  open import Categories.Universal.Limit.Terminal    (Sets {α})
-  open import Categories.Universal.Limit.Product     (Sets {α})
-  open import Categories.Universal.Limit.Equalizer   (Sets {α})
-  open import Categories.Universal.Limit.Pullback    (Sets {α})
-  open import Categories.Universal.Limit.Relations   (Sets {α})
-  open import Categories.Universal.Colimit.Initial   (Sets {α})
-  open import Categories.Universal.Colimit.Coproduct (Sets {α})
+  open import Categories.Object.Limit.Terminal    (Sets {α})
+  open import Categories.Object.Limit.Product     (Sets {α})
+  open import Categories.Object.Limit.Equalizer   (Sets {α})
+  open import Categories.Object.Limit.Pullback    (Sets {α})
+  open import Categories.Object.Limit.Relations   (Sets {α})
+  open import Categories.Object.Colimit.Initial   (Sets {α})
+  open import Categories.Object.Colimit.Coproduct (Sets {α})
 
   terminal : Terminal
-  terminal = record { Ob = Lift ⊤ ; universal = λ _ -> prefl }
+  terminal = record { Ob = Lift ⊤ ; Object = λ _ -> prefl }
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
@@ -45,7 +45,7 @@ module _ {α} where
     ; π²        = proj₂
     ; _↑_       = <_,_>
     ; ↑-inj     = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
-    ; universal = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
+    ; Object = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
     }
 
   equalizers : Equalizers
@@ -55,14 +55,14 @@ module _ {α} where
     ; ↙_⟨_⟩     = λ p r x -> p x ,ᵢ r x
     ; comm      = iproj₂
     ; ↙-inj     = λ p x -> ,ᵢ-inj₁ (p x)
-    ; universal = λ r x -> ∃ᵢ-η (r x)
+    ; Object = λ r x -> ∃ᵢ-η (r x)
     }
 
   pullbacks : Pullbacks
   pullbacks = Product&Equalizer->Pullback binaryProducts equalizers
 
   initial : Initial
-  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; universal = λ{ (lift ()) } }
+  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; Object = λ{ (lift ()) } }
 
   binaryCoproducts : BinaryCoproducts
   binaryCoproducts {A} {B} = record
@@ -71,7 +71,7 @@ module _ {α} where
     ; ι²        = inj₂
     ; _↓_       = [_,_]′
     ; ↓-inj     = < proj₁ ∘′ []-inj , proj₂ ∘′ []-inj >
-    ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
+    ; Object = λ p q -> [ psym ∘′ p , psym ∘′ q ]
     } where
         []-inj : ∀ {α β γ} {A : Set α} {B : Set β} {C : Set γ} {f₁ f₂ : A -> C} {g₁ g₂ : B -> C}
                -> [ f₁ , g₁ ]′ ≗ₚ [ f₂ , g₂ ]′ -> f₁ ≗ₚ f₂ ×ₚ g₁ ≗ₚ g₂
@@ -80,7 +80,7 @@ module _ {α} where
 Setoids : ∀ {α γ} -> Category (suc (α ⊔ γ)) (α ⊔ γ) (α ⊔ γ)
 Setoids {α} {γ} = record
   { Obj      = [ Setoid A γ ∣ A ∈ Set α ]
-  ; _⇒_      = λ s₁ s₂ -> unwrap s₁ ─> unwrap s₂
+  ; _⇒_      = λ Aˢ Bˢ -> reveal Aˢ ─> reveal Bˢ
   ; setoid   = ─>-ISetoid₂
   ; id       = idˢ
   ; _∘_      = _∘ˢ_

@@ -5,7 +5,7 @@ open import Relation.Binary.PropositionalEquality
 open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Discrete
-open import Categories.Universal.Limit.Terminal
+open import Categories.Object.Limit.Terminal
 
 1-Cat : ∀ {α β γ} -> Category (suc (α ⊔ β ⊔ γ)) (α ⊔ β ⊔ γ) (α ⊔ β ⊔ γ)
 1-Cat {α} {β} {γ} = record
@@ -35,5 +35,5 @@ open import Categories.Universal.Limit.Terminal
       ; F-∘      = _
       ; F-resp-≈ = _
       }
-  ; universal = Hetero.hetero _
+  ; Object = Hetero.hetero _
   }

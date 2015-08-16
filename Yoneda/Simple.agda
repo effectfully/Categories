@@ -8,14 +8,14 @@ open import Categories.Categories.Agda
 
 liftStructSetoid : ∀ {α β} α' β'
                  -> [ Setoid S β ∣ S ∈ Set α ] -> [ Setoid S (β ⊔ β') ∣ S ∈ Set (α ⊔ α') ]
-liftStructSetoid α' β' S = wrap record
+liftStructSetoid α' β' (hide setoid) = hide record
   { _≈_           = λ x y -> Lift {ℓ = β'} (lower {ℓ = α'} x ≈ lower y)
   ; isEquivalence = record
       { refl  = lift refl
       ; sym   = lift ∘′ sym ∘′ lower
       ; trans = λ p q -> lift (trans (lower p) (lower q))
       }
-  } where open Setoid (unwrap S)
+  } where open Setoid setoid
 
 module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
   open Category C hiding (inst); open Functor F
@@ -29,8 +29,8 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
   module _ A where
     nat : [ Setoid S _ ∣ S ∈ Set _ ]
     nat = record
-      { index  = NaturalTransformation Hom[ A ,-] F
-      ; unwrap = inst _
+      { hiden  = NaturalTransformation Hom[ A ,-] F
+      ; reveal = inst _
       }
 
     set : [ Setoid S _ ∣ S ∈ Set _ ]
@@ -49,7 +49,7 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
           ; isoʳ = isoʳ
           }
       } where
-          open Setoid₁ (unwrap (F· A))
+          open Setoid₁ (reveal (F· A))
 
           f : nat ⇒₂ set
           f = record
@@ -60,14 +60,14 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
           f⁻¹ : set ⇒₂ nat
           f⁻¹ = record
             { f·       = λ{ (lift x) -> record
-                  { ηₑ         = λ B -> record
+                  { η          = λ {B} -> record
                       { f·       = λ f -> F⇒ f ⟨$⟩ x
                       ; f-resp-≈ = λ p -> F-resp-≈ p refl₁
                       }
                   ; naturality = λ {B C g f₁ f₂} p ->
                       let open Π (F⇒ g)
-                          open EqReasoning₁ (unwrap (F· C))
-                          open EqReasoning₂ (unwrap (F· B)) in
+                          open EqReasoning₁ (reveal (F· C))
+                          open EqReasoning₂ (reveal (F· B)) in
                         begin₁
                           F⇒ (g ∘ f₁ ∘ id) ⟨$⟩ x      →⟨ F-∘ refl₁ ⟩₁
                           F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ f-resp-≈ $

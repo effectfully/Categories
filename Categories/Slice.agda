@@ -1,13 +1,14 @@
 open import Categories.Category
 
-module Categories.Category.Slice {α β γ} (C : Category α β γ) where
+module Categories.Categories.Slice {α β γ} (C : Category α β γ) where
 
+open import Categories.Morphism C 
 open Category C
 
 Slice : Obj -> Category (α ⊔ β) (β ⊔ γ) γ
 Slice C = record
   { Obj      = ∃ (_⇒ C)
-  ; _⇒_      = λ{ (A , f) (B , g) -> ∃ λ h -> g ∘ h ≈ f }
+  ; _⇒_      = λ{ (A , f) (B , g) -> f ≡> g }
   ; setoid   = record
       { _≈_            = λ{ (h₁ , p₁) (h₂ , p₂) -> h₁ ≈ h₂ }
       ; isIEquivalence = record

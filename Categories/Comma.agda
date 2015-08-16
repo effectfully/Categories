@@ -1,13 +1,14 @@
 open import Categories.Category.Category
 open import Categories.Functor.Functor
 
-module Categories.Category.Comma
+module Categories.Categories.Comma
   {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
   {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
   (F₁ : Functor C₁ C₃) (F₂ : Functor C₂ C₃) where
 
 open Functor₁ F₁; open Functor₂ F₂
-open Category₁ C₁; open Category₂ C₂; open Category₃ C₃; open IEqReasoningFrom C₃
+open Category₁ C₁; open Category₂ C₂; open Category₃ C₃
+open IEqReasoningFrom C₃; open Tools₃
 
 Comma : Category (α₁ ⊔ α₂ ⊔ β₃) (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₃) (γ₁ ⊔ γ₂)
 Comma = record
@@ -67,7 +68,7 @@ Comma = record
               id₃ ∘₃ h     ←⟨ ∘-resp-≈ʳ F-id₂ ⟩
               F⇒₂ id₂ ∘₃ h
             ∎
-        } where open Obj A; open Tools₃
+        } where open Obj A
       
       _∘_ : ∀ {A B C} -> B ⇒ C -> A ⇒ B -> A ⇒ C
       _∘_ {A} {B} {C} a₂ a₁ = record
@@ -83,4 +84,3 @@ Comma = record
             ∎
         } where open Arr₁ a₁; open Arr₂ a₂
                 open Obj₁ A; open Obj₂ B; open Obj₃ C
-                open Tools₃
