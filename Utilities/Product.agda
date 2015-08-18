@@ -4,6 +4,8 @@ open import Level
 open import Relation.Binary.PropositionalEquality
 open import Data.Product
 
+infixr 4 _,ᵢ_
+
 ,′-inj : ∀ {α β} {A : Set α} {B : Set β} {x x' : A} {y y' : B}
        -> (x , y) ≡ (x' , y') -> x ≡ x' × y ≡ y'
 ,′-inj refl = refl , refl

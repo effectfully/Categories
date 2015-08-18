@@ -1,7 +1,13 @@
-open import Categories.Category
+open import Categories.Category hiding (zero; suc)
 
 module Categories.Object.Limit.Product {α β γ} (ℂ : Category α β γ) where
 
+open import Categories.Functor
+open import Categories.NaturalTransformation
+open import Categories.Categories.Cones
+
+open import Categories.Functor.Discrete ℂ
+open import Categories.Morphism         ℂ
 open Category ℂ
 
 record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
@@ -38,3 +44,46 @@ record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
   ↑-resp-≈ p q = universal (left π¹-↑ p) (left π²-↑ q)
 
 BinaryProducts = ∀ {A B} -> Product A B
+
+Product-Limit : ∀ {A B} -> Product A B -> Limit (Discreteᶠ (A ∷ B ∷ []))
+Product-Limit {A} {B} p = record
+  { Ob        = hide record
+      { η          = λ {i} -> η₀ i
+      ; naturality = λ {i j p} -> naturality p
+      }
+  ; ↝         = λ {N i} -> ↝ N i
+  ; universal = λ {N u} i -> universal₀ N u i
+  } where
+      open Product p
+
+      η₀ : ∀ i -> Ob ⇒ lookup i (A ∷ B ∷ [])
+      η₀  zero          = π¹
+      η₀ (suc  zero)    = π²
+      η₀ (suc (suc ()))
+
+      naturality : ∀ {i j} -> (p : i ≡ j) -> η₀ j ∘ id ≈ D⇒ p ∘ η₀ i
+      naturality {zero        } prefl = left idʳ idˡ
+      naturality {suc  zero   } prefl = left idʳ idˡ
+      naturality {suc (suc ())} prefl
+
+      module _ (N : [ Cone Ob' _ ∣ Ob' ∈ _ ]) where
+        open NaturalTransformation₁ (reveal N)
+
+        ↝ : ∀ i -> η₁ {i} ⇒ₜ η₀ i
+        ↝ i = arr , comm i where
+          arr  = η₁ {zero} ↑ η₁ {suc zero}
+          
+          comm : ∀ i -> η₀ i ∘ arr ≈ η₁ {i}
+          comm  zero          = π¹-↑
+          comm (suc  zero)    = π²-↑
+          comm (suc (suc ()))
+
+      -- Can't unify (u {i}) with (u {zero}) and (u {suc zero}).
+      -- But `i' is morally irrelevant in the first projection of (↝ N i).
+      -- And we compare only first projections.
+      -- But if I change the type of `u' to (∀ .{i} -> _),
+      -- Agda doesn't want to reduce (η₀ zero) and thinks that it's (η₀ i),
+      -- even if I make everything irrelevant.
+      postulate
+        universal₀ : ∀ (N : [ Cone Ob' _ ∣ Ob' ∈ _ ]) (u : ∀ {i} -> _) i -> u {i} ≈ₜ ↝ N i
+     -- universal₀ N u i = sym (universal (proj₂ (u {zero})) (proj₂ (u {suc zero})))

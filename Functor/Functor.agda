@@ -124,6 +124,9 @@ F₁ ⁂ F₂ = record
   ; F-resp-≈ = map F-resp-≈₁ F-resp-≈₂
   } where open Functor₁ F₁; open Functor₂ F₂
 
+diagonal : ∀ {α β γ} {C : Category α β γ} -> Functor C (C × C)
+diagonal = idᶠ ※ idᶠ
+
 Functor-ISetoid : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
                 -> ISetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
 Functor-ISetoid = record
