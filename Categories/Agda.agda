@@ -26,13 +26,7 @@ Sets {α} = record
       ∘′-resp-≡ q p x rewrite p x = q _
 
 module _ {α} where
-  open import Categories.Object.Limit.Terminal    (Sets {α})
-  open import Categories.Object.Limit.Product     (Sets {α})
-  open import Categories.Object.Limit.Equalizer   (Sets {α})
-  open import Categories.Object.Limit.Pullback    (Sets {α})
-  open import Categories.Object.Limit.Relations   (Sets {α})
-  open import Categories.Object.Colimit.Initial   (Sets {α})
-  open import Categories.Object.Colimit.Coproduct (Sets {α})
+  open import Categories.Object (Sets {α})
 
   terminal : Terminal
   terminal = record { Ob = Lift ⊤ ; universal = λ _ -> prefl }
@@ -42,8 +36,8 @@ module _ {α} where
     { Ob        = A ×ₚ B
     ; π¹        = proj₁
     ; π²        = proj₂
-    ; _↑_       = <_,_>
-    ; ↑-inj     = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
+    ; ⟨_,_⟩     = <_,_>
+    ; ⟨⟩-inj    = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
     ; universal = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
     }
 
@@ -51,9 +45,9 @@ module _ {α} where
   equalizers {f = f} {g = g} = record
     { Ob        = ∃ᵢ λ x -> f x ≡ g x
     ; ι         = iproj₁
-    ; ↙_⟨_⟩     = λ p r x -> p x ,ᵢ r x
+    ; ⟨_⟩∣_∣    = λ p r x -> p x ,ᵢ r x
     ; comm      = iproj₂
-    ; ↙-inj     = λ p x -> ,ᵢ-inj₁ (p x)
+    ; ⟨⟩-inj    = λ p x -> ,ᵢ-inj₁ (p x)
     ; universal = λ r x -> ∃ᵢ-η (r x)
     }
 
@@ -68,8 +62,8 @@ module _ {α} where
     { Ob        = A ⊎ B
     ; ι¹        = inj₁
     ; ι²        = inj₂
-    ; _↓_       = [_,_]′
-    ; ↓-inj     = < proj₁ ∘′ []-inj , proj₂ ∘′ []-inj >
+    ; [_,_]     = [_,_]
+    ; []-inj    = []-inj
     ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
     } where
         []-inj : ∀ {α β γ} {A : Set α} {B : Set β} {C : Set γ} {f₁ f₂ : A -> C} {g₁ g₂ : B -> C}

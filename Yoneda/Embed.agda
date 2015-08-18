@@ -21,7 +21,7 @@ Embed {C = C} = record
         g ∘ (f ∘ h₂ ∘ id) ∘ id
       ∎
   ; F-resp-≈ = λ {_ _ g₁ g₂} q {_ f₁ f₂} p ->
-    -- Why not just (∘-resp-≈ q (∘-resp-≈ʳ p))? Ask Agda, why she doesn't want to accept this.
+    -- Agda doesn't want to accept simply (∘-resp-≈ q (∘-resp-≈ʳ p)).
       begin
         g₁ ∘ f₁ ∘ id →⟨ ∘-resp-≈ q (∘-resp-≈ʳ p) ⟩
         g₂ ∘ f₂ ∘ id

@@ -11,39 +11,49 @@ open import Categories.Morphism         ℂ
 open Category ℂ
 
 record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
-  infixr 5 _↑_
-
   field
-    Ob  : Obj
-    π¹  : Ob ⇒ A
-    π²  : Ob ⇒ B
-    _↑_ : ∀ {C} -> C ⇒ A -> C ⇒ B -> C ⇒ Ob
+    Ob    : Obj
+    π¹    : Ob ⇒ A
+    π²    : Ob ⇒ B
+    ⟨_,_⟩ : ∀ {C} -> C ⇒ A -> C ⇒ B -> C ⇒ Ob
 
-    ↑-inj    : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
-             -> f₁ ↑ g₁ ≈ f₂ ↑ g₂ -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂
+    ⟨⟩-inj    : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
+              -> ⟨ f₁ , g₁ ⟩ ≈ ⟨ f₂ , g₂ ⟩ -> f₁ ≈ f₂ ×ₚ g₁ ≈ g₂
     universal : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob}
-              -> π¹ ∘ u ≈ f -> π² ∘ u ≈ g -> f ↑ g ≈ u
+              -> π¹ ∘ u ≈ f -> π² ∘ u ≈ g -> ⟨ f , g ⟩ ≈ u
 
-  η : π¹ ↑ π² ≈ id
+  η : ⟨ π¹ , π² ⟩ ≈ id
   η = universal idʳ idʳ
 
-  ∘-η : ∀ {C} {u : C ⇒ Ob} -> π¹ ∘ u ↑ π² ∘ u ≈ u
+  ∘-η : ∀ {C} {u : C ⇒ Ob} -> ⟨ π¹ ∘ u , π² ∘ u ⟩ ≈ u
   ∘-η = universal refl refl
 
-  π¹-↑ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π¹ ∘ (f ↑ g) ≈ f
-  π¹-↑ = proj₁ (↑-inj ∘-η)
+  π¹-⟨⟩ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π¹ ∘ ⟨ f , g ⟩ ≈ f
+  π¹-⟨⟩ = proj₁ (⟨⟩-inj ∘-η)
 
-  π²-↑ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π² ∘ (f ↑ g) ≈ g
-  π²-↑ = proj₂ (↑-inj ∘-η)
+  π²-⟨⟩ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} -> π² ∘ ⟨ f , g ⟩ ≈ g
+  π²-⟨⟩ = proj₂ (⟨⟩-inj ∘-η)
+  
+  ⟨⟩-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> ⟨ f ∘ h , g ∘ h ⟩ ≈ ⟨ f , g ⟩ ∘ h
+  ⟨⟩-∘ = universal (∘ˡ-resp-≈ʳ π¹-⟨⟩) (∘ˡ-resp-≈ʳ π²-⟨⟩)
 
-  ↑-∘ : ∀ {C D} {f : D ⇒ A} {g : D ⇒ B} {h : C ⇒ D} -> (f ∘ h) ↑ (g ∘ h) ≈ (f ↑ g) ∘ h
-  ↑-∘ = universal (∘ˡ-resp-≈ʳ π¹-↑) (∘ˡ-resp-≈ʳ π²-↑)
-
-  ↑-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
-           -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> f₁ ↑ g₁ ≈ f₂ ↑ g₂
-  ↑-resp-≈ p q = universal (left π¹-↑ p) (left π²-↑ q)
+  ⟨⟩-resp-≈ : ∀ {C} {f₁ f₂ : C ⇒ A} {g₁ g₂ : C ⇒ B}
+            -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> ⟨ f₁ , g₁ ⟩ ≈ ⟨ f₂ , g₂ ⟩
+  ⟨⟩-resp-≈ p q = universal (left π¹-⟨⟩ p) (left π²-⟨⟩ q)
 
 BinaryProducts = ∀ {A B} -> Product A B
+
+{-Limit-Product : ∀ {A B} -> Limit (Discreteᶠ (A ∷ B ∷ [])) -> Product A B
+Limit-Product lim = record
+  { Ob        = {!!}
+  ; π¹        = {!!}
+  ; π²        = {!!}
+  ; _↑_       = {!!}
+  ; ↑-inj     = {!!}
+  ; universal = {!!}
+  }
+  where
+    open Limit lim-}
 
 Product-Limit : ∀ {A B} -> Product A B -> Limit (Discreteᶠ (A ∷ B ∷ []))
 Product-Limit {A} {B} p = record
@@ -71,11 +81,11 @@ Product-Limit {A} {B} p = record
 
         ↝ : ∀ i -> η₁ {i} ⇒ₜ η₀ i
         ↝ i = arr , comm i where
-          arr  = η₁ {zero} ↑ η₁ {suc zero}
+          arr  = ⟨ η₁ {zero} , η₁ {suc zero} ⟩
           
           comm : ∀ i -> η₀ i ∘ arr ≈ η₁ {i}
-          comm  zero          = π¹-↑
-          comm (suc  zero)    = π²-↑
+          comm  zero          = π¹-⟨⟩
+          comm (suc  zero)    = π²-⟨⟩
           comm (suc (suc ()))
 
       -- Can't unify (u {i}) with (u {zero}) and (u {suc zero}).
@@ -84,6 +94,8 @@ Product-Limit {A} {B} p = record
       -- But if I change the type of `u' to (∀ .{i} -> _),
       -- Agda doesn't want to reduce (η₀ zero) and thinks that it's (η₀ i),
       -- even if I make everything irrelevant.
+      -- So `i' is irrelevant in a relevant context and relevant in an irrelevant context,
+      -- and I have no idea how to express this in Agda.
       postulate
         universal₀ : ∀ (N : [ Cone Ob' _ ∣ Ob' ∈ _ ]) (u : ∀ {i} -> _) i -> u {i} ≈ₜ ↝ N i
      -- universal₀ N u i = sym (universal (proj₂ (u {zero})) (proj₂ (u {suc zero})))

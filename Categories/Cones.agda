@@ -27,3 +27,6 @@ Cones {C₂ = C₂} F = record
 Limit : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
       -> (F : Functor C₁ C₂) -> Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂)
 Limit F = Terminal (Cones F)
+
+module Limit {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+             {F : Functor C₁ C₂} = Terminal (Cones F)

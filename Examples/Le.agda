@@ -26,10 +26,10 @@ initial = record { ↜ = z≤n }
 
 binaryProducts : BinaryProducts
 binaryProducts {n} {m} = record
-  { Ob  = n ⊓ m
-  ; π¹  = m⊓n≤m n m
-  ; π²  = m⊓n≤n n m
-  ; _↑_ = p≤m⊓n
+  { Ob    = n ⊓ m
+  ; π¹    = m⊓n≤m n m
+  ; π²    = m⊓n≤n n m
+  ; ⟨_,_⟩ = p≤m⊓n
   } where
       m⊓n≤n : ∀ m n -> m ⊓ n ≤ n
       m⊓n≤n  0       n      = z≤n
@@ -42,10 +42,10 @@ binaryProducts {n} {m} = record
 
 binaryCoproducts : BinaryCoproducts
 binaryCoproducts {n} {m} = record
-  { Ob  = n ⊔ m
-  ; ι¹  = m≤m⊔n n m
-  ; ι²  = n≤m⊔n n m
-  ; _↓_ = m⊔n≤p
+  { Ob    = n ⊔ m
+  ; ι¹    = m≤m⊔n n m
+  ; ι²    = n≤m⊔n n m
+  ; [_,_] = m⊔n≤p
   } where
       n≤m⊔n : ∀ m n -> n ≤ m ⊔ n
       n≤m⊔n  0       n      = refl

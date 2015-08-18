@@ -17,8 +17,8 @@ Faithful {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (f g : A ⇒₁ B) -> F⇒
 
 Full : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
      -> (F : Functor C₁ C₂) -> Set _
-Full {C₁ = C₁} {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒₂ F· B) -> ∃ λ f -> F⇒ f ≈₂ g
-  where open Functor F; open Category₁ C₁; open Category₂ C₂
+Full {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒ F· B) -> ∃ λ f -> F⇒ f ≈ g
+  where open Functor F; open Category C₂
 
 Bifunctor : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
           -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category α₃ β₃ γ₃ -> Set _

@@ -32,8 +32,8 @@ Product->Coproduct p = record
   { Ob        = Ob
   ; ι¹        = π¹
   ; ι²        = π²
-  ; _↓_       = _↑_
-  ; ↓-inj     = ↑-inj
+  ; [_,_]     = ⟨_,_⟩
+  ; []-inj    = ⟨⟩-inj
   ; universal = universal
   } where open Product ℂ p
 
@@ -42,8 +42,8 @@ Coproduct->Product p = record
   { Ob        = Ob
   ; π¹        = ι¹
   ; π²        = ι²
-  ; _↑_       = _↓_
-  ; ↑-inj     = ↓-inj
+  ; ⟨_,_⟩     = [_,_]
+  ; ⟨⟩-inj    = []-inj
   ; universal = universal
   } where open Coproduct ℂ p
 
@@ -52,9 +52,9 @@ Pullback->Pushout p = record
   { Ob        = Ob
   ; ι¹        = π¹
   ; ι²        = π²
-  ; _↖_⟨_⟩    = _↘_⟨_⟩
+  ; [_,_]∣_∣  = ⟨_,_⟩∣_∣
   ; comm      = comm
-  ; ↖-inj     = ↘-inj
+  ; []-inj    = ⟨⟩-inj
   ; universal = universal
   } where open Pullback ℂ p
 
@@ -63,9 +63,9 @@ Pushout->Pullback p = record
   { Ob        = Ob
   ; π¹        = ι¹
   ; π²        = ι²
-  ; _↘_⟨_⟩    = _↖_⟨_⟩
+  ; ⟨_,_⟩∣_∣  = [_,_]∣_∣
   ; comm      = comm
-  ; ↘-inj     = ↖-inj
+  ; ⟨⟩-inj    = []-inj
   ; universal = universal
   } where open Pushout ℂ p
 
@@ -73,9 +73,9 @@ Equalizer->Coequalizer : ∀ {A B} {f g : A ⇒ B} -> Equalizer ℂ f g -> Coequ
 Equalizer->Coequalizer e = record
   { Ob        = Ob
   ; π         = ι
-  ; _↗⟨_⟩     = ↙_⟨_⟩
+  ; [_]∣_∣    = ⟨_⟩∣_∣
   ; comm      = comm
-  ; ↗-inj     = ↙-inj
+  ; []-inj    = ⟨⟩-inj
   ; universal = universal
   } where open Equalizer ℂ e
 
@@ -83,8 +83,8 @@ Coequalizer->Equalizer : ∀ {A B} {f g : A ⇒ B} -> Coequalizer ℂ f g -> Equ
 Coequalizer->Equalizer e = record
   { Ob        = Ob
   ; ι         = π
-  ; ↙_⟨_⟩     = _↗⟨_⟩
+  ; ⟨_⟩∣_∣    = [_]∣_∣
   ; comm      = comm
-  ; ↙-inj     = ↗-inj
+  ; ⟨⟩-inj    = []-inj
   ; universal = universal
   } where open Coequalizer ℂ e

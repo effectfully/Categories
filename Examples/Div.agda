@@ -19,19 +19,17 @@ Div = record
   ; _∘_    = flip trans
   } 
 
-open import Categories.Object.Limit.Product     Div
-open import Categories.Object.Colimit.Initial   Div
-open import Categories.Object.Colimit.Coproduct Div
+open import Categories.Object Div
 
 initial : Initial
 initial = record { ↜ = 1∣ _ }
 
 binaryProducts : BinaryProducts
 binaryProducts {n} {m} = record
-  { Ob  = d
-  ; π¹  = π¹
-  ; π²  = π²
-  ; _↑_ = _↑_
+  { Ob    = d
+  ; π¹    = π¹
+  ; π²    = π²
+  ; ⟨_,_⟩ = ⟨_,_⟩
   } where
       p : ∃ (GCD n m)
       p = gcd n m
@@ -46,15 +44,15 @@ binaryProducts {n} {m} = record
       π² : d ∣ m
       π² = proj₂ commonDivisor
 
-      _↑_ : ∀ {p} -> p ∣ n -> p ∣ m -> p ∣ d
-      _↑_ = curry greatest
+      ⟨_,_⟩ : ∀ {p} -> p ∣ n -> p ∣ m -> p ∣ d
+      ⟨_,_⟩ = curry greatest
 
 binaryCoproducts : BinaryCoproducts
 binaryCoproducts {n} {m} = record
-  { Ob  = d
-  ; ι¹  = ι¹
-  ; ι²  = ι²
-  ; _↓_ = _↓_
+  { Ob    = d
+  ; ι¹    = ι¹
+  ; ι²    = ι²
+  ; [_,_] = [_,_]
   } where
       p : ∃ (LCM n m)
       p = lcm n m
@@ -69,5 +67,5 @@ binaryCoproducts {n} {m} = record
       ι² : m ∣ d
       ι² = proj₂ commonMultiple
 
-      _↓_ : ∀ {p} -> n ∣ p -> m ∣ p -> d ∣ p
-      _↓_ = curry least
+      [_,_] : ∀ {p} -> n ∣ p -> m ∣ p -> d ∣ p
+      [_,_] = curry least
