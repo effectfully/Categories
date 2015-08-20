@@ -4,7 +4,7 @@ module Categories.Object.Limit.Properties.Product {α β γ} (ℂ : Category α 
 
 open import Categories.Functor
 open import Categories.NaturalTransformation
-open import Categories.Categories.Commas
+open import Categories.Categories.Comma
 open import Categories.Object.Zoo
 
 open import Categories.Object.Limit.Product ℂ
@@ -13,9 +13,9 @@ open import Categories.Functor.Discrete     ℂ
 open IEqReasoningWith ℂ
 
 module _ {A B} where
-  spanᶠ = discreteᶠ (A ∷ B ∷ [])
+  2ᶠ = discreteᶠ (A ∷ B ∷ [])
 
-  Product-Limit : Product A B -> Limit spanᶠ
+  Product-Limit : Product A B -> Limit 2ᶠ
   Product-Limit p = record
     { Ob        = , , record
         { η          = λ {i} -> η₀ i
@@ -34,7 +34,7 @@ module _ {A B} where
         naturality : ∀ {i j} -> (i≡j : i ≡ j) -> η₀ j ∘ id ≈ D⇒ i≡j ∘ η₀ i
         naturality prefl = left idʳ idˡ
 
-        module _ (C : ∃₂ λ Ob' _ -> Cone Ob' spanᶠ) where
+        module _ (C : ∃₂ λ Ob' _ -> Cone Ob' 2ᶠ) where
           open NaturalTransformation₁ (proj₂ (proj₂ C))
 
           ↝ = ⟨ η₁ {zero} , η₁ {suc zero} ⟩
@@ -48,7 +48,7 @@ module _ {A B} where
           universal₀ u = sym (universal (proj₂ (proj₂ u) {zero    } ⋯ idˡ)
                                         (proj₂ (proj₂ u) {suc zero} ⋯ idˡ))
 
-  Limit-Product : Limit spanᶠ -> Product A B
+  Limit-Product : Limit 2ᶠ -> Product A B
   Limit-Product lim = record
     { Ob        = Ob₂
     ; π¹        = η₁ {zero}
