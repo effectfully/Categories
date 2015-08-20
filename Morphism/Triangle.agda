@@ -1,8 +1,8 @@
 open import Categories.Category
 
-module Categories.Morphism.Triangle {α β γ} (ℂ : Category α β γ) where
+module Categories.Morphism.Triangle {α β γ} (C : Category α β γ) {-A-} where
 
-open Category ℂ
+open Category C
 
 infix  3 _⇒ₜ_
 infixr 9 _∘ₜ_

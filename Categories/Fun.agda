@@ -1,6 +1,7 @@
 module Categories.Categories.Fun where
 
 open import Categories.Category
+open import Categories.Category.Product
 open import Categories.Functor
 open import Categories.NaturalTransformation
 
@@ -8,7 +9,7 @@ Fun : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ ->
 Fun C₁ C₂ = record
   { Obj      = Functor C₁ C₂
   ; _⇒_      = NaturalTransformation
-  ; setoid   = NaturalTransformation-ISetoid
+  ; setoid   = setoidⁿ
   ; id       = idⁿ
   ; _∘_      = _∘ⁿ_
   ; idˡ      = idˡ
@@ -16,8 +17,6 @@ Fun C₁ C₂ = record
   ; assoc    = assoc
   ; ∘-resp-≈ = λ q p -> ∘-resp-≈ q p
   } where open NaturalTransformation; open Category C₂
-
-open import Categories.Category.Product
 
 eval : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
      -> Bifunctor (Fun C₁ C₂) C₁ C₂
@@ -55,7 +54,7 @@ eval {C₁ = C₁} {C₂ = C₂} = tag record
       F-∘′ : ∀ {F₁ F₂ F₃ A B C} {g : B ⇒₁ C} {f : A ⇒₁ B}
                {N₂ : NaturalTransformation F₂ F₃} {N₁ : NaturalTransformation F₁ F₂}
            -> F⇒′ (N₂ ∘ⁿ N₁ , g ∘₁ f) ≈₂ F⇒′ (N₂ , g) ∘₂ F⇒′ (N₁ , f)
-      F-∘′{F₁} {F₂} {F₃} {_} {_} {_} {g} {f} {N₂} {N₁} =
+      F-∘′ {F₁} {F₂} {F₃} {_} {_} {_} {g} {f} {N₂} {N₁} =
         begin
           F⇒₃ (g ∘₁ f) ∘₂ η₂ ∘₂ η₁     →⟨ ∘-resp-≈ʳ F-∘₃         ⟩
           (F⇒₃ g ∘₂ F⇒₃ f) ∘₂ η₂ ∘₂ η₁ →⟨ assoc₂                 ⟩
@@ -64,11 +63,8 @@ eval {C₁ = C₁} {C₂ = C₂} = tag record
           F⇒₃ g ∘₂ (η₂ ∘₂ F⇒₂ f) ∘₂ η₁ →⟨ ∘-resp-≈ˡ assoc₂       ⟩
           F⇒₃ g ∘₂ η₂ ∘₂ F⇒₂ f ∘₂ η₁   ←⟨ assoc₂                 ⟩
           (F⇒₃ g ∘₂ η₂) ∘₂ F⇒₂ f ∘₂ η₁
-        ∎
-        where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
-              open Functor₁ F₁; open Functor₂ F₂; open Functor₃ F₃
-
-      open ISetoid NaturalTransformation-ISetoid renaming (_≈_ to _≈ⁿ_)
+        ∎ where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
+                open Functor₁ F₁; open Functor₂ F₂; open Functor₃ F₃
 
       F-resp-≈′ : ∀ {F₁ F₂ A B} {f₁ f₂ : A ⇒₁ B} {N₁ N₂ : NaturalTransformation F₁ F₂}
                 -> N₁ ≈ⁿ N₂ ×ₚ f₁ ≈₁ f₂ -> F⇒′ (N₁ , f₁) ≈₂ F⇒′ (N₂ , f₂)

@@ -9,7 +9,7 @@ open import Categories.Object.Limit.Terminal
 1Cat {α} {β} {γ} = record
   { Obj      = Category α β γ
   ; _⇒_      = Functor
-  ; setoid   = Functor-ISetoid
+  ; setoid   = setoidᶠ
   ; id       = idᶠ
   ; _∘_      = _∘ᶠ_
   ; idˡ      = λ {C₁ C₂}       -> Heterogeneous.hrefl C₂

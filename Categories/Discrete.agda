@@ -2,9 +2,9 @@ module Categories.Categories.Discrete where
 
 open import Data.Empty
 
-open import Categories.Category renaming (zero to lzero)
+open import Categories.Category
 
-Discrete : ∀ {α} -> Set α -> Category α α lzero
+Discrete : ∀ {α} -> Set α -> Category α α zero
 Discrete A = record
   { Obj    = A
   ; _⇒_    = _≡_

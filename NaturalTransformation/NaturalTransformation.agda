@@ -4,6 +4,7 @@ open import Categories.Category
 open import Categories.Functor
 
 infixr 9 _∘ⁿ_
+infix  4 _≈ⁿ_
 
 record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
                              (F₁ F₂ : Functor C₁ C₂) : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) where
@@ -46,26 +47,20 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
   } where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
           open Functor₁ F₁; open Functor₂ F₂; open Functor₃ F₃; open IEqReasoningWith C₂
 
-NaturalTransformation-ISetoid :
-  ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
-  -> ISetoid₂ (NaturalTransformation {C₁ = C₁} {C₂ = C₂}) (α₁ ⊔ γ₂)
-NaturalTransformation-ISetoid {C₂ = C₂} = record
-  { _≈_            = λ{ N₁ N₂ ->
-                         let open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂ in
-                              ∀ {A} -> η₁ {A} ≈ η₂ {A}
-                      }
-  ; isIEquivalence = record
-      { refl  =          refl   
-      ; sym   = λ p   -> sym   p
-      ; trans = λ p q -> trans p q
-      }
-  } where open Category C₂
+module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} where
+  open Category C₂
+
+  constⁿ : ∀ {A B} -> A ⇒ B -> NaturalTransformation (constᶠ {C₁ = C₁} A) (constᶠ {C₂ = C₂} B)
+  constⁿ f = record
+    { η          = f
+    ; naturality = left idʳ idˡ
+    }
 
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          (F : Bifunctor (C₁ ᵒᵖ) C₁ C₂)  where
   open Functor (detag F); open Category₁ C₁; open Category₂ C₂; open IEqReasoningFrom C₂
 
-  applyⁿˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyˡ F A₁) (applyˡ F B₁)
+  applyⁿˡ : ∀ {A₁ B₁} -> B₁ ⇒₁ A₁ -> NaturalTransformation (applyᶠˡ F A₁) (applyᶠˡ F B₁)
   applyⁿˡ f₁ = record
     { η          = F⇒ (f₁ , id₁)
     ; naturality = λ {_ _ f₂} ->
@@ -78,7 +73,7 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
         ∎
     }
 
-  applyⁿʳ : ∀ {A₂ B₂} -> A₂ ⇒₁ B₂ -> NaturalTransformation (applyʳ F A₂) (applyʳ F B₂)
+  applyⁿʳ : ∀ {A₂ B₂} -> A₂ ⇒₁ B₂ -> NaturalTransformation (applyᶠʳ F A₂) (applyᶠʳ F B₂)
   applyⁿʳ f₂ = record
     { η          = F⇒ (id₁ , f₂)
     ; naturality = λ {_ _ f₁} ->
@@ -90,3 +85,22 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
           F⇒ (f₁ , id₁) ∘₂ F⇒ (id₁ , f₂)
         ∎
     }
+
+setoidⁿ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+        -> ISetoid₂ (NaturalTransformation {C₁ = C₁} {C₂ = C₂}) (α₁ ⊔ γ₂)
+setoidⁿ {C₂ = C₂} = record
+  { _≈_            = λ N₁ N₂ ->
+                         let open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂ in
+                              ∀ {A} -> η₁ {A} ≈ η₂ {A}
+  ; isIEquivalence = record
+      { refl  =          refl   
+      ; sym   = λ p   -> sym   p
+      ; trans = λ p q -> trans p q
+      }
+  } where open Category C₂
+
+_≈ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+         {F₁ : Functor C₁ C₂} {F₂ : Functor C₁ C₂}
+     -> NaturalTransformation F₁ F₂ -> NaturalTransformation F₁ F₂ -> Set (α₁ ⊔ γ₂)
+_≈ⁿ_ = _≈_
+  where open ISetoid setoidⁿ

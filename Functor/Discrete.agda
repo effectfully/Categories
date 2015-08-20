@@ -13,8 +13,8 @@ open Category C
 D⇒ : ∀ {n} {xs : Vec Obj n} {i j : Fin n} -> i ≡ j -> lookup i xs ⇒ lookup j xs
 D⇒ prefl = id
 
-Discreteᶠ : ∀ {n} -> Vec Obj n -> Functor (Discrete (Fin n)) C
-Discreteᶠ xs = record
+discreteᶠ : ∀ {n} -> Vec Obj n -> Functor (Discrete (Fin n)) C
+discreteᶠ xs = record
   { F·       = flip lookup xs
   ; F⇒       = D⇒
   ; F-id     = refl

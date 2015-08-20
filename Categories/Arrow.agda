@@ -1,15 +1,15 @@
 open import Categories.Category
 
-module Categories.Categories.Arrow {α β γ} (ℂ : Category α β γ) where
+module Categories.Categories.Arrow {α β γ} (C : Category α β γ) where
 
-open import Categories.Morphism ℂ
-open Category ℂ
+open import Categories.Morphism C
+open Category C
 
 Arrow : Category (α ⊔ β) (β ⊔ γ) γ
 Arrow = record
   { Obj      = ∃₂ _⇒_
-  ; _⇒_      = λ{ (A , B , f) (C , D , g) -> f ⇒ₛ g }
-  ; setoid   = comapⁱˢ (λ{ (f₁ , g₂ , _) -> f₁ , g₂ }) (setoid ×ⁱˢ₂ setoid)
+  ; _⇒_      = λ{ (A , B , f₁) (C , D , g₂) -> f₁ ⇒ₛ g₂ }
+  ; setoid   = comapⁱˢ₁ (λ{ (f₂ , g₁ , _) -> f₂ , g₁ }) (setoid ×ⁱˢ setoid)
   ; id       = idₛ
   ; _∘_      = _∘ₛ_
   ; idˡ      = idˡ , idˡ

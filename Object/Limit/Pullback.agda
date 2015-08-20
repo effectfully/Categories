@@ -59,47 +59,14 @@ flip-Pullback p = record
   } where open Pullback p
 
 module _ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
-  module Pullback₁ where
-    open Pullback p renaming (Ob to Ob₁; π¹ to π¹₁; π² to π²₁; ⟨_,_⟩∣_∣ to ⟨_,_⟩∣_∣₁;
-                              comm to comm₁; ⟨⟩-inj to ⟨⟩-inj₁; universal to universal₁;
-                              ∘-η to ∘-η₁; π-inj to π-inj₁; π¹-⟨⟩ to π¹-⟨⟩₁; π²-⟨⟩ to π²-⟨⟩₁) public
+  module Pullback₁ = Pullback p
+    renaming (Ob to Ob₁; π¹ to π¹₁; π² to π²₁; ⟨_,_⟩∣_∣ to ⟨_,_⟩∣_∣₁;
+              comm to comm₁; ⟨⟩-inj to ⟨⟩-inj₁; universal to universal₁;
+              ∘-η to ∘-η₁; π-inj to π-inj₁; π¹-⟨⟩ to π¹-⟨⟩₁; π²-⟨⟩ to π²-⟨⟩₁)
 
-  module Pullback₂ where
-    open Pullback p renaming (Ob to Ob₂; π¹ to π¹₂; π² to π²₂; ⟨_,_⟩∣_∣ to ⟨_,_⟩∣_∣₂;
-                              comm to comm₂; ⟨⟩-inj to ⟨⟩-inj₂; universal to universal₂;
-                              ∘-η to ∘-η₂; π-inj to π-inj₂; π¹-⟨⟩ to π¹-⟨⟩₂; π²-⟨⟩ to π²-⟨⟩₂) public
-
-glue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
-     -> (p₂ : Pullback f g)
-     -> let open Pullback p₂ in
-        Pullback h π¹
-     -> Pullback (f ∘ h) g
-glue {h = h} {f} {g} p₂ p₁ = record
-  { Ob        = Ob₁
-  ; π¹        = π¹₁
-  ; π²        = π²₂ ∘ π²₁
-  ; ⟨_,_⟩∣_∣  = λ p q r -> ⟨ p , ⟨ h ∘ p , q ⟩∣ reassocˡ r ∣₂ ⟩∣ sym π¹-⟨⟩₂ ∣₁
-  ; comm      = ∘ˡ-resp-≈ˡ comm₁ ⋯ ∘²-resp-≈ʳ comm₂
-  ; ⟨⟩-inj    = λ {_ p₁ p₂ q₁ q₂} r -> case ⟨⟩-inj₁ r of
-      λ{ (s₁ , s₂) -> s₁ , proj₂ (⟨⟩-inj₂ s₂) }
-  ; universal = λ r s -> universal₁ r (sym (universal₂ (right (∘²-resp-≈ʳ comm₁) (∘-resp-≈ˡ r))
-                                                       (reassocˡ s)))
-  } where open Pullback₁ p₁; open Pullback₂ p₂
-
-unglue : ∀ {A B C D} {h : C ⇒ A} {f : A ⇒ D} {g : B ⇒ D}
-       -> (p₂ : Pullback f g)
-       -> let open Pullback p₂ in
-          (m : Mono π²)
-       -> Pullback (f ∘ h) g
-       -> Pullback h π¹
-unglue {h = h} {f} {g} p₂ mono p₁ = record
-  { Ob        = Ob₁
-  ; π¹        = π¹₁
-  ; π²        = ⟨ h ∘ π¹₁ , π²₁ ⟩∣ reassocˡ comm₁ ∣₂
-  ; ⟨_,_⟩∣_∣  = λ p q r -> ⟨ p , π²₂ ∘ q ⟩∣ ∘ˡ-resp-≈ˡ r ⋯ ∘²-resp-≈ʳ comm₂ ∣₁
-  ; comm      = sym π¹-⟨⟩₂
-  ; ⟨⟩-inj    = λ {_ p₁ p₂ q₁ q₂} r -> case ⟨⟩-inj₁ r of λ{ (s₁ , s₂) -> s₁ , mono s₂ }
-  ; universal = λ r s -> universal₁ r (right (∘-resp-≈ʳ π²-⟨⟩₂) (∘ˡ-resp-≈ˡ s))
-  } where open Pullback₁ p₁; open Pullback₂ p₂
+  module Pullback₂ = Pullback p
+    renaming (Ob to Ob₂; π¹ to π¹₂; π² to π²₂; ⟨_,_⟩∣_∣ to ⟨_,_⟩∣_∣₂;
+              comm to comm₂; ⟨⟩-inj to ⟨⟩-inj₂; universal to universal₂;
+              ∘-η to ∘-η₂; π-inj to π-inj₂; π¹-⟨⟩ to π¹-⟨⟩₂; π²-⟨⟩ to π²-⟨⟩₂)
 
 Pullbacks = ∀ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g

@@ -91,6 +91,10 @@ comapⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ γ} {I₁ : Set ι₁} {I₂ : Set ι�
 comapⁱˢ f isetoid = record { isIEquivalence = comapⁱᵉ f isIEquivalence }
   where open ISetoid isetoid
 
+comapⁱˢ₁ : ∀ {ι α₁ α₂ γ} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂} 
+         -> (∀ {i₁} -> A₁ i₁ -> A₂ i₁) -> ISetoid A₂ γ -> ISetoid A₁ γ
+comapⁱˢ₁ = comapⁱˢ
+
 module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid
 

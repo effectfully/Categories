@@ -6,6 +6,10 @@ open import Categories.NaturalTransformation
 open import Categories.Object.Zoo using (Cone) public
 open import Categories.Object.Limit.Terminal
 
+-- This definition is wrong. The problem is probably with _⇒_:
+-- it should be "there is an arrow, such that everything in sight commutes",
+-- while it is "for everything in sight there is an arrow, such that the triangles commute".
+-- Fix that.
 Cones : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
       -> Functor C₁ C₂ -> Category _ _ _
 Cones {C₂ = C₂} F = record

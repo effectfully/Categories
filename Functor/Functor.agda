@@ -89,17 +89,15 @@ _∘ᶠ_ {C₁ = C₁} {C₂ = C₂} {C₃ = C₃} F₂ F₁ = record
   } where open Functor₁ F₁; open Functor₂ F₂
           open Category₁ C₁; open Category₂ C₂; open Category₃ C₃; open IEqReasoningFrom C₃
 
-module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} where
-  open Category C₂
-  
-  constᶠ : Obj -> Functor C₁ C₂
-  constᶠ B = record
-    { F·       = const B
-    ; F⇒       = const id
-    ; F-id     = refl
-    ; F-∘      = sym idʳ
-    ; F-resp-≈ = λ _ -> refl
-    }
+constᶠ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
+       -> _ -> Functor C₁ C₂
+constᶠ {C₂ = C₂} A₂ = record
+  { F·       = const A₂
+  ; F⇒       = const id
+  ; F-id     = refl
+  ; F-∘      = sym idʳ
+  ; F-resp-≈ = λ _ -> refl
+  } where open Category C₂
 
 _※_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
@@ -124,12 +122,8 @@ F₁ ⁂ F₂ = record
   ; F-resp-≈ = map F-resp-≈₁ F-resp-≈₂
   } where open Functor₁ F₁; open Functor₂ F₂
 
-diagonal : ∀ {α β γ} {C : Category α β γ} -> Functor C (C × C)
-diagonal = idᶠ ※ idᶠ
-
-Functor-ISetoid : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-                -> ISetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
-Functor-ISetoid = record
+setoidᶠ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} -> ISetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
+setoidᶠ = record
   { _≈_            = λ{ {C₁ , C₂} F₁ F₂ -> let open Functor₁ F₁; open Functor₂ F₂ in
                                  ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
                       }
