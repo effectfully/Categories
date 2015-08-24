@@ -15,6 +15,7 @@ open import Data.Vec.Properties
 
 infixl 7 _!_ _‼_
 infixl 6 _[_]≔*_
+infix  4 _∉_
 
 _↤_ : ℕ -> ℕ -> Set
 n ↤ m = Vec (Fin m) n
@@ -22,7 +23,7 @@ n ↤ m = Vec (Fin m) n
 _!_ : ∀ {α n} {A : Set α} -> Vec A n -> Fin n -> A
 _!_ = flip lookup
 
-_‼_ : ∀ {α n m} {A : Set α} -> Vec A m -> n ↤ m -> Vec A n
+_‼_ : ∀ {α n m} {A : Set α} -> Vec A n -> m ↤ n -> Vec A m
 xs ‼ is = Vec.map (xs !_) is
 
 _[_]≔*_ : ∀ {α n m} {A : Set α} -> Vec A n -> m ↤ n -> A -> Vec A n
@@ -44,7 +45,6 @@ xs [ is ]≔* x = foldr _ (λ i rs -> rs [ i ]≔ x) xs is
 ∈-++ (x ∷ xs)  here     = inj₁ here
 ∈-++ (x ∷ xs) (there p) = Sum.map there id (∈-++ xs p)
 
-infix 4 _∉_
 _∉_ : ∀ {α n} {A : Set α} -> A -> Vec A n -> Set α
 x ∉ xs = ¬ (x ∈ xs)
 

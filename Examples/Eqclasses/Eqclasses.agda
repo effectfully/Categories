@@ -126,21 +126,30 @@ module _ {n} (Cs : Classes n) where
       ; (no  c) -> tag (substᶜ (psym (∉-lookup-[]≔* c)) (detag p))
       }
 
+    merge-reflects-∉ : ∀ {k l} -> l ∉ glue i j -> k ~₂ l -> k ~₁ l
+    merge-reflects-∉ c p = tag (substᶜ (∉-lookup-[]≔* c) (detag p))
+
+    merge-merges : ∀ {k l} -> l ∈ glue i j -> k ~₂ l -> #₂ k ≡ class (glue i j)
+    merge-merges p q = ∈-lookup-[]≔* (substᶜ (∈-lookup-[]≔* p) (detag q))
+
+    merge-complete : ∀ {k l} -> l ∉ glue i j -> k ~₁ l -> #₂ k ≡ #₁ k
+    merge-complete c p = ∉-lookup-[]≔* (glue-∉ i j p c)
+
     merge-sound : ∀ {i₂ j₂ k₂} -> i₂ ~₂ k₂ -> j₂ ~₂ k₂ -> i₂ ≃₂ j₂
-    merge-sound {i₂} {j₂} {k₂} p q = case [ _≟_ ] k₂ ∈? glue i j of λ
+    merge-sound {i₂} {j₂} {k₂} p₂ q₂ = case [ _≟_ ] k₂ ∈? glue i j of λ
       { (yes r) -> tag $
            begin
-             #₂ i₂            →⟨ ∈-lookup-[]≔* (substᶜ (∈-lookup-[]≔* r) (detag p)) ⟩
-             class (glue i j) ←⟨ ∈-lookup-[]≔* (substᶜ (∈-lookup-[]≔* r) (detag q)) ⟩
+             #₂ i₂            →⟨ merge-merges r p₂ ⟩
+             class (glue i j) ←⟨ merge-merges r q₂ ⟩
              #₂ j₂
            ∎
-      ; (no  c) -> let p₁ = tagWith (, k₂) (substᶜ (∉-lookup-[]≔* c) (detag p))
-                       p₂ = tagWith (, k₂) (substᶜ (∉-lookup-[]≔* c) (detag q))
+      ; (no  c) -> let p₁ = merge-reflects-∉ c p₂
+                       q₁ = merge-reflects-∉ c q₂
                    in tag $
            begin
-             #₂ i₂ →⟨ ∉-lookup-[]≔* (glue-∉ i j p₁ c)  ⟩
-             #₁ i₂ →⟨ detag (sound p₁ p₂)              ⟩
-             #₁ j₂ ←⟨ ∉-lookup-[]≔* (glue-∉ i j p₂ c)  ⟩
+             #₂ i₂ →⟨ merge-complete c p₁ ⟩
+             #₁ i₂ →⟨ detag (sound p₁ q₁) ⟩
+             #₁ j₂ ←⟨ merge-complete c q₁ ⟩
              #₂ j₂
            ∎
       }
@@ -169,12 +178,12 @@ generateᵃ-preserves-∈            []      []     p = p
 generateᵃ-preserves-∈ {Cs = Cs} (i ∷ f) (j ∷ g) p =
   generateᵃ-preserves-∈ f g (merge-preserves-∈ Cs i j p)
 
-comm-generateᵃ : ∀ {n m} {Cs : Classes n} (f : m ↤ n) (g : m ↤ n)
+generateᵃ-sound : ∀ {n m} {Cs : Classes n} (f : m ↤ n) (g : m ↤ n)
                -> let open Classes (generateᵃ Cs f g) in classes ‼ f ≡ classes ‼ g
-comm-generateᵃ            []      []     = prefl
-comm-generateᵃ {Cs = Cs} (i ∷ f) (j ∷ g) =
+generateᵃ-sound            []      []     = prefl
+generateᵃ-sound {Cs = Cs} (i ∷ f) (j ∷ g) =
   cong₂ _∷_ (detag (sound (reflexiveₑ i) (generateᵃ-preserves-∈ f g (∈₂-merge Cs i j))))
-            (comm-generateᵃ f g)
+            (generateᵃ-sound f g)
     where open Classes (generateᵃ (merge Cs i j) f g); open OnClasses classes
 
 generate : ∀ {n m} -> m ↤ n -> m ↤ n -> Classes n
@@ -189,7 +198,7 @@ eqclasses-sound f g =
   begin
     eqclasses f g ‼ f      →⟨ map-cong (flip lookup-map classes) f ⟩
     map (repr ∘′ #) f      →⟨ map-∘ repr # f                       ⟩
-    map repr (classes ‼ f) →⟨ cong (map _) (comm-generateᵃ f g)    ⟩
+    map repr (classes ‼ f) →⟨ cong (map _) (generateᵃ-sound f g)   ⟩
     map repr (classes ‼ g) ←⟨ map-∘ repr # g                       ⟩
     map (repr ∘′ #) g      ←⟨ map-cong (flip lookup-map classes) g ⟩
     eqclasses f g ‼ g
