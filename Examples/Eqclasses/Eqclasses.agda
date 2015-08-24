@@ -19,6 +19,9 @@ List⁺ A = ∃ (Vec A ∘′ suc)
 class : ∀ {n m} -> Vec (Fin n) (suc m) -> List⁺ (Fin n)
 class = ,_
 
+singleton : ∀ {n} -> Fin n -> List⁺ (Fin n)
+singleton = class ∘′ [_]
+
 vec : ∀ {n} -> (c : List⁺ (Fin n)) -> Vec (Fin n) _
 vec = proj₂
 
@@ -93,7 +96,7 @@ identity = record
   ; reflexive = reflexive
   ; sound     = sound
   } where
-      classes = tabulate (class ∘′ [_])
+      classes = tabulate singleton
 
       open OnClasses classes
 
@@ -101,7 +104,7 @@ identity = record
       reflexive {i} = tag (substᶜ (psym (lookup∘tabulate _ i)) here)
 
       sound : ∀ {i j k} -> i ~ k -> j ~ k -> i ≃ j
-      sound {k = k} (tag p) (tag q) rewrite lookup∘tabulate (class ∘′ [_]) k with p | q
+      sound {k = k} (tag p) (tag q) rewrite lookup∘tabulate singleton k with p | q
       ... | here     | here     = tag prefl
       ... | here     | there ()
       ... | there () | _
