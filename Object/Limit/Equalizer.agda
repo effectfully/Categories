@@ -6,7 +6,7 @@ open import Categories.Morphism ℂ
 
 open IEqReasoningWith ℂ
 
-record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
+record Equalizer {A B} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   field
     Ob     : Obj
     ι      : Ob ⇒ A
@@ -38,4 +38,4 @@ record Equalizer {A B : Obj} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   .ι-mono : Mono ι
   ι-mono = λ r -> right (universal r) ∘-η
 
-Equalizers = ∀ {A B : Obj} {f g : A ⇒ B} -> Equalizer f g
+Equalizers = ∀ {A B} {f g : A ⇒ B} -> Equalizer f g

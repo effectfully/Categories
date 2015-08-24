@@ -4,7 +4,7 @@ module Categories.Object.Colimit.Pushout {α β γ} (ℂ : Category α β γ) wh
 
 open Category ℂ
 
-record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ) where
+record Pushout {A B C} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ) where
   field
     Ob       : Obj
     ι¹       : A ⇒ Ob
@@ -38,3 +38,5 @@ record Pushout {A B C : Obj} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ
   .[]-resp-≈ : ∀ {D} {p₁ p₂ : A ⇒ D} {q₁ q₂ : B ⇒ D} {r : p₁ ∘ f ≈ q₁ ∘ g}
              -> (s : p₁ ≈ p₂) -> (t : q₁ ≈ q₂) -> [ p₁ , q₁ ]∣ r ∣ ≈ [ p₂ , q₂ ]∣ s ⌈ r ⌉ˡ t ∣ 
   []-resp-≈ p q = universal (left []-ι¹ p) (left []-ι² q)
+
+Pushouts = ∀ {A B C} {f : C ⇒ A} {g : C ⇒ B} -> Pushout f g

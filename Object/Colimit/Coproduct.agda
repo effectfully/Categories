@@ -4,7 +4,7 @@ module Categories.Object.Colimit.Coproduct {α β γ} (ℂ : Category α β γ) 
 
 open Category ℂ
 
-record Coproduct (A B : Obj) : Set (α ⊔ β ⊔ γ) where
+record Coproduct A B : Set (α ⊔ β ⊔ γ) where
   field
     Ob    : Obj
     ι¹    : A ⇒ Ob

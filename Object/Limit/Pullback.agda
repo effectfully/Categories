@@ -6,7 +6,7 @@ open import Categories.Morphism ℂ
 
 open Category ℂ
 
-record Pullback {A B C : Obj} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
+record Pullback {A B C} (f : A ⇒ C) (g : B ⇒ C) : Set (α ⊔ β ⊔ γ) where
   field
     Ob       : Obj
     π¹       : Ob ⇒ A
@@ -69,4 +69,4 @@ module _ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
               comm to comm₂; ⟨⟩-inj to ⟨⟩-inj₂; universal to universal₂;
               ∘-η to ∘-η₂; π-inj to π-inj₂; π¹-⟨⟩ to π¹-⟨⟩₂; π²-⟨⟩ to π²-⟨⟩₂)
 
-Pullbacks = ∀ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g
+Pullbacks = ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g

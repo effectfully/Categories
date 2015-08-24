@@ -4,7 +4,7 @@ module Categories.Object.Limit.Product {α β γ} (ℂ : Category α β γ) wher
 
 open Category ℂ
 
-record Product (A B : Obj) : Set (α ⊔ β ⊔ γ) where
+record Product A B : Set (α ⊔ β ⊔ γ) where
   field
     Ob    : Obj
     π¹    : Ob ⇒ A
