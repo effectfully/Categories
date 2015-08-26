@@ -8,8 +8,9 @@ open import Data.Sum hiding (map)
 open import Data.Vec
 open import Data.Vec.Properties
 
+open import Categories.Utilities.Prelude hiding (suc; map)
 open import Categories.Examples.Eqclasses.Utilities
-open import Categories.Category hiding (zero; suc; map)
+open import Categories.Setoid
 
 open ≡-Reasoning
 
@@ -69,7 +70,7 @@ record Classes n : Set where
   hreflexive : ∀ {i j} -> i ≃ j -> i ~ j
   hreflexive (tag p) = tag (substᶜ p (detag reflexive))
 
-  symmetric : ∀ {i j} -> i ~  j -> j ~ i
+  symmetric : ∀ {i j} -> i ~ j -> j ~ i
   symmetric p = hreflexive (sound reflexive p)
 
   transitive : ∀ {i j k} -> i ~ j -> j ~ k -> i ~ k
@@ -78,17 +79,18 @@ record Classes n : Set where
   cosound : ∀ {i j k} -> k ~ i -> k ~ j -> i ≃ j
   cosound p q = sound (symmetric p) (symmetric q)
 
-  glue : ∀ i j -> Vec (Fin n) _
-  glue i j = vec (# i) ++ vec (# j)
+  module Glue i j where
+    glued : Vec (Fin n) _
+    glued = vec (# i) ++ vec (# j)
 
-  glue-∈ : ∀ {k l} i j -> k ~ l -> k ∈ glue i j -> l ∈ glue i j
-  glue-∈ i j p q = case ∈-++ (vec (classes ! i)) q of λ
-    { (inj₁ r) -> ∈-++₁ (detag (hreflexive (cosound p (tagWith (, i) r))))
-    ; (inj₂ r) -> ∈-++₂ (vec (# i)) (detag (hreflexive (cosound p (tagWith (, j) r))))
-    }
+    glued-∈ : ∀ {k l} -> k ~ l -> k ∈ glued -> l ∈ glued
+    glued-∈ p q = case ∈-++ (vec (# i)) q of λ
+      { (inj₁ r) -> ∈-++₁             (detag (hreflexive (cosound p (tagWith (, i) r))))
+      ; (inj₂ r) -> ∈-++₂ (vec (# i)) (detag (hreflexive (cosound p (tagWith (, j) r))))
+      }
 
-  glue-∉ : ∀ {k l} i j -> l ~ k -> k ∉ glue i j -> l ∉ glue i j
-  glue-∉ i j p c q = c (glue-∈ i j p q)
+    glued-∉ : ∀ {k l} -> l ~ k -> k ∉ glued -> l ∉ glued
+    glued-∉ p c q = c (glued-∈ p q)
 
 identity : ∀ {n} -> Classes n
 identity = record
@@ -109,65 +111,65 @@ identity = record
       ... | here     | there ()
       ... | there () | _
 
-module _ {n} (Cs : Classes n) where
-  open Classes Cs renaming (classes to classes₁); open OnClasses₁ classes₁
+module Merge {n} (Cs : Classes n) (i j : Fin n) where
+  open Classes Cs renaming (classes to classes₁)
+  open Glue i j
 
-  merge′ : ∀ i j -> Vec (List⁺ (Fin n)) n
-  merge′ i j = classes₁ [ ks ]≔* class ks where ks = glue i j
+  classes₂ : Vec (List⁺ (Fin n)) n
+  classes₂ = classes₁ [ glued ]≔* class glued
 
-  module _ i j where
-    classes₂ = merge′ i j
+  open OnClasses₁ classes₁
+  open OnClasses₂ classes₂
     
-    open OnClasses₂ classes₂
+  merge-preserves-∈ : ∀ {k l} -> k ~₁ l -> k ~₂ l
+  merge-preserves-∈ {k} {l} p = case [ _≟_ ] l ∈? glued of λ
+    { (yes q) -> tag (substᶜ (psym (∈-lookup-[]≔* q)) (glued-∈ (symmetric p) q))
+    ; (no  c) -> tag (substᶜ (psym (∉-lookup-[]≔* c)) (detag p))
+    }
+
+  merge-reflects-∉ : ∀ {k l} -> l ∉ glued -> k ~₂ l -> k ~₁ l
+  merge-reflects-∉ c p = tag (substᶜ (∉-lookup-[]≔* c) (detag p))
+
+  merge-glues : ∀ {k l} -> l ∈ glued -> k ~₂ l -> #₂ k ≡ class glued
+  merge-glues p q = ∈-lookup-[]≔* (substᶜ (∈-lookup-[]≔* p) (detag q))
+
+  merge-ignores : ∀ {k l} -> l ∉ glued -> k ~₁ l -> #₂ k ≡ #₁ k
+  merge-ignores c p = ∉-lookup-[]≔* (glued-∉ p c)
+
+  merge-sound : ∀ {i₂ j₂ k₂} -> i₂ ~₂ k₂ -> j₂ ~₂ k₂ -> i₂ ≃₂ j₂
+  merge-sound {i₂} {j₂} {k₂} p₂ q₂ = case [ _≟_ ] k₂ ∈? glued of λ
+    { (yes r) -> tag $
+         begin
+           #₂ i₂       →⟨ merge-glues r p₂ ⟩
+           class glued ←⟨ merge-glues r q₂ ⟩
+           #₂ j₂
+         ∎
+    ; (no  c) -> let p₁ = merge-reflects-∉ c p₂
+                     q₁ = merge-reflects-∉ c q₂
+                 in tag $
+         begin
+           #₂ i₂ →⟨ merge-ignores c p₁  ⟩
+           #₁ i₂ →⟨ detag (sound p₁ q₁) ⟩
+           #₁ j₂ ←⟨ merge-ignores c q₁  ⟩
+           #₂ j₂
+         ∎
+    }
+
+  ∈₂-merge : j ~₂ i
+  ∈₂-merge = tag (substᶜ (psym (∈-lookup-[]≔* (∈-++₁ (detag (reflexiveₑ i)))))
+                         (∈-++₂ (vec (#₁ i)) (detag (reflexiveₑ j))))
     
-    merge-preserves-∈ : ∀ {k l} -> k ~₁ l -> k ~₂ l
-    merge-preserves-∈ {k} {l} p = case [ _≟_ ] l ∈? glue i j of λ
-      { (yes q) -> tag (substᶜ (psym (∈-lookup-[]≔* q)) (glue-∈ i j (symmetric p) q))
-      ; (no  c) -> tag (substᶜ (psym (∉-lookup-[]≔* c)) (detag p))
-      }
-
-    merge-reflects-∉ : ∀ {k l} -> l ∉ glue i j -> k ~₂ l -> k ~₁ l
-    merge-reflects-∉ c p = tag (substᶜ (∉-lookup-[]≔* c) (detag p))
-
-    merge-merges : ∀ {k l} -> l ∈ glue i j -> k ~₂ l -> #₂ k ≡ class (glue i j)
-    merge-merges p q = ∈-lookup-[]≔* (substᶜ (∈-lookup-[]≔* p) (detag q))
-
-    merge-complete : ∀ {k l} -> l ∉ glue i j -> k ~₁ l -> #₂ k ≡ #₁ k
-    merge-complete c p = ∉-lookup-[]≔* (glue-∉ i j p c)
-
-    merge-sound : ∀ {i₂ j₂ k₂} -> i₂ ~₂ k₂ -> j₂ ~₂ k₂ -> i₂ ≃₂ j₂
-    merge-sound {i₂} {j₂} {k₂} p₂ q₂ = case [ _≟_ ] k₂ ∈? glue i j of λ
-      { (yes r) -> tag $
-           begin
-             #₂ i₂            →⟨ merge-merges r p₂ ⟩
-             class (glue i j) ←⟨ merge-merges r q₂ ⟩
-             #₂ j₂
-           ∎
-      ; (no  c) -> let p₁ = merge-reflects-∉ c p₂
-                       q₁ = merge-reflects-∉ c q₂
-                   in tag $
-           begin
-             #₂ i₂ →⟨ merge-complete c p₁ ⟩
-             #₁ i₂ →⟨ detag (sound p₁ q₁) ⟩
-             #₁ j₂ ←⟨ merge-complete c q₁ ⟩
-             #₂ j₂
-           ∎
-      }
-
-    ∈₂-merge : j ~₂ i
-    ∈₂-merge = tag (substᶜ (psym (∈-lookup-[]≔* (∈-++₁ (detag (reflexiveₑ i)))))
-                           (∈-++₂ (vec (#₁ i)) (detag (reflexiveₑ j))))
-
-  merge : ∀ i j -> Classes n
-  merge i j = record
-    { classes   = merge′ i j
-    ; reflexive = merge-preserves-∈ i j reflexive
-    ; sound     = merge-sound i j
+  merged : Classes n
+  merged = record
+    { classes   = classes₂
+    ; reflexive = merge-preserves-∈ reflexive
+    ; sound     = merge-sound
     }
 
 generateᵃ : ∀ {n m} -> Classes n -> m ↤ n -> m ↤ n -> Classes n
 generateᵃ Cs  []      []     = Cs
-generateᵃ Cs (i ∷ f) (j ∷ g) = generateᵃ (merge Cs i j) f g
+generateᵃ Cs (i ∷ f) (j ∷ g) = generateᵃ merged f g
+  where open Merge Cs i j
 
 generateᵃ-preserves-∈ : ∀ {n m i j} {Cs : Classes n} (f : m ↤ n) (g : m ↤ n)
                       -> let open Classes
@@ -175,16 +177,17 @@ generateᵃ-preserves-∈ : ∀ {n m i j} {Cs : Classes n} (f : m ↤ n) (g : m 
                              open OnClasses₂ (classes (generateᵃ Cs f g))
                          in i ~₁ j -> i ~₂ j
 generateᵃ-preserves-∈            []      []     p = p
-generateᵃ-preserves-∈ {Cs = Cs} (i ∷ f) (j ∷ g) p =
-  generateᵃ-preserves-∈ f g (merge-preserves-∈ Cs i j p)
+generateᵃ-preserves-∈ {Cs = Cs} (i ∷ f) (j ∷ g) p = generateᵃ-preserves-∈ f g (merge-preserves-∈ p)
+  where open Merge Cs i j
 
 generateᵃ-sound : ∀ {n m} {Cs : Classes n} (f : m ↤ n) (g : m ↤ n)
                -> let open Classes (generateᵃ Cs f g) in classes ‼ f ≡ classes ‼ g
 generateᵃ-sound            []      []     = prefl
 generateᵃ-sound {Cs = Cs} (i ∷ f) (j ∷ g) =
-  cong₂ _∷_ (detag (sound (reflexiveₑ i) (generateᵃ-preserves-∈ f g (∈₂-merge Cs i j))))
+  cong₂ _∷_ (detag (sound (reflexiveₑ i) (generateᵃ-preserves-∈ f g ∈₂-merge)))
             (generateᵃ-sound f g)
-    where open Classes (generateᵃ (merge Cs i j) f g); open OnClasses classes
+    where open Merge Cs i j
+          open Classes (generateᵃ merged f g)
 
 generate : ∀ {n m} -> m ↤ n -> m ↤ n -> Classes n
 generate = generateᵃ identity
@@ -196,10 +199,11 @@ eqclasses f g = map repr classes
 eqclasses-sound : ∀ {n m} -> (f : m ↤ n) -> (g : m ↤ n) -> eqclasses f g ‼ f ≡ eqclasses f g ‼ g
 eqclasses-sound f g =
   begin
-    eqclasses f g ‼ f      →⟨ map-cong (flip lookup-map classes) f ⟩
+    map repr classes ‼ f   →⟨ map-cong (flip lookup-map classes) f ⟩
     map (repr ∘′ #) f      →⟨ map-∘ repr # f                       ⟩
     map repr (classes ‼ f) →⟨ cong (map _) (generateᵃ-sound f g)   ⟩
     map repr (classes ‼ g) ←⟨ map-∘ repr # g                       ⟩
     map (repr ∘′ #) g      ←⟨ map-cong (flip lookup-map classes) g ⟩
-    eqclasses f g ‼ g
-  ∎ where open Classes (generate f g); open OnClasses classes
+    map repr classes ‼ g
+  ∎ where open Classes (generate f g)
+          open OnClasses classes
