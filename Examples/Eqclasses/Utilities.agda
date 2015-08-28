@@ -13,9 +13,39 @@ open import Data.Product
 open import Data.Vec as Vec
 open import Data.Vec.Properties
 
+open ≡-Reasoning public
+
+infixr 2 _→⟨_⟩_ _←⟨_⟩_
 infixl 7 _!_ _‼_
 infixl 6 _[_]≔*_
 infix  4 _∉_
+
+record Tag {α β} {A : Set α} (B : A -> Set β) (x : A) : Set β where
+  constructor tag
+  field detag : B x
+  tagOf = x
+open Tag public
+
+Tag₂ : ∀ {α β γ} {A : Set α} {B : A -> Set β} -> (∀ x -> B x -> Set γ) -> ∀ x -> B x -> Set γ
+Tag₂ C x y = Tag (uncurry C) (x , y)
+
+tagWith : ∀ {α β} {A : Set α} {B : (x : A) -> Set β} -> (x : A) -> B x -> Tag B x
+tagWith _ = tag
+
+_→⟨_⟩_ : ∀ {α} {A : Set α} {y z} -> (x : A) -> x ≡ y -> y IsRelatedTo z -> x IsRelatedTo z
+x →⟨ x≡y ⟩ y-irt-z = x ≡⟨     x≡y ⟩ y-irt-z
+
+_←⟨_⟩_ : ∀ {α} {A : Set α} {y z} -> (x : A) -> y ≡ x -> y IsRelatedTo z -> x IsRelatedTo z
+x ←⟨ y≡x ⟩ y-irt-z = x →⟨ sym y≡x ⟩ y-irt-z
+
+zipfoldr : ∀ {α β γ n} {A : Set α} {B : Set β}
+         -> (C : ℕ -> Set γ)
+         -> (∀ {n} -> A -> B -> C n -> C (ℕ.suc n))
+         -> C ℕ.zero
+         -> Vec A n
+         -> Vec B n
+         -> C n
+zipfoldr C f z xs ys = Vec.foldr C (uncurry f) z (Vec.zip xs ys)
 
 _↤_ : ℕ -> ℕ -> Set
 n ↤ m = Vec (Fin m) n

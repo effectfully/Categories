@@ -1,21 +1,20 @@
 module Categories.Examples.Eqclasses.Eqclasses where
 
+open import Function
 open import Relation.Nullary
+open import Relation.Binary.PropositionalEquality hiding ([_])
 open import Data.Nat.Base
-open import Data.Fin hiding (#_)
+open import Data.Fin     hiding (#_)
 open import Data.Fin.Properties
-open import Data.Sum hiding (map)
+open import Data.Sum     hiding (map)
+open import Data.Product hiding (map)
 open import Data.Vec
 open import Data.Vec.Properties
 
-open import Categories.Utilities.Prelude hiding (suc; map)
 open import Categories.Examples.Eqclasses.Utilities
-open import Categories.Setoid
-
-open ≡-Reasoning
 
 List⁺ : ∀ {α} -> Set α -> Set α
-List⁺ A = ∃ (Vec A ∘′ suc)
+List⁺ A = ∃ (Vec A ∘ suc)
 
 class : ∀ {n m} -> Vec (Fin n) (suc m) -> List⁺ (Fin n)
 class = ,_
@@ -24,17 +23,17 @@ vec : ∀ {n} -> (c : List⁺ (Fin n)) -> Vec (Fin n) _
 vec = proj₂
 
 sing : ∀ {n} -> Fin n -> List⁺ (Fin n)
-sing = class ∘′ [_]
+sing = class ∘ [_]
 
 repr : ∀ {n} -> List⁺ (Fin n) -> Fin n
-repr = head ∘′ vec
+repr = head ∘ vec
 
 infix 4 _∈ᶜ_
 _∈ᶜ_ : ∀ {n} -> Fin n -> List⁺ (Fin n) -> Set
 i ∈ᶜ c = i ∈ vec c 
 
 substᶜ : ∀ {n} {i : Fin n} {c d : List⁺ (Fin n)} -> c ≡ d -> i ∈ᶜ c -> i ∈ᶜ d
-substᶜ prefl = id′
+substᶜ refl = id
 
 module OnClasses {n} (classes : Vec (List⁺ (Fin n)) n) where
   infix 4 _~_ _≃_
@@ -103,11 +102,11 @@ identity = record
       open OnClasses classes
 
       reflexive : ∀ {i} -> i ~ i
-      reflexive {i} = tag (substᶜ (psym (lookup∘tabulate _ i)) here)
+      reflexive {i} = tag (substᶜ (sym (lookup∘tabulate _ i)) here)
 
       sound : ∀ {i j k} -> i ~ k -> j ~ k -> i ≃ j
       sound {k = k} (tag p) (tag q) rewrite lookup∘tabulate sing k with p | q
-      ... | here     | here     = tag prefl
+      ... | here     | here     = tag refl
       ... | here     | there ()
       ... | there () | _
 
@@ -123,8 +122,8 @@ module Merge {n} (Cs : Classes n) (i j : Fin n) where
     
   merge-preserves-∈ : ∀ {k l} -> k ~₁ l -> k ~₂ l
   merge-preserves-∈ {k} {l} p = case [ _≟_ ] l ∈? glued of λ
-    { (yes q) -> tag (substᶜ (psym (∈-lookup-[]≔* q)) (glued-∈ (symmetric p) q))
-    ; (no  c) -> tag (substᶜ (psym (∉-lookup-[]≔* c)) (detag p))
+    { (yes q) -> tag (substᶜ (sym (∈-lookup-[]≔* q)) (glued-∈ (symmetric p) q))
+    ; (no  c) -> tag (substᶜ (sym (∉-lookup-[]≔* c)) (detag p))
     }
 
   merge-reflects-∉ : ∀ {k l} -> l ∉ glued -> k ~₂ l -> k ~₁ l
@@ -156,7 +155,7 @@ module Merge {n} (Cs : Classes n) (i j : Fin n) where
     }
 
   ∈₂-merge : j ~₂ i
-  ∈₂-merge = tag (substᶜ (psym (∈-lookup-[]≔* (∈-++₁ (detag (reflexiveₑ i)))))
+  ∈₂-merge = tag (substᶜ (sym (∈-lookup-[]≔* (∈-++₁ (detag (reflexiveₑ i)))))
                          (∈-++₂ (vec (#₁ i)) (detag (reflexiveₑ j))))
     
   merged : Classes n
@@ -182,7 +181,7 @@ generateᵃ-preserves-∈ {Cs = Cs} (i ∷ f) (j ∷ g) p = generateᵃ-preserve
 
 generateᵃ-sound : ∀ {n m} {Cs : Classes n} (f : m ↤ n) (g : m ↤ n)
                -> let open Classes (generateᵃ Cs f g) in classes ‼ f ≡ classes ‼ g
-generateᵃ-sound            []      []     = prefl
+generateᵃ-sound            []      []     = refl
 generateᵃ-sound {Cs = Cs} (i ∷ f) (j ∷ g) =
   cong₂ _∷_ (detag (sound (reflexiveₑ i) (generateᵃ-preserves-∈ f g ∈₂-merge)))
             (generateᵃ-sound f g)
@@ -196,14 +195,14 @@ eqclasses : ∀ {n m} -> m ↤ n -> m ↤ n -> n ↤ n
 eqclasses f g = map repr classes
   where open Classes (generate f g)
 
-eqclasses-sound : ∀ {n m} -> (f : m ↤ n) -> (g : m ↤ n) -> eqclasses f g ‼ f ≡ eqclasses f g ‼ g
+eqclasses-sound : ∀ {n m} -> (f g : n ↤ m) -> eqclasses f g ‼ f ≡ eqclasses f g ‼ g
 eqclasses-sound f g =
   begin
     map repr classes ‼ f   →⟨ map-cong (flip lookup-map classes) f ⟩
-    map (repr ∘′ #) f      →⟨ map-∘ repr # f                       ⟩
+    map (repr ∘ #) f       →⟨ map-∘ repr # f                       ⟩
     map repr (classes ‼ f) →⟨ cong (map _) (generateᵃ-sound f g)   ⟩
     map repr (classes ‼ g) ←⟨ map-∘ repr # g                       ⟩
-    map (repr ∘′ #) g      ←⟨ map-cong (flip lookup-map classes) g ⟩
+    map (repr ∘ #) g       ←⟨ map-cong (flip lookup-map classes) g ⟩
     map repr classes ‼ g
   ∎ where open Classes (generate f g)
           open OnClasses classes

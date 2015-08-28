@@ -2,11 +2,21 @@ module Categories.Categories.Fins where
 
 open import Data.Nat.Base
 open import Data.Fin
-open import Data.Vec
+open import Data.Vec as Vec
 open import Data.Vec.Properties
 
-open import Categories.Examples.Eqclasses.Utilities
-open import Categories.Category renaming (zero to lzero)
+open import Categories.Category hiding (suc) renaming (zero to lzero)
+
+infixl 7 _!_ _‼_
+
+_↤_ : ℕ -> ℕ -> Set
+n ↤ m = Vec (Fin m) n
+
+_!_ : ∀ {α n} {A : Set α} -> Vec A n -> Fin n -> A
+_!_ = flip lookup
+
+_‼_ : ∀ {α n m} {A : Set α} -> Vec A n -> m ↤ n -> Vec A m
+xs ‼ is = Vec.map (xs !_) is
 
 Fins : Category lzero lzero lzero
 Fins = record
@@ -27,3 +37,15 @@ Fins = record
         ‼-! {f = []   }  ()
         ‼-! {f = _ ∷ _}  zero   = prefl
         ‼-! {f = _ ∷ _} (suc i) = ‼-! i
+
+open import Categories.Object Fins
+
+initial : Initial
+initial = record
+  { Ob        = 0
+  ; ↜         = []
+  ; universal = λ{ {_} {[]} -> prefl }
+  }
+
+binaryCoproducts : BinaryCoproducts
+binaryCoproducts {n} {m} = {!!}
