@@ -48,6 +48,11 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
                              F-resp-≈ to F-resp-≈₃) public
     open Heterogeneousᶠ F renaming (hF-id to hF-id₃; hF-∘ to hF-∘₃; F-resp-≋ to F-resp-≋₃) public
 
+  module Functor₄ where
+    open Functor F renaming (F· to F·₄; F⇒ to F⇒₄; F-id to F-id₄; F-∘ to F-∘₄;
+                             F-resp-≈ to F-resp-≈₄) public
+    open Heterogeneousᶠ F renaming (hF-id to hF-id₄; hF-∘ to hF-∘₄; F-resp-≋ to F-resp-≋₄) public
+
 _ᶠᵒᵖ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
      -> Functor C₁ C₂ -> Functor (C₁ ᵒᵖ) (C₂ ᵒᵖ)
 F ᶠᵒᵖ = record

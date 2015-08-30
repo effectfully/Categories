@@ -50,8 +50,8 @@ applyᶠˡ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
 applyᶠˡ F A₁ = reduceᶠˡ F (constᶠ A₁)
 
 applyᶠʳ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
-           {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
-       -> Bifunctor C₁ C₂ C₃ -> _ -> Functor C₁ C₃
+            {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
+        -> Bifunctor C₁ C₂ C₃ -> _ -> Functor C₁ C₃
 applyᶠʳ F A₂ = reduceᶠʳ F (constᶠ A₂)
 
 composeᶠ : ∀ {α₁ α₂ α₃ α₄ α₅ β₁ β₂ β₃ β₄ β₅ γ₁ γ₂ γ₃ γ₄ γ₅}

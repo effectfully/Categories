@@ -3,7 +3,7 @@ module Categories.NaturalTransformation.NaturalTransformation where
 open import Categories.Category
 open import Categories.Functor
 
-infixr 9 _∘ⁿ_
+infixr 9 _∘ⁿ_ _∘ʰ_ _∘ˡ_ _∘ʳ_
 infix  4 _≈ⁿ_
 
 record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
@@ -46,6 +46,45 @@ _∘ⁿ_ {C₂ = C₂} {F₁} {F₂} {F₃} N₁ N₂ = record
       ∎
   } where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
           open Functor₁ F₁; open Functor₂ F₂; open Functor₃ F₃; open IEqReasoningWith C₂
+
+_∘ʰ_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
+         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
+         {F₁ F₂ : Functor C₁ C₂} {F₃ F₄ : Functor C₂ C₃}
+     -> NaturalTransformation F₃ F₄
+     -> NaturalTransformation F₁ F₂
+     -> NaturalTransformation (F₃ ∘ᶠ F₁) (F₄ ∘ᶠ F₂)
+_∘ʰ_ {C₂ = C₂} {C₃ = C₃} {F₁} {F₂} {F₃} {F₄} N₂ N₁ = record
+  { η          = F⇒₄ η₁ ∘ η₂
+  ; naturality = λ {_ _ f} ->
+      begin
+        (F⇒₄ η₁ ∘ η₂) ∘ F⇒₃ (F⇒₁ f) ←⟨ ∘-resp-≈ʳ naturality₂             ⟩
+        (η₂ ∘ F⇒₃ η₁) ∘ F⇒₃ (F⇒₁ f) →⟨ assoc                             ⟩
+        η₂ ∘ (F⇒₃ η₁ ∘ F⇒₃ (F⇒₁ f)) ←⟨ ∘-resp-≈ˡ F-∘₃                    ⟩
+        η₂ ∘ F⇒₃ (η₁ ∘₂ F⇒₁ f)      →⟨ naturality₂                       ⟩
+        F⇒₄ (η₁ ∘₂ F⇒₁ f) ∘ η₂      →⟨ ∘-resp-≈ʳ (F-resp-≈₄ naturality₁) ⟩
+        F⇒₄ (F⇒₂ f ∘₂ η₁) ∘ η₂      →⟨ ∘-resp-≈ʳ F-∘₄                    ⟩
+        (F⇒₄ (F⇒₂ f) ∘ F⇒₄ η₁) ∘ η₂ →⟨ assoc                             ⟩
+        F⇒₄ (F⇒₂ f) ∘ F⇒₄ η₁ ∘ η₂
+      ∎
+  } where open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂
+          open Functor₁ F₁; open Functor₂ F₂; open Functor₃ F₃; open Functor₄ F₄
+          open Category₂ C₂; open IEqReasoningWith C₃
+
+_∘ˡ_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
+         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
+         {F₁ F₂ : Functor C₁ C₂}
+     -> (F₃ : Functor C₂ C₃)
+     -> NaturalTransformation F₁ F₂
+     -> NaturalTransformation (F₃ ∘ᶠ F₁) (F₃ ∘ᶠ F₂)
+F₃ ∘ˡ N = idⁿ {F = F₃} ∘ʰ N
+
+_∘ʳ_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
+         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
+         {F₂ F₃ : Functor C₂ C₃}
+     -> NaturalTransformation F₂ F₃
+     -> (F₁ : Functor C₁ C₂)
+     -> NaturalTransformation (F₂ ∘ᶠ F₁) (F₃ ∘ᶠ F₁)
+N ∘ʳ F₁ = N ∘ʰ idⁿ {F = F₁}
 
 module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} where
   open Category C₂
