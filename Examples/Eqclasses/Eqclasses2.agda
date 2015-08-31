@@ -57,21 +57,21 @@ xor  zero   (suc j) = just (suc j , izero (toℕ j))
 xor (suc i)  zero   = just (suc i , izero (toℕ i))
 xor (suc i) (suc j) = map suc isuc <$> xor i j
 
-Self : ℕ -> Set
-Self n = IVec (λ i -> Maybe ⟨ i ⋯ n ⟩) n
+DAG : ℕ -> Set
+DAG n = IVec (λ i -> Maybe ⟨ i ⋯ n ⟩) n
 
-ilookup : ∀ {n} -> (i : Fin n) -> Self n -> Maybe [ n ∸ toℕ i ⋯ n ⟩
+ilookup : ∀ {n} -> (i : Fin n) -> DAG n -> Maybe [ n ∸ toℕ i ⋯ n ⟩
 ilookup = ilookupᵈ (λ j n -> Maybe [ j ⋯ n ⟩)
 
-_[_]≔ᵢ_ : ∀ {n} -> Self n -> (i : Fin n) -> [ n ∸ toℕ i ⋯ n ⟩ -> Self n
+_[_]≔ᵢ_ : ∀ {n} -> DAG n -> (i : Fin n) -> [ n ∸ toℕ i ⋯ n ⟩ -> DAG n
 is [ i ]≔ᵢ j = iassignᵈ (λ j n -> Maybe [ j ⋯ n ⟩) i is (just j)
 
 -- Terminates being closed.
 {-# NON_TERMINATING #-}
-ilookup* : ∀ {n} -> Fin n -> Self n -> Fin n
+ilookup* : ∀ {n} -> Fin n -> DAG n -> Fin n
 ilookup* i is = maybe (λ j -> ilookup* (ItoFin j) is) i (ilookup i is)
 
-step : ∀ {n} -> Fin n -> Fin n -> Self n -> Self n
+step : ∀ {n} -> Fin n -> Fin n -> DAG n -> DAG n
 step i j is = maybe (uncurry (is [_]≔ᵢ_)) is (xor (ilookup* i is) (ilookup* j is))
 
 eqclasses : ∀ {n m} -> n ↤ m -> n ↤ m -> m ↤ m

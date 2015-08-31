@@ -132,7 +132,7 @@ module Category {α β γ} (C : Category α β γ) where
 _ᵒᵖ : ∀ {α β γ} -> Category α β γ -> Category α β γ
 C ᵒᵖ = record 
   { _⇒_      = flip _⇒_
-  ; setoid   = comapⁱˢ id′ setoid
+  ; setoid   = coerceⁱˢ setoid
   ; id       = id
   ; _∘_      = flip _∘_
   ; idˡ      = idʳ
@@ -160,8 +160,12 @@ module _ {α β γ} (C : Category α β γ) where
   module MixedEqReasoningFrom where
     open Heterogeneous public; open MixedEqReasoning setoid public
 
-module IEqReasoningWith {α β γ} (C : Category α β γ) where
-  open Category C public; open IEqReasoning setoid public
+module _ {α β γ} (C : Category α β γ) where
+  module IEqReasoningWith where
+    open Category C public; open IEqReasoningFrom     C public
+
+  module MixedEqReasoningWith where
+    open Category C public; open MixedEqReasoningFrom C public
 
 module _ {α β γ} (C : Category α β γ) where
   module Category₁ where
@@ -204,7 +208,7 @@ module _ {α₁ α₂ β γ} {Obj₂ : Set α₂} (C : Category α₁ β γ) whe
   comapIn f = record
     { Obj      = Obj₂
     ; _⇒_      = λ A B -> f A ⇒₁ f B
-    ; setoid   = comapⁱˢ id′ setoid₁
+    ; setoid   = coerceⁱˢ setoid₁
     ; id       = id₁
     ; _∘_      = _∘₁_
     ; idˡ      = idˡ₁

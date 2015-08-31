@@ -62,11 +62,6 @@ ISetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} 
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
 ISetoid₂ A = ISetoid (uncurry A)
 
-reduceⁱˢ : ∀ {ι α β} {I : Set ι} {A : I -> I -> Set α}
-         -> ISetoid₂ A β -> ISetoid (λ i -> A i i) β
-reduceⁱˢ isetoid = record { isIEquivalence = comapⁱᵉ id′ isIEquivalence }
-  where open ISetoid isetoid
-
 HSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} (A : ∀ i₁ -> I₂ i₁ -> Set α) β
          -> Set (ι₁ ⊔ ι₂ ⊔ α ⊔ suc β)
 HSetoid₂ A = HSetoid (uncurry A)
@@ -85,15 +80,23 @@ comap∀ⁱˢ f isetoid = record { isIEquivalence = comap∀ⁱᵉ f isIEquivale
 
 -- We could write (comapⁱˢ f = comap∀ⁱˢ λ{ tt -> f }),
 -- but then some functions would require η-expansion.
-comapⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
+comapⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ β} {I₁ : Set ι₁} {I₂ : Set ι₂}
             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
-        -> (∀ {i₁} -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ γ
+        -> (∀ {i₁} -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ β -> ISetoid A₁ β
 comapⁱˢ f isetoid = record { isIEquivalence = comapⁱᵉ f isIEquivalence }
   where open ISetoid isetoid
 
-comapⁱˢ₁ : ∀ {ι α₁ α₂ γ} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂} 
-         -> (∀ {i₁} -> A₁ i₁ -> A₂ i₁) -> ISetoid A₂ γ -> ISetoid A₁ γ
+comapⁱˢ₁ : ∀ {ι α₁ α₂ β} {I : Set ι} {A₁ : I -> Set α₁} {A₂ : I -> Set α₂} 
+         -> (∀ {i₁} -> A₁ i₁ -> A₂ i₁) -> ISetoid A₂ β -> ISetoid A₁ β
 comapⁱˢ₁ = comapⁱˢ
+
+coerceⁱˢ : ∀ {ι₁ ι₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₂ -> Set α} {k : I₁ -> I₂}
+         -> ISetoid A β -> ISetoid (A ∘′ k) β
+coerceⁱˢ = comapⁱˢ id′
+
+reduceⁱˢ : ∀ {ι α β} {I : Set ι} {A : I -> I -> Set α}
+         -> ISetoid₂ A β -> ISetoid (λ i -> A i i) β
+reduceⁱˢ = coerceⁱˢ
 
 module Indexed {α β} {A : Set α} (setoid : Setoid A β) where
   open Setoid setoid

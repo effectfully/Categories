@@ -2,7 +2,7 @@ open import Categories.Category
 
 module Categories.Morphism.Triangle {α β γ} (C : Category α β γ) where
 
--- Alternatively we can write
+-- Alternatively we could write
 
 -- open import Categories.Functor
 -- open import Categories.Morphism.TriangleOver (idᶠ {C = C}) public

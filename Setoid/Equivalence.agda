@@ -129,6 +129,11 @@ comapⁱᵉ f isIEquivalence = record
   ; trans = trans
   } where open IsIEquivalence isIEquivalence
 
+coerceⁱᵉ : ∀ {ι₁ ι₂ α β} {I₁ : Set ι₁} {I₂ : Set ι₂} {A : I₂ -> Set α} {k : I₁ -> I₂}
+             {_≈_ : ∀ {i₂} -> A i₂ -> A i₂ -> Set β}
+         -> IsIEquivalence A  _≈_ -> IsIEquivalence (A ∘′ k) _≈_
+coerceⁱᵉ = comapⁱᵉ id′
+
 module _ {α β} {A : Set α} {_≈_ : A -> A -> Set β}
          (isEquivalence : IsEquivalence _≈_) where
   module IsEquivalence₁ = IsEquivalence isEquivalence

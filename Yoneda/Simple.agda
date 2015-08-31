@@ -70,13 +70,12 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
                           open EqReasoning₂ (reveal (F· B)) in
                         begin₁
                           F⇒ (g ∘ f₁ ∘ id) ⟨$⟩ x      →⟨ F-∘ refl₁ ⟩₁
-                          F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ f-resp-≈ $
-                              begin₂
-                                F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ F-resp-≈ idʳ refl₁ ⟩₂
-                                F⇒ f₁ ⟨$⟩ x        →⟨ F-resp-≈ p   refl₁ ⟩₂
-                                F⇒ f₂ ⟨$⟩ x
-                              ∎₂
-                            ⟩₁
+                          F⇒ g ⟨$⟩ F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ f-resp-≈  $
+                            begin₂
+                              F⇒ (f₁ ∘ id) ⟨$⟩ x →⟨ F-resp-≈ idʳ refl₁ ⟩₂
+                              F⇒ f₁ ⟨$⟩ x        →⟨ F-resp-≈ p   refl₁ ⟩₂
+                              F⇒ f₂ ⟨$⟩ x
+                            ∎₂                                     ⟩₁
                           F⇒ g ⟨$⟩ (F⇒ f₂ ⟨$⟩ x)
                         ∎₁         
                   }

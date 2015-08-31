@@ -130,7 +130,7 @@ F₁ ⁂ F₂ = record
 setoidᶠ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} -> ISetoid₂ (Functor {α₁} {α₂} {β₁} {β₂} {γ₁} {γ₂}) (α₁ ⊔ β₁ ⊔ γ₂)
 setoidᶠ = record
   { _≈_            = λ{ {C₁ , C₂} F₁ F₂ -> let open Functor₁ F₁; open Functor₂ F₂ in
-                                 ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
+                           ∀ {A B} {f : A [ C₁ ]⇒ B} -> F⇒₁ f [ C₂ ]≋ F⇒₂ f
                       }
   ; isIEquivalence = record
       { refl  = λ{ {C₁ , C₂}     -> Heterogeneous.hrefl  C₂     }    

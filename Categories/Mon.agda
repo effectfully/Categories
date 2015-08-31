@@ -102,10 +102,10 @@ Homo-ISetoid₂ = record
                           ∀ {x} -> f·₁ x ≈ f·₂ x
                       }
   ; isIEquivalence = record
-    { refl  = λ{ {M₁ , M₂}     -> Monoid.refl  M₂     }
-    ; sym   = λ{ {M₁ , M₂} p   -> Monoid.sym   M₂ p   }
-    ; trans = λ{ {M₁ , M₂} p q -> Monoid.trans M₂ p q }
-    }
+      { refl  = λ{ {M₁ , M₂}     -> Monoid.refl  M₂     }
+      ; sym   = λ{ {M₁ , M₂} p   -> Monoid.sym   M₂ p   }
+      ; trans = λ{ {M₁ , M₂} p q -> Monoid.trans M₂ p q }
+      }
   }
 
 Mon : ∀ {α} -> Set α -> (β : Level) -> Category (α ⊔ suc β) (α ⊔ β) (α ⊔ β)
@@ -121,25 +121,25 @@ Mon A β = record
   ; ∘-resp-≈ = λ {M₁ M₂ M₃ H₁ H₂ H₃ H₄} q p -> Monoid.trans M₃ q (Homo.f-resp-≈ H₂ p)
   }
 
-Monoid-Category : ∀ {α β} {A : Set α} -> Monoid A β -> Category zero α β
-Monoid-Category {A = A} M = record
-  { Obj      = ⊤
-  ; _⇒_      = λ _ _ -> A
-  ; setoid   = let open Indexed setoid in isetoid
-  ; id       = ε
-  ; _∘_      = _∙_
-  ; idˡ      = idˡ
-  ; idʳ      = idʳ
-  ; assoc    = assoc
-  ; ∘-resp-≈ = ∙-resp-≈
-  } where open Monoid M
+-- Monoid-Category : ∀ {α β} {A : Set α} -> Monoid A β -> Category zero α β
+-- Monoid-Category {A = A} M = record
+--   { Obj      = ⊤
+--   ; _⇒_      = λ _ _ -> A
+--   ; setoid   = let open Indexed setoid in isetoid
+--   ; id       = ε
+--   ; _∘_      = _∙_
+--   ; idˡ      = idˡ
+--   ; idʳ      = idʳ
+--   ; assoc    = assoc
+--   ; ∘-resp-≈ = ∙-resp-≈
+--   } where open Monoid M
 
-Homo-Functor : ∀ {α₁ α₂ β₁ β₂} {A₁ : Set α₁} {A₂ : Set α₂}
-                 {M₁ : Monoid A₁ β₁} {M₂ : Monoid A₂ β₂}
-             -> Homo M₁ M₂ -> Functor (Monoid-Category M₁) (Monoid-Category M₂)
-Homo-Functor H = record
-  { F⇒       = f·
-  ; F-id     = f-ε
-  ; F-∘      = f-∙
-  ; F-resp-≈ = f-resp-≈
-  } where open Homo H
+-- Homo-Functor : ∀ {α₁ α₂ β₁ β₂} {A₁ : Set α₁} {A₂ : Set α₂}
+--                  {M₁ : Monoid A₁ β₁} {M₂ : Monoid A₂ β₂}
+--              -> Homo M₁ M₂ -> Functor (Monoid-Category M₁) (Monoid-Category M₂)
+-- Homo-Functor H = record
+--   { F⇒       = f·
+--   ; F-id     = f-ε
+--   ; F-∘      = f-∙
+--   ; F-resp-≈ = f-resp-≈
+--   } where open Homo H

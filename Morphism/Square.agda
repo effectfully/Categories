@@ -2,7 +2,7 @@ open import Categories.Category
 
 module Categories.Morphism.Square {α β γ} (C : Category α β γ) where
 
--- Alternatively we can write
+-- Alternatively we could write
 
 -- open import Categories.Functor
 -- open import Categories.Morphism.SquareOver (idᶠ {C = C}) (idᶠ {C = C}) public
