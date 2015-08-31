@@ -27,8 +27,14 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
   fmap-pure : ∀ {A B} {f : A ⇒ B} -> fmap f ∘ pure ≈ pure ∘ f
   fmap-pure = sym naturality
 
+  joinFmap : ∀ {A B} -> A ⇒ ⟨ B ⟩ -> ⟨ A ⟩ ⇒ ⟨ B ⟩
+  joinFmap f = join ∘ fmap f
+
+  _<=<_ : ∀ {A B C} -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ B ⟩ -> A ⇒ ⟨ C ⟩
+  g <=< f = joinFmap g ∘ f
+
   _>=>_ : ∀ {A B C} -> A ⇒ ⟨ B ⟩ -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ C ⟩
-  f >=> g = join ∘ fmap g ∘ f
+  _>=>_ = flip _<=<_
 
   -- open Hetero (setoidⁿ {C₁ = C} {C₂ = C})
   -- idˡₘ   : μₘ ∘ⁿ (Fₘ ∘ˡ ηₘ) ≋ idⁿ {F = Fₘ}

@@ -13,7 +13,7 @@ Kleisli = record
   ; _⇒_      = λ A B -> A ⇒ ⟨ B ⟩
   ; setoid   = coerceⁱˢ setoid
   ; id       = pure
-  ; _∘_      = flip _>=>_
+  ; _∘_      = _<=<_
   ; idˡ      = λ {_ _ f} ->
       begin
         join ∘ fmap pure ∘ f →⟨ ∘ˡ-resp-≈ʳ join-fmap-pure ⟩
