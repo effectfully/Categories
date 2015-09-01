@@ -1,7 +1,7 @@
 module Categories.Category.Category where
 
 open import Categories.Utilities.Prelude public
-open import Categories.Setoid public
+open import Categories.Setoid            public
 
 module Category-Module where
   record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
@@ -161,7 +161,7 @@ module _ {α β γ} (C : Category α β γ) where
     open Heterogeneous public; open MixedEqReasoning setoid public
 
 module _ {α β γ} (C : Category α β γ) where
-  module IEqReasoningWith where
+  module IEqReasoningWith     where
     open Category C public; open IEqReasoningFrom     C public
 
   module MixedEqReasoningWith where

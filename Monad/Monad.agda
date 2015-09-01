@@ -19,6 +19,14 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
   open NaturalTransformation η renaming (η to pure) hiding (naturality)             public
   open NaturalTransformation μ renaming (η to join; naturality to join-fmap-fmap)   public
 
+  -- Need irrelevance for this.
+  -- Or heterogeneous equality: open Hetero (setoidⁿ {C₁ = C} {C₂ = C})
+  -- But no idea how to use it then.
+  -- field
+  --   idˡₘ   : μ ∘ⁿ (T ∘ˡ η) ≈ⁿ idⁿ {F = T}
+  --   idʳₘ   : μ ∘ⁿ (η ∘ʳ T) ≈ⁿ idⁿ {F = T}
+  --   assocₘ : μ ∘ⁿ (T ∘ˡ μ) ≈ⁿ μ ∘ⁿ (μ ∘ʳ T)
+
   field
     join-pure      : ∀ {A} -> join {A} ∘ pure      ≈ id
     join-fmap-pure : ∀ {A} -> join {A} ∘ fmap pure ≈ id
@@ -35,8 +43,3 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
 
   _>=>_ : ∀ {A B C} -> A ⇒ ⟨ B ⟩ -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ C ⟩
   _>=>_ = flip _<=<_
-
-  -- open Hetero (setoidⁿ {C₁ = C} {C₂ = C})
-  -- idˡₘ   : μₘ ∘ⁿ (Fₘ ∘ˡ ηₘ) ≋ idⁿ {F = Fₘ}
-  -- idʳₘ   : μₘ ∘ⁿ (ηₘ ∘ʳ Fₘ) ≋ idⁿ {F = Fₘ}
-  -- assocₘ : μₘ ∘ⁿ (Fₘ ∘ˡ μₘ) ≋ μₘ ∘ⁿ (μₘ ∘ʳ Fₘ)

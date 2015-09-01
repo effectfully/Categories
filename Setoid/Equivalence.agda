@@ -94,11 +94,11 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
     p ⌊ r ⌋ q = hsym p ⌈ r ⌉ hsym q
 
 comap∀ⁱᵉₑ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
-              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
-              {B : I₁ -> Set β} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
-          -> (f : ∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁))
+              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β}
+              {k : ∀ {i₁} -> B i₁ -> I₂} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
+          -> (f : ∀ {i₁} -> A₁ i₁ -> (z : B i₁) -> A₂ (k z))
           -> IsIEquivalence A₂  _≈_
-          -> IsIEquivalence A₁ (λ x y -> ∀ z -> f z x ≈ f z y)
+          -> IsIEquivalence A₁ (λ x y -> ∀ z -> f x z ≈ f y z)
 comap∀ⁱᵉₑ f isIEquivalence = record
   { refl  = λ     z -> refl
   ; sym   = λ p   z -> sym   (p z)
@@ -106,11 +106,11 @@ comap∀ⁱᵉₑ f isIEquivalence = record
   } where open IsIEquivalence isIEquivalence
 
 comap∀ⁱᵉ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
-             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}
-             {B : I₁ -> Set β} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
-         -> (f : ∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁))
+             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β}
+             {k : ∀ {i₁} -> B i₁ -> I₂} {_≈_ : ∀ {i₂} -> A₂ i₂ -> A₂ i₂ -> Set γ}
+         -> (f : ∀ {i₁} -> A₁ i₁ -> (z : B i₁) -> A₂ (k z))
          -> IsIEquivalence A₂  _≈_
-         -> IsIEquivalence A₁ (λ x y -> ∀ {z} -> f z x ≈ f z y)
+         -> IsIEquivalence A₁ (λ x y -> ∀ {z} -> f x z ≈ f y z)
 comap∀ⁱᵉ f isIEquivalence = record
   { refl  =          refl
   ; sym   = λ p   -> sym   p 

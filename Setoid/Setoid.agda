@@ -67,18 +67,24 @@ HSetoid₂ : ∀ {ι₁ ι₂ α} {I₁ : Set ι₁} {I₂ : I₁ -> Set ι₂} 
 HSetoid₂ A = HSetoid (uncurry A)
 
 comap∀ⁱˢₑ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
-              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β} {k : I₁ -> I₂}
-          -> (∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ (β ⊔ γ)
+              {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
+              {B : I₁ -> Set β} {k : ∀ {i₁} -> B i₁ -> I₂}
+          -> (∀ {i₁} -> A₁ i₁ -> (z : B i₁) -> A₂ (k z))
+          -> ISetoid A₂ γ
+          -> ISetoid A₁ (β ⊔ γ)
 comap∀ⁱˢₑ f isetoid = record { isIEquivalence = comap∀ⁱᵉₑ f isIEquivalence }
   where open ISetoid isetoid
 
 comap∀ⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
-             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β} {k : I₁ -> I₂}
-         -> (∀ {i₁} -> B i₁ -> A₁ i₁ -> A₂ (k i₁)) -> ISetoid A₂ γ -> ISetoid A₁ (β ⊔ γ)
+             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂}
+             {B : I₁ -> Set β} {k : ∀ {i₁} -> B i₁ -> I₂}
+         -> (∀ {i₁} -> A₁ i₁ -> (z : B i₁) -> A₂ (k z))
+         -> ISetoid A₂ γ
+         -> ISetoid A₁ (β ⊔ γ)
 comap∀ⁱˢ f isetoid = record { isIEquivalence = comap∀ⁱᵉ f isIEquivalence }
   where open ISetoid isetoid
 
--- We could write (comapⁱˢ f = comap∀ⁱˢ λ{ tt -> f }),
+-- We could write (comapⁱˢ f = comap∀ⁱˢ λ{ x tt -> f x }),
 -- but then some functions would require η-expansion.
 comapⁱˢ : ∀ {ι₁ ι₂ α₁ α₂ β} {I₁ : Set ι₁} {I₂ : Set ι₂}
             {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {k : I₁ -> I₂}

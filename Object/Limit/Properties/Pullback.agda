@@ -1,4 +1,4 @@
--- This module doesn't typecheck because I can't open modules properly.
+-- This module doesn't typecheck because I can't open the modules properly.
 
 open import Categories.Category
 

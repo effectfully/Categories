@@ -3,7 +3,6 @@ module Categories.Categories.Agda where
 open import Data.Empty
 open import Data.Sum
 
-open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Category
 open import Categories.Functor
@@ -29,7 +28,10 @@ module _ {α} where
   open import Categories.Object (Sets {α})
 
   terminal : Terminal
-  terminal = record { Ob = Lift ⊤ ; universal = λ _ -> prefl }
+  terminal = record
+    { Ob        = Lift ⊤
+    ; universal = λ _ -> prefl
+    }
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
@@ -55,7 +57,11 @@ module _ {α} where
   pullbacks = Product&Equalizer->Pullback binaryProducts equalizers
 
   initial : Initial
-  initial = record { Ob = Lift ⊥ ; ↜ = λ{ (lift ()) } ; universal = λ{ (lift ()) } }
+  initial = record
+    { Ob        = Lift ⊥
+    ; ↜         = λ{ (lift ()) }
+    ; universal = λ{ (lift ()) }
+    }
 
   binaryCoproducts : BinaryCoproducts
   binaryCoproducts {A} {B} = record
@@ -63,12 +69,9 @@ module _ {α} where
     ; ι¹        = inj₁
     ; ι²        = inj₂
     ; [_,_]     = [_,_]
-    ; []-inj    = []-inj
+    ; []-inj    = λ p -> p ∘′ inj₁ , p ∘′ inj₂
     ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
-    } where
-        []-inj : ∀ {α β γ} {A : Set α} {B : Set β} {C : Set γ} {f₁ f₂ : A -> C} {g₁ g₂ : B -> C}
-               -> [ f₁ , g₁ ]′ ≗ₚ [ f₂ , g₂ ]′ -> f₁ ≗ₚ f₂ ×ₚ g₁ ≗ₚ g₂
-        []-inj p = p ∘′ inj₁ , p ∘′ inj₂
+    }
 
 Setoids : ∀ {α γ} -> Category (suc (α ⊔ γ)) (α ⊔ γ) (α ⊔ γ)
 Setoids {α} {γ} = record
@@ -82,6 +85,19 @@ Setoids {α} {γ} = record
   ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ˢ g ∘ˢ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open Π
+
+ISetoids : ∀ {ι α γ} -> Set ι -> Category (ι ⊔ suc (α ⊔ γ)) (ι ⊔ α ⊔ γ) (ι ⊔ α ⊔ γ)
+ISetoids {ι} {α} {γ} I = record
+  { Obj      = [ ISetoid A γ ∣ A ∈ (I -> Set α) ]
+  ; _⇒_      = λ Aˢ Bˢ -> ∀ {i} -> inst (reveal Aˢ) i ─> inst (reveal Bˢ) i
+  ; setoid   = comap∀ⁱˢ (λ f i -> f {i}) ─>-ISetoid₂
+  ; id       = idˢ
+  ; _∘_      = λ g f -> g ∘ˢ f
+  ; idˡ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
+  ; idʳ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
+  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ˢ g ∘ˢ f) r
+  ; ∘-resp-≈ = λ q p r -> q (p r)
+  } where open ISetoid using (inst); open Π
 
 Presheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
 Presheaf {α} {γ} C = Contravariant C (Setoids {α} {γ})

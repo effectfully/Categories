@@ -127,16 +127,8 @@ module _ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ�
 
 setoidⁿ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
         -> ISetoid₂ (NaturalTransformation {C₁ = C₁} {C₂ = C₂}) (α₁ ⊔ γ₂)
-setoidⁿ {C₂ = C₂} = record
-  { _≈_            = λ N₁ N₂ ->
-                         let open NaturalTransformation₁ N₁; open NaturalTransformation₂ N₂ in
-                              ∀ {A} -> η₁ {A} ≈ η₂ {A}
-  ; isIEquivalence = record
-      { refl  =          refl   
-      ; sym   = λ p   -> sym   p
-      ; trans = λ p q -> trans p q
-      }
-  } where open Category C₂
+setoidⁿ {C₂ = C₂} = comap∀ⁱˢ (λ N A -> let open NaturalTransformation N in η {A}) setoid
+  where open Category C₂
 
 _≈ⁿ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
          {F₁ : Functor C₁ C₂} {F₂ : Functor C₁ C₂}
