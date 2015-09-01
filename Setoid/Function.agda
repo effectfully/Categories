@@ -3,7 +3,7 @@ module Categories.Setoid.Function where
 open import Categories.Utilities.Prelude
 open import Categories.Setoid.Setoid
 
-infixr 9 _∘ˢ_
+infixr 9 _∘ᵖⁱ_
 
 record Π {α β γ δ} {A : Set α} {B : A -> Set β}
          (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
@@ -28,24 +28,24 @@ _─>_ : ∀ {α β γ δ} {A : Set α} {B : Set β} -> Setoid A γ -> Setoid B 
 Aˢ ─> Bˢ = Π Aˢ hBˢ
   where open Indexed Bˢ renaming (hsetoid to hBˢ)
 
-idˢ : ∀ {α γ} {A : Set α} {Aˢ : Setoid A γ} -> Aˢ ─> Aˢ
-idˢ = record
+idᵖⁱ : ∀ {α γ} {A : Set α} {Aˢ : Setoid A γ} -> Aˢ ─> Aˢ
+idᵖⁱ = record
   { f·       = id′
   ; f-resp-≈ = id′
   }
 
-_∘ˢ_ : ∀ {α β γ δ ε ζ} {A : Set α} {B : Set β} {C : Set γ}
-         {Aˢ : Setoid A δ} {Bˢ : Setoid B ε} {Cˢ : Setoid C ζ}
-     -> Bˢ ─> Cˢ -> Aˢ ─> Bˢ -> Aˢ ─> Cˢ
-g ∘ˢ f = record
+_∘ᵖⁱ_ : ∀ {α β γ δ ε ζ} {A : Set α} {B : Set β} {C : Set γ}
+          {Aˢ : Setoid A δ} {Bˢ : Setoid B ε} {Cˢ : Setoid C ζ}
+      -> Bˢ ─> Cˢ -> Aˢ ─> Bˢ -> Aˢ ─> Cˢ
+g ∘ᵖⁱ f = record
   { f·       = f·₂ ∘′ f·₁
   ; f-resp-≈ = f-resp-≈₂ ∘′ f-resp-≈₁
   } where open Π₁ f; open Π₂ g
 
-_×ʳ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}
-         {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
-     -> Aˢ₁ ─> Bˢ₁ -> Aˢ₂ ─> Bˢ₂ -> (Aˢ₁ ×ˢ Aˢ₂) ─> (Bˢ₁ ×ˢ Bˢ₂)
-f₁ ×ʳ f₂ = record
+_×ᵖⁱ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}
+          {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
+      -> Aˢ₁ ─> Bˢ₁ -> Aˢ₂ ─> Bˢ₂ -> (Aˢ₁ ×ˢ Aˢ₂) ─> (Bˢ₁ ×ˢ Bˢ₂)
+f₁ ×ᵖⁱ f₂ = record
   { f·       = map f·₁ f·₂
   ; f-resp-≈ = map f-resp-≈₁ f-resp-≈₂
   } where open Π₁ f₁; open Π₂ f₂
@@ -81,6 +81,6 @@ _×ⁱ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α�
          {Aˢ₁ : Setoid A₁ γ₁} {Aˢ₂ : Setoid A₂ γ₂} {Bˢ₁ : Setoid B₁ δ₁} {Bˢ₂ : Setoid B₂ δ₂}
      -> Injection Aˢ₁ Bˢ₁ -> Injection Aˢ₂ Bˢ₂ -> Injection (Aˢ₁ ×ˢ Aˢ₂) (Bˢ₁ ×ˢ Bˢ₂)
 injection₁ ×ⁱ injection₂ = record
-  { π           = π₁ ×ʳ π₂
+  { π           = π₁ ×ᵖⁱ π₂
   ; π-injective = map π-injective₁ π-injective₂
   } where open HInjection₁ injection₁; open HInjection₂ injection₂

@@ -19,12 +19,12 @@ liftStructSetoid α' β' (hide setoid) = hide record
 
 module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
   open Category C hiding (inst); open Functor F
-  module _ {α' γ'} where
-    Setoids' = Setoids {α'} {γ'}
+  module _ {α' β'} where
+    Setoids' = Setoids α' β'
 
     open Category₂ Setoids' hiding (inst) public
     open import Categories.Morphism Setoids' public
-    open ISetoid (NaturalTransformation-ISetoid {C₁ = C} {Setoids'}) using (inst) public
+    open ISetoid (setoidⁿ {C₁ = C} {Setoids'}) using (inst) public
 
   module _ A where
     nat : [ Setoid S _ ∣ S ∈ Set _ ]

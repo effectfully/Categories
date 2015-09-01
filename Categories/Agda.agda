@@ -8,6 +8,10 @@ open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Fun
 
+∘′-resp-≡ : ∀ {α} {A B C : Set α} {g₁ g₂ : B -> C} {f₁ f₂ : A -> B}
+          -> (∀ y -> g₁ y ≡ g₂ y) -> (∀ x -> f₁ x ≡ f₂ x) -> ∀ x -> g₁ (f₁ x) ≡ g₂ (f₂ x)
+∘′-resp-≡ q p x rewrite p x = q _
+
 Sets : ∀ {α} -> Category (suc α) α α
 Sets {α} = record
   { Obj      = Set α
@@ -19,10 +23,7 @@ Sets {α} = record
   ; idʳ      = λ _ -> prefl
   ; assoc    = λ _ -> prefl
   ; ∘-resp-≈ = ∘′-resp-≡
-  } where
-      ∘′-resp-≡ : ∀ {α} {A B C : Set α} {g₁ g₂ : B -> C} {f₁ f₂ : A -> B}
-                -> (∀ y -> g₁ y ≡ g₂ y) -> (∀ x -> f₁ x ≡ f₂ x) -> ∀ x -> g₁ (f₁ x) ≡ g₂ (f₂ x)
-      ∘′-resp-≡ q p x rewrite p x = q _
+  }
 
 module _ {α} where
   open import Categories.Object (Sets {α})
@@ -73,40 +74,53 @@ module _ {α} where
     ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
     }
 
-Setoids : ∀ {α γ} -> Category (suc (α ⊔ γ)) (α ⊔ γ) (α ⊔ γ)
-Setoids {α} {γ} = record
-  { Obj      = [ Setoid A γ ∣ A ∈ Set α ]
+ISets : ∀ {ι α} -> Set ι -> Category (ι ⊔ suc α) (ι ⊔ α) (ι ⊔ α)
+ISets {ι} {α} I = record
+  { Obj      = I -> Set α
+  ; _⇒_      = λ A B -> ∀ {i} -> A i -> B i
+  ; setoid   = comap∀ⁱˢ (λ f i -> f {i}) →-ISetoid₂
+  ; id       = id′
+  ; _∘_      = λ g f -> g ∘′ f
+  ; idˡ      = λ _ -> prefl
+  ; idʳ      = λ _ -> prefl
+  ; assoc    = λ _ -> prefl
+  ; ∘-resp-≈ = λ q p -> ∘′-resp-≡ q p
+  }
+
+Setoids : ∀ α β -> Category (suc (α ⊔ β)) (α ⊔ β) (α ⊔ β)
+Setoids α β = record
+  { Obj      = [ Setoid A β ∣ A ∈ Set α ]
   ; _⇒_      = λ Aˢ Bˢ -> reveal Aˢ ─> reveal Bˢ
   ; setoid   = ─>-ISetoid₂
-  ; id       = idˢ
-  ; _∘_      = _∘ˢ_
+  ; id       = idᵖⁱ
+  ; _∘_      = _∘ᵖⁱ_
   ; idˡ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
   ; idʳ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
-  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ˢ g ∘ˢ f) r
+  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ᵖⁱ g ∘ᵖⁱ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open Π
 
-ISetoids : ∀ {ι α γ} -> Set ι -> Category (ι ⊔ suc (α ⊔ γ)) (ι ⊔ α ⊔ γ) (ι ⊔ α ⊔ γ)
-ISetoids {ι} {α} {γ} I = record
-  { Obj      = [ ISetoid A γ ∣ A ∈ (I -> Set α) ]
+ISetoids : ∀ {ι} α β -> Set ι -> Category (ι ⊔ suc (α ⊔ β)) (ι ⊔ α ⊔ β) (ι ⊔ α ⊔ β)
+ISetoids α β I = record
+  { Obj      = [ ISetoid A β ∣ A ∈ (I -> Set α) ]
   ; _⇒_      = λ Aˢ Bˢ -> ∀ {i} -> inst (reveal Aˢ) i ─> inst (reveal Bˢ) i
   ; setoid   = comap∀ⁱˢ (λ f i -> f {i}) ─>-ISetoid₂
-  ; id       = idˢ
-  ; _∘_      = λ g f -> g ∘ˢ f
+  ; id       = idᵖⁱ
+  ; _∘_      = λ g f -> g ∘ᵖⁱ f
   ; idˡ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
   ; idʳ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
-  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ˢ g ∘ˢ f) r
+  ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ᵖⁱ g ∘ᵖⁱ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
   } where open ISetoid using (inst); open Π
 
-Presheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
-Presheaf {α} {γ} C = Contravariant C (Setoids {α} {γ})
+Presheaf : ∀ {α β α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
+Presheaf {α} {β} C = Contravariant C (Setoids α β)
 
-Copresheaf : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
-Copresheaf {α} {γ} C = Functor C (Setoids {α} {γ})
+Copresheaf : ∀ {α β α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
+Copresheaf {α} {β} C = Functor C (Setoids α β)
 
-Profunctor : ∀ {α γ α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Set _
-Profunctor {α} {γ} C₁ C₂ = Bifunctor (C₁ ᵒᵖ) C₂ (Setoids {α} {γ})
+Profunctor : ∀ {α β α₁ α₂ β₁ β₂ γ₁ γ₂} -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Set _
+Profunctor {α} {β} C₁ C₂ = Bifunctor (C₁ ᵒᵖ) C₂ (Setoids α β)
 
-Presheaves : ∀ {α γ α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Category _ _ _
-Presheaves {α} {γ} C = Fun (C ᵒᵖ) (Setoids {α} {γ})
+Presheaves : ∀ {α β α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Category _ _ _
+Presheaves {α} {β} C = Fun (C ᵒᵖ) (Setoids α β)
