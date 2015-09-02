@@ -95,3 +95,6 @@ private
         Fin.zero →⟨ hcong (λ n -> Fin (ℕ.suc n) ∋ Fin.zero) (hetero (+-comm n m)) ⟩
         Fin.zero
       ∎
+
+    postulate
+      freaking-out : ℕ.zero ≅ Fin.zero {0}
