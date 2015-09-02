@@ -56,8 +56,8 @@ sub-∘ {κ = κ} {ι} (var v) = cong var (ren-∘ κ ι v)
 sub-∘             (ƛ b  ) = cong ƛ (sub-∘ b)
 sub-∘             (f · x) = cong₂ _·_ (sub-∘ f) (sub-∘ x)
 
-Varᶠ : Functor (OPE Type) (ISets Type)
-Varᶠ = record
+Ren : Functor (OPE Type) (ISets Type)
+Ren = record
   { F·       = flip _∈_
   ; F⇒       = λ ι v -> ren ι v
   ; F-id     = ren-idˢ
@@ -65,8 +65,8 @@ Varᶠ = record
   ; F-resp-≈ = λ p v -> cong (flip ren v) p
   }
 
-Termᶠ : Functor (OPE Type) (ISets Type)
-Termᶠ = record
+Sub : Functor (OPE Type) (ISets Type)
+Sub = record
   { F·       = _⊢_
   ; F⇒       = λ ι t -> sub ι t
   ; F-id     = sub-idˢ
@@ -74,8 +74,8 @@ Termᶠ = record
   ; F-resp-≈ = λ p t -> cong (flip sub t) p
   }
 
-Termⁿ : NaturalTransformation Varᶠ Termᶠ
-Termⁿ = record
+Term : NaturalTransformation Ren Sub
+Term = record
   { η          = var
   ; naturality = λ v -> prefl
   }
