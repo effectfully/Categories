@@ -5,6 +5,9 @@ open import Categories.Functor
 open import Categories.NaturalTransformation
 
 record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
+  infix  2 >>=_
+  infixr 2 _<=<_ _>=>_
+
   field
     T : Endofunctor C
     η : NaturalTransformation idᶠ T
@@ -21,7 +24,7 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
 
   -- Need irrelevance for this.
   -- Or heterogeneous equality: open Hetero (setoidⁿ {C₁ = C} {C₂ = C})
-  -- But no idea how to use it then.
+  -- But I have no idea how to use it then.
   -- field
   --   idˡₘ   : μ ∘ⁿ (T ∘ˡ η) ≈ⁿ idⁿ {F = T}
   --   idʳₘ   : μ ∘ⁿ (η ∘ʳ T) ≈ⁿ idⁿ {F = T}
@@ -35,11 +38,11 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
   fmap-pure : ∀ {A B} {f : A ⇒ B} -> fmap f ∘ pure ≈ pure ∘ f
   fmap-pure = sym naturality
 
-  joinFmap : ∀ {A B} -> A ⇒ ⟨ B ⟩ -> ⟨ A ⟩ ⇒ ⟨ B ⟩
-  joinFmap f = join ∘ fmap f
+  >>=_ : ∀ {A B} -> A ⇒ ⟨ B ⟩ -> ⟨ A ⟩ ⇒ ⟨ B ⟩
+  (>>= f) = join ∘ fmap f
 
   _<=<_ : ∀ {A B C} -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ B ⟩ -> A ⇒ ⟨ C ⟩
-  g <=< f = joinFmap g ∘ f
+  g <=< f = (>>= g) ∘ f
 
   _>=>_ : ∀ {A B C} -> A ⇒ ⟨ B ⟩ -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ C ⟩
   _>=>_ = flip _<=<_

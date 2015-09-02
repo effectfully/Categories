@@ -8,20 +8,20 @@ infixl 5 _▻_
 infix  4 _⊆_
 infixr 9 _∘ˢ_
 
-data Con {α} (A : Set α) : Set α where
-  ε   : Con A
-  _▻_ : Con A -> A -> Con A
+data Listʳ {α} (A : Set α) : Set α where
+  ε   : Listʳ A
+  _▻_ : Listʳ A -> A -> Listʳ A
 
-data _⊆_ {α} {A : Set α} : Con A -> Con A -> Set α where
+data _⊆_ {α} {A : Set α} : Listʳ A -> Listʳ A -> Set α where
   stop : ε ⊆ ε
   skip : ∀ {Γ Δ x} -> Γ ⊆ Δ -> Γ ⊆ Δ ▻ x
   keep : ∀ {Γ Δ x} -> Γ ⊆ Δ -> Γ ▻ x ⊆ Δ ▻ x
 
-idˢ : ∀ {α} {A : Set α} {Γ : Con A} -> Γ ⊆ Γ
+idˢ : ∀ {α} {A : Set α} {Γ : Listʳ A} -> Γ ⊆ Γ
 idˢ {Γ = ε    } = stop
 idˢ {Γ = Γ ▻ x} = keep idˢ
 
-_∘ˢ_ : ∀ {α} {A : Set α} {Γ Δ Θ : Con A} -> Δ ⊆ Θ -> Γ ⊆ Δ -> Γ ⊆ Θ
+_∘ˢ_ : ∀ {α} {A : Set α} {Γ Δ Θ : Listʳ A} -> Δ ⊆ Θ -> Γ ⊆ Δ -> Γ ⊆ Θ
 stop   ∘ˢ stop   = stop
 skip ι ∘ˢ κ      = skip (ι ∘ˢ κ)
 keep ι ∘ˢ skip κ = skip (ι ∘ˢ κ)
@@ -29,7 +29,7 @@ keep ι ∘ˢ keep κ = keep (ι ∘ˢ κ)
 
 OPE : ∀{α} -> Set α -> Category α α α
 OPE A = record
-  { Obj      = Con A
+  { Obj      = Listʳ A
   ; _⇒_      = _⊆_
   ; setoid   = ≡-ISetoid
   ; id       = idˢ
@@ -39,17 +39,17 @@ OPE A = record
   ; assoc    = λ {_ _ _ _ ι₃ ι₂ ι₁} -> assoc ι₃ ι₂ ι₁
   ; ∘-resp-≈ = cong₂ _∘ˢ_
   } where
-      idˡ : ∀ {α} {A : Set α} {Γ Δ : Con A} {ι : Γ ⊆ Δ} -> idˢ ∘ˢ ι ≡ ι
+      idˡ : ∀ {α} {A : Set α} {Γ Δ : Listʳ A} {ι : Γ ⊆ Δ} -> idˢ ∘ˢ ι ≡ ι
       idˡ {ι = stop  } = prefl
       idˡ {ι = skip ι} = cong skip idˡ
       idˡ {ι = keep ι} = cong keep idˡ
 
-      idʳ : ∀ {α} {A : Set α} {Γ Δ : Con A} {ι : Γ ⊆ Δ} -> ι ∘ˢ idˢ ≡ ι
+      idʳ : ∀ {α} {A : Set α} {Γ Δ : Listʳ A} {ι : Γ ⊆ Δ} -> ι ∘ˢ idˢ ≡ ι
       idʳ {ι = stop  } = prefl
       idʳ {ι = skip ι} = cong skip idʳ
       idʳ {ι = keep ι} = cong keep idʳ
 
-      assoc : ∀ {α} {A : Set α} {Γ₁ Γ₂ Γ₃ Γ₄ : Con A}
+      assoc : ∀ {α} {A : Set α} {Γ₁ Γ₂ Γ₃ Γ₄ : Listʳ A}
                 (ι₃ : Γ₃ ⊆ Γ₄) (ι₂ : Γ₂ ⊆ Γ₃) (ι₁ : Γ₁ ⊆ Γ₂)
             -> (ι₃ ∘ˢ ι₂) ∘ˢ ι₁ ≡ ι₃ ∘ˢ (ι₂ ∘ˢ ι₁)
       assoc  stop      stop      stop     = prefl
