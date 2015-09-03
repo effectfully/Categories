@@ -42,4 +42,4 @@ Categories stuff is pretty standard and much like in [this](https://github.com/c
  - [The pullback pasting lemma](https://github.com/effectfully/Categories/blob/master/Object/Limit/Properties/Pullback.agda) (for some reason the code typechecks only after copying it into Pullback.agda).
  - [Products are limits](https://github.com/effectfully/Categories/blob/master/Object/Limit/Properties/Product.agda).
  - [Lambda terms form a natural transformation](https://github.com/effectfully/Categories/blob/master/NaturalTransformation/Lambda.agda).
- - [Two failed attempts to construct coequalizers in **FinSet**](https://github.com/effectfully/Categories/tree/master/Examples/Eqclasses) (I'm not giving up).
+ - [Two failed attempts to construct coequalizers in **FinSet**](https://github.com/effectfully/Categories/tree/master/Utilities/Coequalize) (I'm not giving up).
