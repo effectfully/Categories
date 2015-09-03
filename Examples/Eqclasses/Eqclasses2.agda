@@ -3,7 +3,7 @@ module Categories.Examples.Eqclasses.Eqclasses2 where
 open import Function
 open import Data.Nat.Base
 open import Data.Fin     hiding (_+_; _<_)
-open import Data.Maybe   renaming (map to _<$>_)
+open import Data.Maybe.Base renaming (map to _<$>_)
 open import Data.Product hiding (zip)
 open import Data.Vec     hiding (map)
 
