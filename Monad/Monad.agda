@@ -5,7 +5,6 @@ open import Categories.Functor
 open import Categories.NaturalTransformation
 
 record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
-  infix  2 >>=_
   infixr 2 _<=<_ _>=>_
 
   field
@@ -38,11 +37,8 @@ record Monad {α β γ} (C : Category α β γ) : Set (α ⊔ β ⊔ γ) where
   fmap-pure : ∀ {A B} {f : A ⇒ B} -> fmap f ∘ pure ≈ pure ∘ f
   fmap-pure = sym naturality
 
-  >>=_ : ∀ {A B} -> A ⇒ ⟨ B ⟩ -> ⟨ A ⟩ ⇒ ⟨ B ⟩
-  (>>= f) = join ∘ fmap f
-
   _<=<_ : ∀ {A B C} -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ B ⟩ -> A ⇒ ⟨ C ⟩
-  g <=< f = (>>= g) ∘ f
+  g <=< f = join ∘ fmap g ∘ f
 
   _>=>_ : ∀ {A B C} -> A ⇒ ⟨ B ⟩ -> B ⇒ ⟨ C ⟩ -> A ⇒ ⟨ C ⟩
   _>=>_ = flip _<=<_

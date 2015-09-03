@@ -34,13 +34,6 @@ record IsIEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i}
     sym   : ∀ {i} {x y   : A i} -> x ≈ y -> y ≈ x
     trans : ∀ {i} {x y z : A i} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  inst : ∀ i -> IsEquivalence (_≈_ {i})
-  inst i = record
-    { refl  = refl
-    ; sym   = sym
-    ; trans = trans
-    }
-
   module EqTools where
     infix  5 _⌈_⌉_ _⌊_⌋_
     infixl 6 _⋯_
@@ -66,13 +59,6 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
     hsym   : ∀ {i j}   {x : A i} {y : A j}           -> x ≈ y -> y ≈ x
     htrans : ∀ {i j k} {x : A i} {y : A j} {z : A k} -> x ≈ y -> y ≈ z -> x ≈ z
 
-  hinst : ∀ i -> IsEquivalence (_≈_ {i} {i})
-  hinst i = record
-    { refl  = hrefl
-    ; sym   = hsym
-    ; trans = htrans
-    }
-
   module HEqTools where
     infix  5 _⌈_⌉_ _⌊_⌋_
     infixl 6 _⋯_
@@ -92,6 +78,22 @@ record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i 
     _⌊_⌋_ : ∀ {i₁ i₂ j₁ j₂} {x₁ : A i₁} {x₂ : A i₂} {y₁ : A j₁} {y₂ : A j₂}
           -> x₁ ≈ x₂ -> x₂ ≈ y₂ -> y₁ ≈ y₂ -> x₁ ≈ y₁
     p ⌊ r ⌋ q = hsym p ⌈ r ⌉ hsym q
+
+instⁱᵉ : ∀ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i} -> A i -> A i -> Set β}
+       -> ∀ i -> IsIEquivalence A _≈_ -> IsEquivalence (_≈_ {i})
+instⁱᵉ i isIEquivalence = record
+  { refl  = refl
+  ; sym   = sym
+  ; trans = trans
+  } where open IsIEquivalence isIEquivalence
+
+instʰᵉ : ∀ {ι α β} {I : Set ι} {A : I -> Set α} {_≈_ : ∀ {i j} -> A i -> A j -> Set β}
+       -> ∀ i -> IsHEquivalence A _≈_ -> IsEquivalence (_≈_ {i} {i})
+instʰᵉ i isHEquivalence = record
+  { refl  = hrefl
+  ; sym   = hsym
+  ; trans = htrans
+  } where open IsHEquivalence isHEquivalence
 
 comap∀ⁱᵉₑ : ∀ {ι₁ ι₂ α₁ α₂ β γ} {I₁ : Set ι₁} {I₂ : Set ι₂}
               {A₁ : I₁ -> Set α₁} {A₂ : I₂ -> Set α₂} {B : I₁ -> Set β}

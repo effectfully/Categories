@@ -6,6 +6,7 @@ open import Categories.Functor.Hom
 open import Categories.NaturalTransformation
 open import Categories.Categories.Agda
 
+-- I don't place this in Setoid.agda because it's too ad hoc. Which is TO DO.
 liftStructSetoid : ∀ {α β} α' β'
                  -> [ Setoid S β ∣ S ∈ Set α ] -> [ Setoid S (β ⊔ β') ∣ S ∈ Set (α ⊔ α') ]
 liftStructSetoid α' β' (hide setoid) = hide record
@@ -18,19 +19,18 @@ liftStructSetoid α' β' (hide setoid) = hide record
   } where open Setoid setoid
 
 module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
-  open Category C hiding (inst); open Functor F
+  open Category C; open Functor F
   module _ {α' β'} where
     Setoids' = Setoids α' β'
-
-    open Category₂ Setoids' hiding (inst) public
+    
     open import Categories.Morphism Setoids' public
-    open ISetoid (setoidⁿ {C₁ = C} {Setoids'}) using (inst) public
+    open Category₂ Setoids' public
 
   module _ A where
     nat : [ Setoid S _ ∣ S ∈ Set _ ]
     nat = record
       { hiden  = NaturalTransformation Hom[ A ,-] F
-      ; reveal = inst _
+      ; reveal = instⁱˢ _ setoidⁿ
       }
 
     set : [ Setoid S _ ∣ S ∈ Set _ ]

@@ -1,4 +1,4 @@
-module Categories.Examples.Div where
+module Categories.Categories.Div where
 
 open import Relation.Binary
 open import Data.Nat.Base

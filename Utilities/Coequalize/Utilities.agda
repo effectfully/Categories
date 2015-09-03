@@ -1,4 +1,4 @@
-module Categories.Examples.Eqclasses.Utilities where
+module Categories.Utilities.Coequalize.Utilities where
 
 open import Function
 open import Relation.Nullary

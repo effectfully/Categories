@@ -1,4 +1,4 @@
-module Categories.Examples.Le where
+module Categories.Categories.Le where
 
 open import Relation.Binary
 open import Data.Nat

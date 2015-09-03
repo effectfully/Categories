@@ -8,9 +8,9 @@ Here I study some basic category theory.
 
 There are three kinds of setoids in this development:
 
- - usual setoids `                   (underlying equality is _≈_ :            A   -> A   -> Set β)`
- - indexed setoids `                 (underlying equality is _≈_ : ∀ {i}   -> A i -> A i -> Set β)`
- - heterogeneously indexed setoids ` (underlying equality is _≈_ : ∀ {i j} -> A i -> A j -> Set β)`
+ - usual setoids                   (underlying equality is `_≈_ :            A   -> A   -> Set β`)
+ - indexed setoids                 (underlying equality is `_≈_ : ∀ {i}   -> A i -> A i -> Set β`)
+ - heterogeneously indexed setoids (underlying equality is `_≈_ : ∀ {i j} -> A i -> A j -> Set β`)
 
 All of them are used in the code.
 

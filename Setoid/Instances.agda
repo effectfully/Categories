@@ -23,7 +23,7 @@ infix 3 _↣ₕ_ _↣_
   }
 
 ≡-Setoid : ∀ {α} {A : Set α} -> Setoid A α
-≡-Setoid = inst tt where open ISetoid ≡-ISetoid
+≡-Setoid = instⁱˢ tt ≡-ISetoid
 
 →-ISetoid₂ : ∀ {α} -> ISetoid₂ (λ (A B : Set α) -> A -> B) α
 →-ISetoid₂ = record

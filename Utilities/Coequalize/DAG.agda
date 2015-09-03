@@ -1,4 +1,4 @@
-module Categories.Examples.Eqclasses.Eqclasses2 where
+module Categories.Utilities.Coequalize.DAG where
 
 open import Function
 open import Data.Nat.Base
@@ -7,7 +7,7 @@ open import Data.Maybe.Base renaming (map to _<$>_)
 open import Data.Product hiding (zip)
 open import Data.Vec     hiding (map)
 
-open import Categories.Examples.Eqclasses.Utilities
+open import Categories.Utilities.Coequalize.Utilities
 
 infixr 5 _∷_
 data IVec {α} (A : ℕ -> Set α) : ℕ -> Set α where

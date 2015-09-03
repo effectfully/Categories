@@ -1,4 +1,4 @@
-module Categories.Examples.Eqclasses.Eqclasses where
+module Categories.Utilities.Coequalize.Eqclasses where
 
 open import Function
 open import Relation.Nullary
@@ -11,7 +11,7 @@ open import Data.Product hiding (map)
 open import Data.Vec
 open import Data.Vec.Properties
 
-open import Categories.Examples.Eqclasses.Utilities
+open import Categories.Utilities.Coequalize.Utilities
 
 List⁺ : ∀ {α} -> Set α -> Set α
 List⁺ A = ∃ (Vec A ∘ suc)

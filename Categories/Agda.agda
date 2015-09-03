@@ -103,7 +103,7 @@ Setoids α β = record
 ISetoids : ∀ {ι} α β -> Set ι -> Category (ι ⊔ suc (α ⊔ β)) (ι ⊔ α ⊔ β) (ι ⊔ α ⊔ β)
 ISetoids α β I = record
   { Obj      = [ ISetoid A β ∣ A ∈ (I -> Set α) ]
-  ; _⇒_      = λ Aˢ Bˢ -> ∀ {i} -> inst (reveal Aˢ) i ─> inst (reveal Bˢ) i
+  ; _⇒_      = λ Aˢ Bˢ -> ∀ {i} -> instⁱˢ i (reveal Aˢ) ─> instⁱˢ i (reveal Bˢ)
   ; setoid   = comap∀ⁱˢ (λ f i -> f {i}) ─>-ISetoid₂
   ; id       = idᵖⁱ
   ; _∘_      = λ g f -> g ∘ᵖⁱ f
@@ -111,7 +111,7 @@ ISetoids α β I = record
   ; idʳ      = λ {Aˢ Bˢ f}           r -> f-resp-≈ f r
   ; assoc    = λ {Aˢ Bˢ Cˢ Dˢ h g f} r -> f-resp-≈ (h ∘ᵖⁱ g ∘ᵖⁱ f) r
   ; ∘-resp-≈ = λ q p r -> q (p r)
-  } where open ISetoid using (inst); open Π
+  } where open Π
 
 Presheaf : ∀ {α β α₁ β₁ γ₁} -> Category α₁ β₁ γ₁ -> Set _
 Presheaf {α} {β} C = Contravariant C (Setoids α β)
