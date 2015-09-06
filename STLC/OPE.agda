@@ -1,4 +1,4 @@
-module Categories.Categories.OPE where
+module Categories.STLC.OPE where
 
 open import Categories.Category
 open import Categories.Functor
