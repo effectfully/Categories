@@ -32,10 +32,41 @@ Term = record
   ; naturality = λ v -> prefl
   }
 
-Eval : N-Algebra Term 
-Eval = record
-  { C       = ⟦_⟧ᵀ
-  ; str     = λ ρ t -> ⟦ t ⟧ ρ
-  ; ηʳ      = λ v -> prefl
-  ; str-str = ⟦⟧-ren-sub
-  }
+module Eval where
+  open import Categories.STLC.Eval
+
+  Semantics : N-Algebra Term 
+  Semantics = record
+    { Ob         = ⟦_⟧ᵀ
+    ; str        = λ ρ t -> ⟦ t ⟧ ρ
+    ; ηʳ         = λ v -> prefl
+    ; str-∘      = ⟦⟧-ren-sub
+    ; str-resp-≈ = λ p t -> {!!}
+    }
+
+module NbE where
+  open import Categories.STLC.NbE
+
+  Renˢᵉᵐ : Functor (OPE Type) (ISets Type)
+  Renˢᵉᵐ = record
+    { F·       = flip ⟦_⟧ᵀ
+    ; F⇒       = λ ι x -> renˢᵉᵐ ι x
+    ; F-id     = {!!}
+    ; F-∘      = {!!}
+    ; F-resp-≈ = {!!}
+    }
+
+  Sem : NaturalTransformation Ren Renˢᵉᵐ
+  Sem = record
+    { η          = varˢᵉᵐ
+    ; naturality = {!!}
+    }  
+    
+  Semantics : Relative-N-Algebra Term Sem
+  Semantics = record
+    { str        = λ ρ t -> ⟦ t ⟧ ρ
+    ; ηʳ         = λ v -> prefl
+    ; str-∘₁     = {!!}
+    ; str-∘₂     = {!!}
+    ; str-resp-≈ = λ p t -> {!!}
+    }

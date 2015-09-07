@@ -4,6 +4,7 @@ open import Function
 open import Relation.Binary.PropositionalEquality
 
 open import Categories.STLC.STLC
+open import Categories.STLC.Eval
 
 ren-idˢ : ∀ {Γ σ} (v : σ ∈ Γ) -> ren idˢ v ≡ v
 ren-idˢ  vz    = refl
@@ -26,16 +27,16 @@ sub-∘ {κ = κ} {ι} (var v) = cong var (ren-∘ κ ι v)
 sub-∘             (ƛ b  ) = cong ƛ (sub-∘ b)
 sub-∘             (f · x) = cong₂ _·_ (sub-∘ f) (sub-∘ x)
 
+▷-ren : ∀ {Γ Δ σ τ} {ι : Γ ⊆ Δ} {ρ : Env Δ} (x : ⟦ σ ⟧ᵀ) (v : τ ∈ Γ ▻ σ)
+      -> (ρ ∘ ren ι ▷ x) v ≡ (ρ ▷ x) (ren (keep ι) v)
+▷-ren x  vz    = refl
+▷-ren x (vs v) = refl
+
 postulate
   ext  : ∀ {α β} {A : Set α} {B : A -> Set β} {f g : ∀ x -> B x}
        -> (∀ x -> f x ≡ g x) -> f ≡ g
   extᵢ : ∀ {α β} {A : Set α} {B : A -> Set β} {f g : ∀ {x} -> B x}
        -> (∀ {x} -> f {x} ≡ g {x}) -> (λ {x} -> f {x}) ≡ (λ {x} -> g {x})
-
-▷-ren : ∀ {Γ Δ σ τ} {ι : Γ ⊆ Δ} {ρ : Env Δ} (x : ⟦ σ ⟧ᵀ) (v : τ ∈ Γ ▻ σ)
-      -> (ρ ∘ ren ι ▷ x) v ≡ (ρ ▷ x) (ren (keep ι) v)
-▷-ren x  vz    = refl
-▷-ren x (vs v) = refl
 
 ⟦⟧-ren-sub : ∀ {Γ Δ σ} {ι : Γ ⊆ Δ} {ρ : Env Δ} (t : Γ ⊢ σ)
            -> ⟦ t ⟧ (ρ ∘ ren ι) ≡ ⟦ sub ι t ⟧ ρ

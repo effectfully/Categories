@@ -21,6 +21,9 @@ idˢ : ∀ {α} {A : Set α} {Γ : Listʳ A} -> Γ ⊆ Γ
 idˢ {Γ = ε    } = stop
 idˢ {Γ = Γ ▻ x} = keep idˢ
 
+topˢ : ∀ {α} {A : Set α} {Γ : Listʳ A} {x} -> Γ ⊆ Γ ▻ x
+topˢ = skip idˢ
+
 _∘ˢ_ : ∀ {α} {A : Set α} {Γ Δ Θ : Listʳ A} -> Δ ⊆ Θ -> Γ ⊆ Δ -> Γ ⊆ Θ
 stop   ∘ˢ stop   = stop
 skip ι ∘ˢ κ      = skip (ι ∘ˢ κ)
