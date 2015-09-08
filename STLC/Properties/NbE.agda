@@ -9,42 +9,42 @@ open import Categories.STLC.Properties
 open import Categories.STLC.Ext
 
 mutual
-  renⁿᵉ-idˢ : ∀ {Γ σ} (t : Γ ⊢ⁿᵉ σ) -> renⁿᵉ idˢ t ≡ t
-  renⁿᵉ-idˢ (varⁿᵉ v) = cong varⁿᵉ (ren-idˢ v)
-  renⁿᵉ-idˢ (f ·ⁿᵉ x) = cong₂ _·ⁿᵉ_ (renⁿᵉ-idˢ f) (renⁿᶠ-idˢ x)
+  subⁿᵉ-idˢ : ∀ {Γ σ} (t : Γ ⊢ⁿᵉ σ) -> subⁿᵉ idˢ t ≡ t
+  subⁿᵉ-idˢ (varⁿᵉ v) = cong varⁿᵉ (ren-idˢ v)
+  subⁿᵉ-idˢ (f ·ⁿᵉ x) = cong₂ _·ⁿᵉ_ (subⁿᵉ-idˢ f) (subⁿᶠ-idˢ x)
 
-  renⁿᶠ-idˢ : ∀ {Γ σ} (t : Γ ⊢ⁿᶠ σ) -> renⁿᶠ idˢ t ≡ t
-  renⁿᶠ-idˢ (neⁿᶠ t) = cong neⁿᶠ (renⁿᵉ-idˢ t)
-  renⁿᶠ-idˢ (ƛⁿᶠ  b) = cong ƛⁿᶠ_ (renⁿᶠ-idˢ b)
+  subⁿᶠ-idˢ : ∀ {Γ σ} (t : Γ ⊢ⁿᶠ σ) -> subⁿᶠ idˢ t ≡ t
+  subⁿᶠ-idˢ (neⁿᶠ t) = cong neⁿᶠ (subⁿᵉ-idˢ t)
+  subⁿᶠ-idˢ (ƛⁿᶠ  b) = cong ƛⁿᶠ_ (subⁿᶠ-idˢ b)
 
-renˢᵉᵐ-idˢ : ∀ {σ Γ} (x : ⟦ σ ⟧ᵀ Γ) -> renˢᵉᵐ idˢ x ≡ x
-renˢᵉᵐ-idˢ {⋆    } t = renⁿᵉ-idˢ t
-renˢᵉᵐ-idˢ {σ ⇒ τ} f = extᵢ ext λ x -> cong f idʳˢ
+subˢᵉᵐ-idˢ : ∀ {σ Γ} (x : ⟦ σ ⟧ᵀ Γ) -> subˢᵉᵐ idˢ x ≡ x
+subˢᵉᵐ-idˢ {⋆    } t = subⁿᵉ-idˢ t
+subˢᵉᵐ-idˢ {σ ⇒ τ} f = extᵢ ext λ x -> cong f idʳˢ
 
 mutual
-  renⁿᵉ-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ⁿᵉ σ)
-          -> renⁿᵉ (κ ∘ˢ ι) t ≡ renⁿᵉ κ (renⁿᵉ ι t)
-  renⁿᵉ-∘ {κ = κ} (varⁿᵉ v) = cong varⁿᵉ (ren-∘ κ _ v)
-  renⁿᵉ-∘         (f ·ⁿᵉ x) = cong₂ _·ⁿᵉ_ (renⁿᵉ-∘ f) (renⁿᶠ-∘ x)
+  subⁿᵉ-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ⁿᵉ σ)
+          -> subⁿᵉ (κ ∘ˢ ι) t ≡ subⁿᵉ κ (subⁿᵉ ι t)
+  subⁿᵉ-∘ {κ = κ} (varⁿᵉ v) = cong varⁿᵉ (ren-∘ κ _ v)
+  subⁿᵉ-∘         (f ·ⁿᵉ x) = cong₂ _·ⁿᵉ_ (subⁿᵉ-∘ f) (subⁿᶠ-∘ x)
 
-  renⁿᶠ-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ⁿᶠ σ)
-          -> renⁿᶠ (κ ∘ˢ ι) t ≡ renⁿᶠ κ (renⁿᶠ ι t)
-  renⁿᶠ-∘ (neⁿᶠ t) = cong neⁿᶠ (renⁿᵉ-∘ t)
-  renⁿᶠ-∘ (ƛⁿᶠ  b) = cong ƛⁿᶠ_ (renⁿᶠ-∘ b)
+  subⁿᶠ-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ⁿᶠ σ)
+          -> subⁿᶠ (κ ∘ˢ ι) t ≡ subⁿᶠ κ (subⁿᶠ ι t)
+  subⁿᶠ-∘ (neⁿᶠ t) = cong neⁿᶠ (subⁿᵉ-∘ t)
+  subⁿᶠ-∘ (ƛⁿᶠ  b) = cong ƛⁿᶠ_ (subⁿᶠ-∘ b)
 
-renˢᵉᵐ-∘ : ∀ {σ Γ Δ Θ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (x : ⟦ σ ⟧ᵀ Γ)
-         -> renˢᵉᵐ (κ ∘ˢ ι) x ≡ renˢᵉᵐ κ (renˢᵉᵐ ι x)
-renˢᵉᵐ-∘ {⋆    } t = renⁿᵉ-∘ t
-renˢᵉᵐ-∘ {σ ⇒ τ} f = extᵢ ext λ π -> cong f (sym (assocˢ π _ _))
+subˢᵉᵐ-∘ : ∀ {σ Γ Δ Θ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (x : ⟦ σ ⟧ᵀ Γ)
+         -> subˢᵉᵐ (κ ∘ˢ ι) x ≡ subˢᵉᵐ κ (subˢᵉᵐ ι x)
+subˢᵉᵐ-∘ {⋆    } t = subⁿᵉ-∘ t
+subˢᵉᵐ-∘ {σ ⇒ τ} f = extᵢ ext λ π -> cong f (sym (assocˢ π _ _))
 
-ren-renˢᵉᵐ : ∀ {σ Γ Δ} {ι : Γ ⊆ Δ} (v : σ ∈ Γ)
-           -> ↑ (varⁿᵉ (ren ι v)) ≡ renˢᵉᵐ ι (↑ (varⁿᵉ v))
-ren-renˢᵉᵐ {⋆    } v = refl
-ren-renˢᵉᵐ {σ ⇒ τ} v = extᵢ ext λ κ -> ext λ x -> cong (λ f -> ↑ (varⁿᵉ f ·ⁿᵉ ↓ x))
+ren-subˢᵉᵐ : ∀ {σ Γ Δ} {ι : Γ ⊆ Δ} (v : σ ∈ Γ)
+           -> ↑ (varⁿᵉ (ren ι v)) ≡ subˢᵉᵐ ι (↑ (varⁿᵉ v))
+ren-subˢᵉᵐ {⋆    } v = refl
+ren-subˢᵉᵐ {σ ⇒ τ} v = extᵢ ext λ κ -> ext λ x -> cong (λ f -> ↑ (varⁿᵉ f ·ⁿᵉ ↓ x))
                                                        (sym (ren-∘ κ _ v))
 
 ▷-ren : ∀ {Γ Δ Θ Ξ σ τ} {κ : Θ ⊆ Ξ} {ι : Γ ⊆ Δ} {ρ : Δ ↦ Θ} (x : ⟦ σ ⟧ᵀ Ξ) (v : τ ∈ Γ ▻ σ)
-      -> (renˢᵉᵐ κ ∘ ρ ∘ ren ι ▷ x) v ≡ (renˢᵉᵐ κ ∘ ρ ▷ x) (ren (keep ι) v)
+      -> (subˢᵉᵐ κ ∘ ρ ∘ ren ι ▷ x) v ≡ (subˢᵉᵐ κ ∘ ρ ▷ x) (ren (keep ι) v)
 ▷-ren x  vz    = refl
 ▷-ren x (vs v) = refl
 
