@@ -1,8 +1,8 @@
-module Categories.STLC.NbE where
+module Categories.STLC.Core.NbE where
 
 open import Function
 
-open import Categories.STLC.STLC
+open import Categories.STLC.Core
 
 infix  4 _⊢ⁿᵉ_ _⊢ⁿᶠ_ _↦_
 infixl 5 _▷_
@@ -49,10 +49,10 @@ mutual
 
   ↓ : ∀ {σ Γ} -> ⟦ σ ⟧ᵀ Γ -> Γ ⊢ⁿᶠ σ
   ↓ {⋆    } t = neⁿᶠ t
-  ↓ {σ ⇒ τ} f = ƛⁿᶠ (↓ (f topˢ (varˢᵉᵐ vz)))
+  ↓ {σ ⇒ τ} f = ƛⁿᶠ ↓ (f topˢ (varˢᵉᵐ vz))
 
   varˢᵉᵐ : ∀ {Γ σ} -> σ ∈ Γ -> ⟦ σ ⟧ᵀ Γ
-  varˢᵉᵐ v = ↑ (varⁿᵉ v)
+  varˢᵉᵐ = ↑ ∘ varⁿᵉ
 
 _↦_ : Con -> Con -> Set
 Γ ↦ Δ = ∀ {σ} -> σ ∈ Γ -> ⟦ σ ⟧ᵀ Δ

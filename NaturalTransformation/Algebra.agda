@@ -15,8 +15,8 @@ record N-Algebra {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β
     Ob  : Obj
     str : ∀ {A} -> F·₁ A ⇒ Ob -> F·₂ A ⇒ Ob
 
-    ηʳ         : ∀ {A} {f : F·₁ A ⇒ Ob} -> str f ∘ η ≈ f 
-    str-∘      : ∀ {A B} {f : A [ C₁ ]⇒ B} {g : F·₁ B ⇒ Ob}
+    ηʳ         : ∀ {A} {f : F·₁ A ⇒ Ob} -> str f ∘ η ≈ f
+    str-∘      : ∀ {A B} {g : F·₁ B ⇒ Ob} {f : A [ C₁ ]⇒ B}
                -> str (g ∘ F⇒₁ f) ≈ str g ∘ F⇒₂ f
     str-resp-≈ : ∀ {A} {f g : F·₁ A ⇒ Ob} -> f ≈ g -> str f ≈ str g
 
@@ -30,9 +30,9 @@ record Relative-N-Algebra {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category
   field
     str : ∀ {A B} -> F·₁ A ⇒ F·₃ B -> F·₂ A ⇒ F·₃ B
 
-    ηʳ         : ∀ {A B} {f : F·₁ A ⇒ F·₃ B} -> str f ∘ η₁ ≈ f 
-    str-∘₁     : ∀ {A B C} {f : A [ C₁ ]⇒ B} {g : F·₁ B ⇒ F·₃ C}
+    ηʳ         : ∀ {A B} {f : F·₁ A ⇒ F·₃ B} -> str f ∘ η₁ ≈ f
+    str-∘₁     : ∀ {A B C} {g : F·₁ B ⇒ F·₃ C} {f : A [ C₁ ]⇒ B}
                -> str (g ∘ F⇒₁ f) ≈ str g ∘ F⇒₂ f
-    str-∘₂     : ∀ {A B C} {f : F·₁ A ⇒ F·₃ B} {g : B [ C₁ ]⇒ C} 
-               -> str (F⇒₃ g ∘ f) ≈ F⇒₃ g ∘ str f
+    str-∘₂     : ∀ {A B C} {g : F·₃ B ⇒ F·₃ C} {f : F·₁ A ⇒ F·₃ B}
+               -> str (g ∘ f) ≈ g ∘ str f
     str-resp-≈ : ∀ {A B} {f g : F·₁ A ⇒ F·₃ B} -> f ≈ g -> str f ≈ str g

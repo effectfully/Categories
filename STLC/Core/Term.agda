@@ -1,6 +1,6 @@
-module Categories.STLC.STLC where
+module Categories.STLC.Core.Term where
 
-open import Categories.STLC.OPE public
+open import Categories.STLC.Core.OPE
 
 infix  4 _∈_ _⊢_
 infixr 5 _⇒_
