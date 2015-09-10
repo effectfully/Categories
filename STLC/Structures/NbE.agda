@@ -37,30 +37,51 @@ Subˢᵉᵐ = record
   ; F-resp-≈ = λ p x -> cong (flip subˢᵉᵐ x) p
   }
 
-NF : NaturalTransformation Subⁿᵉ Subⁿᶠ
-NF = record
+Embⁿᵉ : NaturalTransformation Subⁿᵉ Sub
+Embⁿᵉ = record
+  { η          = embⁿᵉ
+  ; naturality = embⁿᵉ-subⁿᵉ
+  }
+
+Embⁿᶠ : NaturalTransformation Subⁿᶠ Sub
+Embⁿᶠ = record
+  { η          = embⁿᶠ
+  ; naturality = embⁿᶠ-subⁿᶠ
+  }
+
+Varⁿᵉ : NaturalTransformation Ren Subⁿᵉ
+Varⁿᵉ = record
+  { η          = varⁿᵉ
+  ; naturality = λ v -> prefl
+  }
+
+Neⁿᶠ : NaturalTransformation Subⁿᵉ Subⁿᶠ
+Neⁿᶠ = record
   { η          = neⁿᶠ
   ; naturality = λ t -> prefl
   }
 
-Var : NaturalTransformation Ren Subˢᵉᵐ
-Var = record
+Sem : NaturalTransformation Ren Subˢᵉᵐ
+Sem = record
   { η          = varˢᵉᵐ
-  ; naturality = ren-subˢᵉᵐ
+  ; naturality = ↑-varⁿᵉ-ren
   }
 
 Reflect : NaturalTransformation Subⁿᵉ Subˢᵉᵐ
 Reflect = record
   { η          = ↑
-  ; naturality = {!!}
+  ; naturality = ↑-subⁿᵉ
   }
 
-Reify : NaturalTransformation Subˢᵉᵐ Subⁿᶠ
-Reify = record
-  { η          = ↓
-  ; naturality = {!!}
-  }
-    
+-- Reify : NaturalTransformation Subˢᵉᵐ Subⁿᶠ
+-- Reify = record
+--   { η          = ↓
+--   ; naturality = ↓-subˢᵉᵐ
+--   }
+
+-- RRTerm : NaturalTransformation Ren Sub
+-- RRTerm = Embⁿᶠ ∘ⁿ Reify ∘ⁿ Reflect ∘ⁿ Varⁿᵉ
+
 Eval : Relative-N-Algebra Subˢᵉᵐ Term
 Eval = record
   { str        = λ ρ t -> ⟦ t ⟧ ρ
@@ -68,10 +89,4 @@ Eval = record
   ; str-∘₁     = ⟦⟧-ren-sub
   ; str-∘₂     = {!!}
   ; str-resp-≈ = λ p t -> ⟦⟧-resp-≈ t p
-  }
-
-Norm : NaturalTransformation Sub Sub
-Norm = record
-  { η          = norm
-  ; naturality = {!!}
   }
