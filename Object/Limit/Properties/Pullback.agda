@@ -20,8 +20,7 @@ glue {h = h} {f} {g} p₂ p₁ = record
   ; π²        = π²₂ ∘ π²₁
   ; ⟨_,_⟩∣_∣  = λ p q r -> ⟨ p , ⟨ h ∘ p , q ⟩∣ reassocˡ r ∣₂ ⟩∣ sym π¹-⟨⟩₂ ∣₁
   ; comm      = ∘ˡ-resp-≈ˡ comm₁ ⋯ ∘²-resp-≈ʳ comm₂
-  ; ⟨⟩-inj    = λ {_ p₁ p₂ q₁ q₂} r -> case ⟨⟩-inj₁ r of
-      λ{ (s₁ , s₂) -> s₁ , proj₂ (⟨⟩-inj₂ s₂) }
+  ; ⟨⟩-inj    = λ {_ p₁ p₂ q₁ q₂} r -> case ⟨⟩-inj₁ r of λ{ (s₁ , s₂) -> s₁ , proj₂ (⟨⟩-inj₂ s₂) }
   ; universal = λ r s -> universal₁ r (sym (universal₂ (right (∘²-resp-≈ʳ comm₁) (∘-resp-≈ˡ r))
                                                        (reassocˡ s)))
   } where open Pullback₁ p₁; open Pullback₂ p₂

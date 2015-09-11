@@ -64,7 +64,7 @@ restrict : ∀ {n m} -> (f : n ↦ m) -> n ↦ _
 restrict = proj₁ ∘ proj₂ ∘ restrict-go
 
 invert-restrict : ∀ {n m} -> (f : n ↦ m) -> ∃ λ s -> restrict f ∘ s ≗ id
-invert-restrict {0}     f = id , λ {()}
+invert-restrict {0}     f = id , λ()
 invert-restrict {suc n} f with restrict-go (f ∘ suc) | invert-restrict (f ∘ suc)
 ... | _ , _ , π | s , p with π (f zero)
 ... | just  j = suc ∘ s , p
