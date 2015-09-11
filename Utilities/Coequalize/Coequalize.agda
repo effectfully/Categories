@@ -83,7 +83,7 @@ project-restrict {suc n} f (suc i) with restrict-go (f ∘ suc) | project-restri
 ... | just  j | [ q ] = p
 ... | nothing | [ q ] with f (suc i) ≟ f zero
 ... | yes r rewrite r | q = case p of λ()
-... | no  c rewrite p = refl
+... | no  c rewrite p     = refl
 
 restrict-preserves-≡ : ∀ {n m i j} -> (f : n ↦ m) -> f i ≡ f j -> restrict f i ≡ restrict f j
 restrict-preserves-≡ {i = i} {j = j} f p = let open ≡-Reasoning in unjust $
