@@ -8,10 +8,6 @@ open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Fun
 
-∘′-resp-≡ : ∀ {α} {A B C : Set α} {g₁ g₂ : B -> C} {f₁ f₂ : A -> B}
-          -> (∀ y -> g₁ y ≡ g₂ y) -> (∀ x -> f₁ x ≡ f₂ x) -> ∀ x -> g₁ (f₁ x) ≡ g₂ (f₂ x)
-∘′-resp-≡ q p x rewrite p x = q _
-
 Sets : ∀ {α} -> Category (suc α) α α
 Sets {α} = record
   { Obj      = Set α
