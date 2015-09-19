@@ -14,8 +14,10 @@ open import Data.Maybe.Base as M
 open import Data.Sum        as S
 open import Data.Product    as P
 
-open import Categories.Setoid using (module ≡-Reasoning)
+open import Categories.Setoid.Instances using (module ≡-Reasoning)
 open ≡-Reasoning
+
+-- Utilities.
 
 unJust : ∀ {α} {A : Set α} {x y : A} -> _≡_ {A = Maybe A} (just x) (just y) -> x ≡ y
 unJust refl = refl
@@ -63,6 +65,8 @@ min-max-≡ : ∀ {n} -> (i j : Fin n) -> min-max i j ≡ (i , j) ⊎ min-max i 
 min-max-≡  zero    j      = inj₁ refl
 min-max-≡ (suc i)  zero   = inj₂ refl
 min-max-≡ (suc i) (suc j) = S.map (cong (P.map suc suc)) (cong (P.map suc suc)) (min-max-≡ i j)
+
+-- Restricting.
 
 restrict-rename : ∀ {n m} -> n ↦ m -> ∃ λ m' -> (n ↦ m') × (Fin m -> Maybe (Fin m'))
 restrict-rename {0}     f = 0 , id , const nothing
@@ -148,7 +152,9 @@ restrict-reflects-≡ f p = case rename-injective f (restrict-to-rename f p) of 
   { (inj₁ q) -> case trans (sym (rename≗restrict f _)) q of λ()
   ; (inj₂ q) -> q
   }
-  
+
+-- Coequalizing.
+
 coeq : ∀ {n m} -> n ↦ m -> n ↦ m -> m ↦ m
 coeq {0}     f g = id
 coeq {suc n} f g =
