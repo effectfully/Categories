@@ -26,7 +26,7 @@ open import Categories.Object.Limit.Terminal
 
 1Cat-Terminal : Terminal 1Cat
 1Cat-Terminal = record
-  { Ob        = One
-  ; ↝         = record { F⇒ = λ _ -> prefl }
-  ; universal = Hetero.hetero _
+  { Ob     = One
+  ; ↝      = record { F⇒ = λ _ -> prefl }
+  ; ↝-univ = Hetero.hetero _
   }

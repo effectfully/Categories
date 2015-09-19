@@ -26,28 +26,28 @@ module _ {α} where
 
   terminal : Terminal
   terminal = record
-    { Ob        = Lift ⊤
-    ; universal = λ _ -> prefl
+    { Ob     = Lift ⊤
+    ; ↝-univ = λ _ -> prefl
     }
 
   binaryProducts : BinaryProducts
   binaryProducts {A} {B} = record
-    { Ob        = A ×ₚ B
-    ; π¹        = proj₁
-    ; π²        = proj₂
-    ; ⟨_,_⟩     = <_,_>
-    ; ⟨⟩-inj    = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
-    ; universal = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
+    { Ob      = A ×ₚ B
+    ; π¹      = proj₁
+    ; π²      = proj₂
+    ; ⟨_,_⟩   = <_,_>
+    ; ⟨⟩-inj  = λ p -> proj₁ ∘′ ,′-inj ∘′ p , proj₂ ∘′ ,′-inj ∘′ p
+    ; ⟨⟩-univ = λ p q x -> cong₂ _,_ (psym (p x)) (psym (q x))
     }
 
   equalizers : Equalizers
   equalizers {f = f} {g = g} = record
-    { Ob        = ∃ᵢ λ x -> f x ≡ g x
-    ; ι         = iproj₁
-    ; ⟨_⟩∣_∣    = λ p r x -> p x ,ᵢ r x
-    ; comm      = iproj₂
-    ; ⟨⟩-inj    = λ p x -> ,ᵢ-inj₁ (p x)
-    ; universal = λ r x -> ∃ᵢ-η (r x)
+    { Ob      = ∃ᵢ λ x -> f x ≡ g x
+    ; ι       = iproj₁
+    ; ⟨_⟩∣_∣  = λ p r x -> p x ,ᵢ r x
+    ; ι-comm  = iproj₂
+    ; ⟨⟩-inj  = λ p x -> ,ᵢ-inj₁ (p x)
+    ; ⟨⟩-univ = λ r x -> ∃ᵢ-η (r x)
     }
 
   pullbacks : Pullbacks
@@ -55,19 +55,19 @@ module _ {α} where
 
   initial : Initial
   initial = record
-    { Ob        = Lift ⊥
-    ; ↜         = λ{ (lift ()) }
-    ; universal = λ{ (lift ()) }
+    { Ob     = Lift ⊥
+    ; ↜      = λ{ (lift ()) }
+    ; ↜-univ = λ{ (lift ()) }
     }
 
   binaryCoproducts : BinaryCoproducts
   binaryCoproducts {A} {B} = record
-    { Ob        = A ⊎ B
-    ; ι¹        = inj₁
-    ; ι²        = inj₂
-    ; [_,_]     = [_,_]
-    ; []-inj    = λ p -> p ∘′ inj₁ , p ∘′ inj₂
-    ; universal = λ p q -> [ psym ∘′ p , psym ∘′ q ]
+    { Ob      = A ⊎ B
+    ; ι¹      = inj₁
+    ; ι²      = inj₂
+    ; [_,_]   = [_,_]
+    ; []-inj  = λ p -> p ∘′ inj₁ , p ∘′ inj₂
+    ; []-univ = λ p q -> [ psym ∘′ p , psym ∘′ q ]
     }
 
 ISets : ∀ {ι α} -> Set ι -> Category (ι ⊔ suc α) (ι ⊔ α) (ι ⊔ α)

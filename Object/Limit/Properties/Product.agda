@@ -17,12 +17,12 @@ module _ {A B} where
 
   Product-Limit : Product A B -> Limit 2ᶠ
   Product-Limit p = record
-    { Ob        = , , record
+    { Ob     = , , record
         { η          = λ {i} -> η₀ i
         ; naturality = λ {i j i≡j} -> naturality i≡j
         }
-    ; ↝         = λ {C} -> ↝ C , prefl , left (comm C) idˡ
-    ; universal = λ {C u} -> universal₀ C u , _
+    ; ↝      = λ {C} -> ↝ C , prefl , left (comm C) idˡ
+    ; ↝-univ = λ {C u} -> ↝-univ₀ C u , _
     } where
         open Product p
 
@@ -44,18 +44,18 @@ module _ {A B} where
           comm {suc  zero   } = π²-⟨⟩
           comm {suc (suc ())}
 
-          universal₀ : ∀ u -> proj₁ u ≈ ↝
-          universal₀ u = sym (universal (proj₂ (proj₂ u) {zero    } ⋯ idˡ)
-                                        (proj₂ (proj₂ u) {suc zero} ⋯ idˡ))
+          ↝-univ₀ : ∀ u -> proj₁ u ≈ ↝
+          ↝-univ₀ u = sym (⟨⟩-univ (proj₂ (proj₂ u) {zero    } ⋯ idˡ)
+                                   (proj₂ (proj₂ u) {suc zero} ⋯ idˡ))
 
   Limit-Product : Limit 2ᶠ -> Product A B
   Limit-Product lim = record
-    { Ob        = Ob₂
-    ; π¹        = η₁ {zero}
-    ; π²        = η₁ {suc zero}
-    ; ⟨_,_⟩     = λ f g -> proj₁ ⟨ f ⇣ g ⟩
-    ; ⟨⟩-inj    = ⟨⟩-inj
-    ; universal = universal₂
+    { Ob      = Ob₂
+    ; π¹      = η₁ {zero}
+    ; π²      = η₁ {suc zero}
+    ; ⟨_,_⟩   = λ f g -> proj₁ ⟨ f ⇣ g ⟩
+    ; ⟨⟩-inj  = ⟨⟩-inj
+    ; ⟨⟩-univ = ⟨⟩-univ₂
     } where
         open Limit lim
         open NaturalTransformation₁ (proj₂ (proj₂ Ob))
@@ -100,10 +100,10 @@ module _ {A B} where
             ∎
           )
 
-        universal₂ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob₂}
+        ⟨⟩-univ₂ : ∀ {C} {f : C ⇒ A} {g : C ⇒ B} {u : C ⇒ Ob₂}
                    -> η₁ ∘ u ≈ f -> η₁ ∘ u ≈ g -> proj₁ ⟨ f ⇣ g ⟩ ≈ u
-        universal₂ {C} {f} {g} {u} p q = sym (proj₁ (universal {_} {u , prefl , univ})) where
-          univ : ∀ {i} -> η₁ {i} ∘ u ≈ id ∘ η₂ i f g
-          univ {zero        } = left p idˡ
-          univ {suc  zero   } = left q idˡ
-          univ {suc (suc ())}
+        ⟨⟩-univ₂ {C} {f} {g} {u} p q = sym (proj₁ (↝-univ {_} {u , prefl , ⟨⟩-univ})) where
+          ⟨⟩-univ : ∀ {i} -> η₁ {i} ∘ u ≈ id ∘ η₂ i f g
+          ⟨⟩-univ {zero        } = left p idˡ
+          ⟨⟩-univ {suc  zero   } = left q idˡ
+          ⟨⟩-univ {suc (suc ())}

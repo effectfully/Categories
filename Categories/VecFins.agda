@@ -45,19 +45,19 @@ open import Categories.Object Fins
 
 initial : Initial
 initial = record
-  { Ob        = 0
-  ; ↜         = []
-  ; universal = λ{ {_} {[]} -> prefl }
+  { Ob     = 0
+  ; ↜      = []
+  ; ↜-univ = λ{ {_} {[]} -> prefl }
   }
 
 binaryCoproducts : BinaryCoproducts
 binaryCoproducts {n} {m} = record
-  { Ob        = n + m
-  ; ι¹        = map (inject+ m) (allFin n)
-  ; ι²        = map (raise   n) (allFin m)
-  ; [_,_]     = _++_
-  ; []-inj    = ++-injective _ _
-  ; universal = universal
+  { Ob      = n + m
+  ; ι¹      = map (inject+ m) (allFin n)
+  ; ι²      = map (raise   n) (allFin m)
+  ; [_,_]   = _++_
+  ; []-inj  = ++-injective _ _
+  ; []-univ = []-univ
   } where
       ++-injective : ∀ {α n m} {A : Set α} {ys₁ ys₂ : Vec A m} (xs₁ xs₂ : Vec A n)
                    -> xs₁ ++ ys₁ ≡ xs₂ ++ ys₂ -> xs₁ ≡ xs₂ ×ₚ ys₁ ≡ ys₂
@@ -87,11 +87,11 @@ binaryCoproducts {n} {m} = record
           xs
         ∎
 
-      universal : ∀ {n m p} {f : n ↤ p} {g : m ↤ p} {u : n + m ↤ p}
-                -> map (u !_) (map (inject+ m) (allFin n)) ≡ f
-                -> map (u !_) (map (raise   n) (allFin m)) ≡ g
-                -> f ++ g ≡ u
-      universal {n} {m} {p} {f} {g} {u} q r =
+      []-univ : ∀ {n m p} {f : n ↤ p} {g : m ↤ p} {u : n + m ↤ p}
+              -> map (u !_) (map (inject+ m) (allFin n)) ≡ f
+              -> map (u !_) (map (raise   n) (allFin m)) ≡ g
+              -> f ++ g ≡ u
+      []-univ {n} {m} {p} {f} {g} {u} q r =
         begin
           f ++ g                           ←⟨ cong (_++ _)              (map-map-tabulate q) ⟩
           tabulate {n} _ ++ g              ←⟨ cong (tabulate {n} _ ++_) (map-map-tabulate r) ⟩

@@ -4,7 +4,7 @@ open import Function
 open import Relation.Nullary
 open import Relation.Nullary.Decidable
 open import Relation.Binary
-open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality hiding (module ≡-Reasoning)
 open import Data.Empty
 open import Data.Bool.Base
 open import Data.Nat.Base
@@ -14,6 +14,7 @@ open import Data.Maybe.Base as M
 open import Data.Sum        as S
 open import Data.Product    as P
 
+open import Categories.Setoid using (module ≡-Reasoning)
 open ≡-Reasoning
 
 unJust : ∀ {α} {A : Set α} {x y : A} -> _≡_ {A = Maybe A} (just x) (just y) -> x ≡ y
@@ -102,8 +103,8 @@ rename≗restrict {suc n} f (suc i) with restrict-rename (f ∘ suc) | rename≗
 rename-injective : ∀ {n m i j} (f : n ↦ m)
                  -> rename f i ≡ rename f j -> rename f i ≡ nothing ⊎ i ≡ j
 rename-injective {0}                     f p = inj₁ refl
-rename-injective {suc n} {i = i} {j = j} f p with rename (f ∘ suc)
-                                                | rename-injective {i = i} {j = j} (f ∘ suc)
+rename-injective {suc n} {i = i} {j = j} f p
+    with rename (f ∘ suc) | rename-injective {i = i} {j = j} (f ∘ suc)
 ... | π | r with π (f zero)
 ... | just  k = r p
 ... | nothing with f zero ≟ i | f zero ≟ j
@@ -121,9 +122,9 @@ restrict-to-rename : ∀ {n m i j} (f : n ↦ m)
                    -> restrict f i ≡ restrict f j -> rename f (f i) ≡ rename f (f j)
 restrict-to-rename {i = i} {j = j} f p =
   begin
-    rename f (f i)      ≡⟨      rename≗restrict f i  ⟩
-    just (restrict f i) ≡⟨ cong just p               ⟩
-    just (restrict f j) ≡⟨ sym (rename≗restrict f j) ⟩
+    rename f (f i)      →⟨ rename≗restrict f i ⟩
+    just (restrict f i) →⟨ cong just p         ⟩
+    just (restrict f j) ←⟨ rename≗restrict f j ⟩
     rename f (f j)
   ∎
 
@@ -131,13 +132,13 @@ rename-to-restrict : ∀ {n m i j} (f : n ↦ m)
                    -> rename f (f i) ≡ rename f (f j) -> restrict f i ≡ restrict f j
 rename-to-restrict {i = i} {j = j} f p = unJust $
   begin
-    just (restrict f i) ≡⟨ sym (rename≗restrict f i) ⟩
-    rename f (f i)      ≡⟨ p                         ⟩
-    rename f (f j)      ≡⟨      rename≗restrict f j  ⟩
+    just (restrict f i) ←⟨ rename≗restrict f i ⟩
+    rename f (f i)      →⟨ p                   ⟩
+    rename f (f j)      →⟨ rename≗restrict f j ⟩
     just (restrict f j)
   ∎
 
-restrict-preserves-≡ : ∀ {n m i j} -> (f : n ↦ m)
+restrict-preserves-≡ : ∀ {n m i j} (f : n ↦ m)
                      -> f i ≡ f j -> restrict f i ≡ restrict f j
 restrict-preserves-≡ {i = i} {j = j} f p = rename-to-restrict f (cong (rename f) p)
 
@@ -157,9 +158,29 @@ coeq {suc n} f g =
 
 coeq-comm : ∀ {n m} -> (f g : n ↦ m) -> coeq f g ∘ f ≗ coeq f g ∘ g
 coeq-comm {0}     f g  ()
-coeq-comm {suc n} f g  zero with coeq (f ∘ suc) (g ∘ suc) | f zero | g zero
-                          | λ k j -> trans (subst-same k j) (sym (subst-for-same k j))
+coeq-comm {suc n} f g  zero
+    with coeq (f ∘ suc) (g ∘ suc) | f zero | g zero
+       | λ k j -> trans (subst-same k j) (sym (subst-for-same k j))
 ... | r | i | j | lem with min-max-≡ i j
 ... | inj₁ p rewrite p = sym (lem (r i) (r j))
 ... | inj₂ p rewrite p =      lem (r j) (r i)
 coeq-comm {suc n} f g (suc i) rewrite coeq-comm (f ∘ suc) (g ∘ suc) i = refl
+
+coeq-univ : ∀ {n m p} {f g : n ↦ m} -> (u : m ↦ p) -> u ∘ f ≗ u ∘ g -> u ∘ coeq f g ≗ u
+coeq-univ {0}                     u p x = refl
+coeq-univ {suc n} {f = f} {g = g} u p x with f zero | g zero | p zero
+... | i | j | p' with min-max i j | min-max-≡ i j | coeq (f ∘ suc) (g ∘ suc) | coeq-univ u (p ∘ suc)
+... | min , max | mm | r | q with r x ≟ r max
+... | no  _ = q x
+... | yes s with λ i j p' s ->
+        begin
+          u (r i) →⟨ q i      ⟩
+          u  i    →⟨ p'       ⟩
+          u  j    ←⟨ q j      ⟩
+          u (r j) ←⟨ cong u s ⟩
+          u (r x) →⟨ q x      ⟩
+          u  x
+        ∎
+... | lem with min | max | mm
+... | ._ | ._ | inj₁ refl = lem i j      p'  s
+... | ._ | ._ | inj₂ refl = lem j i (sym p') s

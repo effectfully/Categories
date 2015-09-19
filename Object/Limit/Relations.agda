@@ -13,16 +13,16 @@ module _ {A B C} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
 
   Pullback->Equalizer : Equalizer (f ∘ π¹) (g ∘ π²)
   Pullback->Equalizer = record
-    { Ob        = Ob
-    ; ι         = id
-    ; ⟨_⟩∣_∣    = λ p r -> p
-    ; comm      = ∘-resp-≈ʳ comm
-    ; ⟨⟩-inj    = id′
-    ; universal = flip right idˡ
+    { Ob      = Ob
+    ; ι       = id
+    ; ⟨_⟩∣_∣  = λ p r -> p
+    ; ι-comm  = ∘-resp-≈ʳ π-comm
+    ; ⟨⟩-inj  = id′
+    ; ⟨⟩-univ = flip right idˡ
     }
 
 module _ {A B} (p : Product A B) where
-  open Product p renaming (⟨⟩-inj to ⟨⟩-injₚ; universal to universalₚ) hiding (Ob)
+  open Product p renaming (⟨⟩-inj to ⟨⟩-injₚ; ⟨⟩-univ to ⟨⟩-univₚ) hiding (Ob)
 
   Product&Equalizer->Pullback : ∀ {C} {f : A ⇒ C} {g : B ⇒ C}
                               -> Equalizer (f ∘ π¹) (g ∘ π²) -> Pullback f g
@@ -31,7 +31,7 @@ module _ {A B} (p : Product A B) where
     ; π¹        = π¹ ∘ ι
     ; π²        = π² ∘ ι
     ; ⟨_,_⟩∣_∣  = λ p q r -> ⟨ ⟨ p , q ⟩ ⟩∣ sym π¹-⟨⟩ ʳ⌈ r ⌉ʳ sym π²-⟨⟩ ∣
-    ; comm      = reassoc² comm
+    ; π-comm    = reassoc² ι-comm
     ; ⟨⟩-inj    = ⟨⟩-injₚ ∘′ ⟨⟩-injₑ
-    ; universal = λ r s -> universalₑ (sym (universalₚ (reassocˡ r) (reassocˡ s)))
-    } where open Equalizer e renaming (⟨⟩-inj to ⟨⟩-injₑ; universal to universalₑ)
+    ; ⟨⟩-univ = λ r s -> ⟨⟩-univₑ (sym (⟨⟩-univₚ (reassocˡ r) (reassocˡ s)))
+    } where open Equalizer e renaming (⟨⟩-inj to ⟨⟩-injₑ; ⟨⟩-univ to ⟨⟩-univₑ)
