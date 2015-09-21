@@ -4,7 +4,7 @@ open import Function
 open import Relation.Nullary
 open import Relation.Nullary.Decidable
 open import Relation.Binary
-open import Relation.Binary.PropositionalEquality hiding (module ≡-Reasoning)
+open import Relation.Binary.PropositionalEquality
 open import Data.Empty
 open import Data.Bool.Base
 open import Data.Nat.Base
@@ -14,8 +14,15 @@ open import Data.Maybe.Base as M
 open import Data.Sum        as S
 open import Data.Product    as P
 
-open import Categories.Setoid.Instances using (module ≡-Reasoning)
 open ≡-Reasoning
+
+infixr 2 _→⟨_⟩_ _←⟨_⟩_
+
+_→⟨_⟩_ : ∀ {α} {A : Set α} {y z} -> (x : A) -> x ≡ y -> y IsRelatedTo z -> x IsRelatedTo z
+x →⟨ x≡y ⟩ y-irt-z = x ≡⟨     x≡y ⟩ y-irt-z
+
+_←⟨_⟩_ : ∀ {α} {A : Set α} {y z} -> (x : A) -> y ≡ x -> y IsRelatedTo z -> x IsRelatedTo z
+x ←⟨ y≡x ⟩ y-irt-z = x →⟨ sym y≡x ⟩ y-irt-z
 
 -- Utilities.
 
@@ -40,8 +47,7 @@ unMapJust (just x) refl = refl
 _↦_ : ℕ -> ℕ -> Set
 n ↦ m = Fin n -> Fin m
 
-caseFin : ∀ {α n} {A : Fin (suc n) -> Set α}
-        -> A zero -> (∀ i -> A (suc i)) -> (i : Fin (suc n)) -> A i
+caseFin : ∀ {α n} {A : Fin (suc n) -> Set α} -> A zero -> (∀ i -> A (suc i)) -> ∀ i -> A i
 caseFin z f  zero   = z
 caseFin z f (suc i) = f i
 
