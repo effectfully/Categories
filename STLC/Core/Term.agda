@@ -20,6 +20,8 @@ data _⊢_ Γ : Type -> Set where
   ƛ   : ∀ {σ τ} -> Γ ▻ σ ⊢ τ -> Γ ⊢ σ ⇒ τ
   _·_ : ∀ {σ τ} -> Γ ⊢ σ ⇒ τ -> Γ ⊢ σ     -> Γ ⊢ τ
 
+-- TODO: rename this stupidness.
+
 ren : ∀ {Γ Δ σ} -> Γ ⊆ Δ -> σ ∈ Γ -> σ ∈ Δ
 ren  stop     ()
 ren (skip ι)  v     = vs (ren ι v)
