@@ -20,15 +20,13 @@ data _⊢_ Γ : Type -> Set where
   ƛ   : ∀ {σ τ} -> Γ ▻ σ ⊢ τ -> Γ ⊢ σ ⇒ τ
   _·_ : ∀ {σ τ} -> Γ ⊢ σ ⇒ τ -> Γ ⊢ σ     -> Γ ⊢ τ
 
--- TODO: rename this stupidness.
+renᵛ : ∀ {Γ Δ σ} -> Γ ⊆ Δ -> σ ∈ Γ -> σ ∈ Δ
+renᵛ  stop     ()
+renᵛ (skip ι)  v     = vs (renᵛ ι v)
+renᵛ (keep ι)  vz    = vz
+renᵛ (keep ι) (vs v) = vs (renᵛ ι v)
 
-ren : ∀ {Γ Δ σ} -> Γ ⊆ Δ -> σ ∈ Γ -> σ ∈ Δ
-ren  stop     ()
-ren (skip ι)  v     = vs (ren ι v)
-ren (keep ι)  vz    = vz
-ren (keep ι) (vs v) = vs (ren ι v)
-
-sub : ∀ {Γ Δ σ} -> Γ ⊆ Δ -> Γ ⊢ σ -> Δ ⊢ σ
-sub ι (var v) = var (ren ι v)
-sub ι (ƛ b  ) = ƛ (sub (keep ι) b)
-sub ι (f · x) = sub ι f · sub ι x
+ren : ∀ {Γ Δ σ} -> Γ ⊆ Δ -> Γ ⊢ σ -> Δ ⊢ σ
+ren ι (var v) = var (renᵛ ι v)
+ren ι (ƛ b  ) = ƛ (ren (keep ι) b)
+ren ι (f · x) = ren ι f · ren ι x

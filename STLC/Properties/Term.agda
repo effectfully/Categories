@@ -5,23 +5,23 @@ open import Relation.Binary.PropositionalEquality
 
 open import Categories.STLC.Core
 
-ren-idˢ : ∀ {Γ σ} (v : σ ∈ Γ) -> ren idˢ v ≡ v
-ren-idˢ  vz    = refl
-ren-idˢ (vs v) = cong vs (ren-idˢ v)
+renᵛ-idˢ : ∀ {Γ σ} (v : σ ∈ Γ) -> renᵛ idˢ v ≡ v
+renᵛ-idˢ  vz    = refl
+renᵛ-idˢ (vs v) = cong vs (renᵛ-idˢ v)
 
-ren-∘ : ∀ {Γ Δ Θ σ} (κ : Δ ⊆ Θ) (ι : Γ ⊆ Δ) (v : σ ∈ Γ) -> ren (κ ∘ˢ ι) v ≡ ren κ (ren ι v)
-ren-∘  stop     stop     ()
-ren-∘ (skip κ)  ι        v     = cong vs (ren-∘ κ ι v)
-ren-∘ (keep κ) (skip ι)  v     = cong vs (ren-∘ κ ι v)
-ren-∘ (keep κ) (keep ι)  vz    = refl
-ren-∘ (keep κ) (keep ι) (vs v) = cong vs (ren-∘ κ ι v)
+renᵛ-∘ : ∀ {Γ Δ Θ σ} (κ : Δ ⊆ Θ) (ι : Γ ⊆ Δ) (v : σ ∈ Γ) -> renᵛ (κ ∘ˢ ι) v ≡ renᵛ κ (renᵛ ι v)
+renᵛ-∘  stop     stop     ()
+renᵛ-∘ (skip κ)  ι        v     = cong vs (renᵛ-∘ κ ι v)
+renᵛ-∘ (keep κ) (skip ι)  v     = cong vs (renᵛ-∘ κ ι v)
+renᵛ-∘ (keep κ) (keep ι)  vz    = refl
+renᵛ-∘ (keep κ) (keep ι) (vs v) = cong vs (renᵛ-∘ κ ι v)
 
-sub-idˢ : ∀ {Γ σ} (t : Γ ⊢ σ) -> sub idˢ t ≡ t
-sub-idˢ (var v) = cong var (ren-idˢ v)
-sub-idˢ (ƛ b  ) = cong ƛ (sub-idˢ b)
-sub-idˢ (f · x) = cong₂ _·_ (sub-idˢ f) (sub-idˢ x)
+ren-idˢ : ∀ {Γ σ} (t : Γ ⊢ σ) -> ren idˢ t ≡ t
+ren-idˢ (var v) = cong var (renᵛ-idˢ v)
+ren-idˢ (ƛ b  ) = cong ƛ (ren-idˢ b)
+ren-idˢ (f · x) = cong₂ _·_ (ren-idˢ f) (ren-idˢ x)
 
-sub-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ σ) -> sub (κ ∘ˢ ι) t ≡ sub κ (sub ι t)
-sub-∘ {κ = κ} (var v) = cong var (ren-∘ κ _ v)
-sub-∘         (ƛ b  ) = cong ƛ (sub-∘ b)
-sub-∘         (f · x) = cong₂ _·_ (sub-∘ f) (sub-∘ x)
+ren-∘ : ∀ {Γ Δ Θ σ} {κ : Δ ⊆ Θ} {ι : Γ ⊆ Δ} (t : Γ ⊢ σ) -> ren (κ ∘ˢ ι) t ≡ ren κ (ren ι t)
+ren-∘ {κ = κ} (var v) = cong var (renᵛ-∘ κ _ v)
+ren-∘         (ƛ b  ) = cong ƛ (ren-∘ b)
+ren-∘         (f · x) = cong₂ _·_ (ren-∘ f) (ren-∘ x)
