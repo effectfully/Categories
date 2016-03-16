@@ -6,8 +6,8 @@ open import Relation.Nullary.Decidable
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
 open import Data.Empty
-open import Data.Bool.Base
-open import Data.Nat.Base
+open import Data.Bool.Base hiding (_≟_)
+open import Data.Nat.Base  hiding (_≟_)
 open import Data.Fin
 open import Data.Fin.Properties
 open import Data.Maybe.Base as M

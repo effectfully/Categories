@@ -1,7 +1,7 @@
 module Categories.Setoid.EqReasoning where
 
 open import Categories.Setoid.Equivalence
-open import Categories.Setoid.Setoid
+open import Categories.Setoid.Core
 
 module HEqReasoning {ι α β} {I : Set ι} {A : I -> Set α} (hsetoid : HSetoid A β) where
   open HSetoid hsetoid

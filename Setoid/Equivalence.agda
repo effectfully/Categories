@@ -1,9 +1,9 @@
 module Categories.Setoid.Equivalence where
 
 open import Categories.Utilities.Prelude
-open import Categories.Utilities.Product
 
 record IsEquivalence {α β} {A : Set α} (_≈_ : A -> A -> Set β) : Set (α ⊔ β) where
+  -- no-eta-equality
   field
     refl  : ∀ {x}     -> x ≈ x
     sym   : ∀ {x y}   -> x ≈ y -> y ≈ x
@@ -29,6 +29,7 @@ record IsEquivalence {α β} {A : Set α} (_≈_ : A -> A -> Set β) : Set (α �
 
 record IsIEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i} -> A i -> A i -> Set β)
                       : Set (ι ⊔ α ⊔ β) where
+  -- no-eta-equality
   field
     refl  : ∀ {i} {x     : A i} -> x ≈ x
     sym   : ∀ {i} {x y   : A i} -> x ≈ y -> y ≈ x
@@ -54,6 +55,7 @@ record IsIEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i}
 
 record IsHEquivalence {ι α β} {I : Set ι} (A : I -> Set α) (_≈_ : ∀ {i j} -> A i -> A j -> Set β)
                       : Set (ι ⊔ α ⊔ β) where
+  -- no-eta-equality
   field
     hrefl  : ∀ {i}     {x : A i}                     -> x ≈ x
     hsym   : ∀ {i j}   {x : A i} {y : A j}           -> x ≈ y -> y ≈ x

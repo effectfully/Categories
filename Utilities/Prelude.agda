@@ -8,6 +8,8 @@ open import Relation.Binary.PropositionalEquality
 open import Data.Unit.Base using (⊤; tt) public
 open import Data.Product renaming (_×_ to _×ₚ_) public
 
+open import Categories.Utilities.Product public
+
 infixl 10 _%
 _% = _∘′_
 

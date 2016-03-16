@@ -5,7 +5,7 @@ open import Relation.Nullary
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
 open import Data.Empty
-open import Data.Nat.Base
+open import Data.Nat.Base hiding (_≟_)
 open import Data.Fin
 open import Data.Fin.Properties
 open import Data.Sum as Sum

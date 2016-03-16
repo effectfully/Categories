@@ -1,11 +1,12 @@
-module Categories.Setoid.Setoid where
+module Categories.Setoid.Core where
 
 open import Categories.Utilities.Prelude
-open import Categories.Utilities.Product
 open import Categories.Setoid.Equivalence
 
 module Setoid-Module where
   record Setoid {α} (A : Set α) β : Set (α ⊔ suc β) where
+    -- no-eta-equality
+    
     infix 4 _≈_
   
     field
@@ -20,8 +21,10 @@ module Setoid {α β} {A : Set α} (setoid : Setoid A β) where
 
 module ISetoid-Module where
   record ISetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
+    -- no-eta-equality
+    
     infix 4 _≈_
-  
+    
     field
       _≈_            : ∀ {i} -> A i -> A i -> Set β
       isIEquivalence : IsIEquivalence A _≈_
@@ -34,6 +37,8 @@ module ISetoid {ι α β} {I : Set ι} {A : I -> Set α} (isetoid : ISetoid A β
 
 module HSetoid-Module where
   record HSetoid {ι α} {I : Set ι} (A : I -> Set α) β : Set (ι ⊔ α ⊔ suc β) where
+    -- no-eta-equality
+    
     infix 4 _≈_
   
     field

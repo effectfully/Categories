@@ -3,11 +3,11 @@ module Categories.Utilities.Coequalize.Eqclasses where
 open import Function
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality hiding ([_])
-open import Data.Nat.Base
-open import Data.Fin     hiding (#_)
+open import Data.Nat.Base hiding (_≟_)
+open import Data.Fin      hiding (#_)
 open import Data.Fin.Properties
-open import Data.Sum     hiding (map)
-open import Data.Product hiding (map)
+open import Data.Sum      hiding (map)
+open import Data.Product  hiding (map)
 open import Data.Vec
 open import Data.Vec.Properties
 

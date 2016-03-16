@@ -1,12 +1,14 @@
 module Categories.Setoid.Function where
 
 open import Categories.Utilities.Prelude
-open import Categories.Setoid.Setoid
+open import Categories.Setoid.Core
 
 infixr 9 _∘ᵖⁱ_
 
 record Π {α β γ δ} {A : Set α} {B : A -> Set β}
          (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
+  no-eta-equality
+  
   open Setoid₁ Aˢ; open HSetoid₂ Bˢ
 
   field
@@ -21,7 +23,6 @@ module _ where
 module _ {α β γ δ} {A : Set α} {B : A -> Set β}
          {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ} (f : Π Aˢ Bˢ) where
   module Π₁ = Π f renaming (f· to f·₁; f-resp-≈ to f-resp-≈₁)
-
   module Π₂ = Π f renaming (f· to f·₂; f-resp-≈ to f-resp-≈₂)
 
 _─>_ : ∀ {α β γ δ} {A : Set α} {B : Set β} -> Setoid A γ -> Setoid B δ -> Set (α ⊔ β ⊔ γ ⊔ δ)
@@ -62,6 +63,7 @@ Injective {Aˢ = Aˢ} {Bˢ = Bˢ} f = ∀ {x y} -> f ⟨$⟩ x ≈₂ f ⟨$⟩ 
 
 record HInjection {α β γ δ} {A : Set α} {B : A -> Set β}
                   (Aˢ : Setoid A γ) (Bˢ : HSetoid B δ) : Set (α ⊔ β ⊔ γ ⊔ δ) where
+  no-eta-equality
   field
     π           : Π Aˢ Bˢ
     π-injective : Injective π
@@ -74,7 +76,6 @@ Injection Aˢ Bˢ = HInjection Aˢ hBˢ
 module _ {α β γ δ} {A : Set α} {B : A -> Set β} {Aˢ : Setoid A γ} {Bˢ : HSetoid B δ}
          (injection : HInjection Aˢ Bˢ) where
   module HInjection₁ = HInjection injection renaming (π to π₁; π-injective to π-injective₁)
-
   module HInjection₂ = HInjection injection renaming (π to π₂; π-injective to π-injective₂)
 
 _×ⁱ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂ δ₁ δ₂} {A₁ : Set α₁} {A₂ : Set α₂} {B₁ : Set β₁} {B₂ : Set β₂}

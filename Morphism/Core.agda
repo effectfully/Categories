@@ -1,6 +1,6 @@
 open import Categories.Category
 
-module Categories.Morphism.Morphism {α β γ} (ℂ : Category α β γ) where
+module Categories.Morphism.Core {α β γ} (ℂ : Category α β γ) where
 
 open Category ℂ
 

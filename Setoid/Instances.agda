@@ -3,7 +3,7 @@ module Categories.Setoid.Instances where
 open import Categories.Utilities.Prelude
 open import Categories.Utilities.Product
 open import Categories.Setoid.Equivalence
-open import Categories.Setoid.Setoid
+open import Categories.Setoid.Core
 open import Categories.Setoid.Function
 open import Categories.Setoid.EqReasoning
 

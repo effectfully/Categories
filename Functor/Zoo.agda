@@ -1,8 +1,7 @@
 module Categories.Functor.Zoo where
 
 open import Categories.Category
-open import Categories.Category.Product
-open import Categories.Functor.Functor
+open import Categories.Functor.Core
 open import Categories.Categories.Discrete
 
 Endofunctor : ∀ {α β γ} -> Category α β γ -> Set _

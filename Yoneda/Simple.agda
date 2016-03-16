@@ -6,7 +6,7 @@ open import Categories.Functor.Hom
 open import Categories.NaturalTransformation
 open import Categories.Categories.Agda
 
--- I don't place this in Setoid.agda because it's too ad hoc. Which is TO DO.
+-- I don't place this in Setoid.agda because it's too ad hoc. Which is TODO.
 liftStructSetoid : ∀ {α β} α' β'
                  -> [ Setoid S β ∣ S ∈ Set α ] -> [ Setoid S (β ⊔ β') ∣ S ∈ Set (α ⊔ α') ]
 liftStructSetoid α' β' (hide setoid) = hide record
@@ -36,16 +36,14 @@ module _ {α β γ} {C : Category α β γ} (F : Copresheaf {β} {γ} C) where
     set : [ Setoid S _ ∣ S ∈ Set _ ]
     set = liftStructSetoid (α ⊔ suc (β ⊔ γ)) (α ⊔ β) (F· A)
 
-    postulate ⊥ : ∀ {α} {A : Set α} -> A
+    postulate undefined : ∀ {α} {A : Set α} -> A
 
     Yoneda : nat ≃ set
     Yoneda = record
       { f   = f
       ; f⁻¹ = f⁻¹
       ; iso = record
-            -- It's a trivial proposition, but Agda eats 1 GB RAM
-            -- and doesn't allow to finish the proof on my machine. 
-          { isoˡ = ⊥
+          { isoˡ = undefined
           ; isoʳ = isoʳ
           }
       } where

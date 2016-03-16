@@ -1,5 +1,3 @@
--- This module doesn't typecheck because I can't open the modules properly.
-
 open import Categories.Category
 
 module Categories.Object.Limit.Properties.Pullback {α β γ} (ℂ : Category α β γ) where

@@ -1,9 +1,9 @@
-module Categories.Monad.RelativeMonad where
+module Categories.Monad.Relative where
 
 open import Categories.Category
 open import Categories.Functor
 open import Categories.NaturalTransformation
-open import Categories.Monad.Monad
+open import Categories.Monad.Core
 
 -- class (Functor j) => RelativeMonad j t where
 --   return :: j a -> t a

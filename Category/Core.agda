@@ -1,10 +1,12 @@
-module Categories.Category.Category where
+module Categories.Category.Core where
 
-open import Categories.Utilities.Prelude public
-open import Categories.Setoid            public
+open import Categories.Utilities.Prelude
+open import Categories.Setoid
 
 module Category-Module where
   record Category α β γ : Set (suc (α ⊔ β ⊔ γ)) where
+    no-eta-equality
+    
     infix  3 _⇒_
     infixr 9 _∘_
   

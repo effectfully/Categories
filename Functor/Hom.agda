@@ -49,14 +49,16 @@ module _ {α β γ} {C : Category α β γ} where
   Hom[_,-] : Obj -> Copresheaf C
   Hom[_,-] = applyᶠˡ Hom[-,-]
 
-  Hom[-,_] : Obj -> Presheaf   C
-  Hom[-,_] = applyᶠʳ Hom[ C ][-,-]
-
-  Hom-NaturalTransformation₁ : ∀ {A₁ A₂} -> A₂ ⇒ A₁ -> NaturalTransformation Hom[ A₁ ,-] Hom[ A₂ ,-]
+  Hom-NaturalTransformation₁ : ∀ {A₁ A₂}
+                             -> A₂ ⇒ A₁ -> NaturalTransformation Hom[ A₁ ,-] Hom[ A₂ ,-]
   Hom-NaturalTransformation₁ = applyⁿˡ Hom[-,-]
 
-  Hom-NaturalTransformation₂ : ∀ {B₁ B₂} -> B₁ ⇒ B₂ -> NaturalTransformation Hom[-, B₁ ] Hom[-, B₂ ]
-  Hom-NaturalTransformation₂ = applyⁿʳ Hom[-,-]
+module _ {α β γ} (C : Category α β γ) where
+  open Category C
 
-Hom[_][-,_] : ∀ {α β γ} -> (C : Category α β γ) -> _ -> Presheaf C
-Hom[ C ][-, B ] = Hom[-,_] {C = C} B
+  Hom[_][-,_] : Obj -> Presheaf   C
+  Hom[_][-,_] = applyᶠʳ Hom[ C ][-,-]
+
+  Hom-NaturalTransformation₂ : ∀ {B₁ B₂}
+                             -> B₁ ⇒ B₂ -> NaturalTransformation (Hom[_][-,_] B₁) (Hom[_][-,_] B₂)
+  Hom-NaturalTransformation₂ = applyⁿʳ Hom[ C ][-,-]

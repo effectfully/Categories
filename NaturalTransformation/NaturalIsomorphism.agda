@@ -2,7 +2,7 @@ module Categories.NaturalTransformation.NaturalIsomorphism where
 
 open import Categories.Category
 open import Categories.Functor
-open import Categories.NaturalTransformation.NaturalTransformation
+open import Categories.NaturalTransformation
 import Categories.Morphism as Morphism
 
 record NaturalIsomorphism {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}

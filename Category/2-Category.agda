@@ -1,10 +1,12 @@
-module Categories.2-Category where
+module Categories.Category.2-Category where
 
 open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Discrete
 
 record 2-Category α β γ δ : Set (suc (α ⊔ β ⊔ γ ⊔ δ)) where
+  no-eta-equality
+
   infix  3 _⇒_
   infixr 9 _∘_
 
@@ -16,9 +18,7 @@ record 2-Category α β γ δ : Set (suc (α ⊔ β ⊔ γ ⊔ δ)) where
 
   _∘_ : ∀ {A B C} {C₁ C₂ : Category β γ δ}
       -> Functor C₁ (B ⇒ C) -> Functor C₂ (A ⇒ B) -> Bifunctor C₁ C₂ (A ⇒ C)
-  F₁ ∘ F₂ = comp ∘ᶠ (F₁ ⁂ F₂)
-
-  open ISetoid Functor-ISetoid
+  F₁ ∘ F₂ = tag $ detag comp ∘ᶠ (F₁ ⁂ F₂)
 
 --  field
 --    idˡ idʳ assoc

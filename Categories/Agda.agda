@@ -3,7 +3,6 @@ module Categories.Categories.Agda where
 open import Data.Empty
 open import Data.Sum
 
-open import Categories.Utilities.Product
 open import Categories.Category
 open import Categories.Functor
 open import Categories.Categories.Fun

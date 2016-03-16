@@ -1,7 +1,7 @@
 open import Categories.Category
 open import Categories.Functor
 open import Categories.NaturalTransformation
-open import Categories.Monad.Monad
+open import Categories.Monad.Core
 
 module Categories.Categories.Kleisli {α β γ} {C : Category α β γ} (M : Monad C) where
 

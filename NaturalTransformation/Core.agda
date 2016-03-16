@@ -1,4 +1,4 @@
-module Categories.NaturalTransformation.NaturalTransformation where
+module Categories.NaturalTransformation.Core where
 
 open import Categories.Category
 open import Categories.Functor
@@ -8,6 +8,8 @@ infix  4 _≈ⁿ_
 
 record NaturalTransformation {α₁ α₂ β₁ β₂ γ₁ γ₂} {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
                              (F₁ F₂ : Functor C₁ C₂) : Set (α₁ ⊔ α₂ ⊔ β₁ ⊔ β₂ ⊔ γ₁ ⊔ γ₂) where
+  no-eta-equality
+
   open Category C₂; open Functor₁ F₁; open Functor₂ F₂ 
 
   field
