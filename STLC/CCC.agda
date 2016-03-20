@@ -6,7 +6,7 @@ open import Categories.STLC.OPE
 open import Categories.STLC.Term
 
 -- Just an approximation. The actual equality must be βη (convertibility? normalization?).
--- And we probably need explicit subsitutions to make proofs tractable.
+-- And we probably need explicit substitutions to make proofs tractable.
 
 Term : Category _ _ _
 Term = record

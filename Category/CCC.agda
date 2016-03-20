@@ -26,6 +26,9 @@ record CCC : Set (α ⊔ β ⊔ γ) where
     ⋆ : Type
     ⋆ = Ob
 
+    _↦_ : Type -> Type -> Type
+    _↦_ = flip _^_
+
     _&_ : Type -> Type -> Type
     _&_ = _×_
 
@@ -35,8 +38,8 @@ record CCC : Set (α ⊔ β ⊔ γ) where
     unit : ∀ {σ} -> σ ⊢₁ ⋆
     unit = ↝
 
-    _[_]₁ : ∀ {σ τ ν} -> τ ⊢₁ ν -> σ ⊢₁ τ -> σ ⊢₁ ν
-    _[_]₁ = _∘_
+    ƛ_ : ∀ {σ τ ν} -> σ & τ ⊢₁ ν -> σ ⊢₁ τ ↦ ν
+    ƛ_ = curr
     
     pair : ∀ {σ τ ν} -> σ ⊢₁ τ -> σ ⊢₁ ν -> σ ⊢₁ τ & ν
     pair = ⟨_,_⟩
@@ -47,11 +50,8 @@ record CCC : Set (α ⊔ β ⊔ γ) where
     snd : ∀ {σ τ} -> σ & τ ⊢₁ τ
     snd = π²
 
-    _↦_ : Type -> Type -> Type
-    _↦_ = flip _^_
+    _[_]₁ : ∀ {σ τ ν} -> τ ⊢₁ ν -> σ ⊢₁ τ -> σ ⊢₁ ν
+    _[_]₁ = _∘_
 
-    apply : ∀ {σ τ} -> (σ ↦ τ) & σ ⊢₁ τ
-    apply = eval
-
-    lcurry : ∀ {σ τ ν} -> σ & τ ⊢₁ ν -> σ ⊢₁ τ ↦ ν
-    lcurry = curr
+    app : ∀ {σ τ} -> (σ ↦ τ) & σ ⊢₁ τ
+    app = eval
