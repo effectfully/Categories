@@ -70,29 +70,18 @@ record CCC : Set (α ⊔ β ⊔ γ) where
     shift : ∀ {Γ σ τ} -> Γ ⊢ σ -> Γ & τ ⊢ σ
     shift t = t [ ↑ ]
 
-    Con : ℕ -> Set α
-    Con n = Replicate n Type
-
-    -- var : ∀ n m {Γ : Con (ℕ.suc n + ℕ.suc m)} -> foldrʳ₁ (flip _&_) Γ ⊢ nlookupʳ n Γ
-    -- var  0      m = vz
-    -- var (suc n) m = shift (var n m)
-
-    var : ∀ n m {Γ : Con (ℕ.suc n + m)} -> foldrʳ₁ (flip _&_) Γ ⊢ nlookupʳ n Γ
-    var  0       0      = id
-    var  0      (suc m) = vz
-    var (suc n)  m      = shift (var n m)
-
-    -- In (var n m) `n' is a de Bruijn index and (m = p - n),
-    -- where `p' is the number of variables in scope.
+    var : ∀ {Δ σ} n {Γ : Replicate n Type} -> foldrʳ (flip _&_) (Δ & σ) Γ ⊢ σ
+    var  0      = vz
+    var (suc n) = shift (var n)
 
     I : ∀ {Γ σ} -> Γ ⊢ σ ↦ σ
-    I = ƛ var 0 1
+    I = ƛ var 0
 
     A : ∀ {Γ σ τ} -> Γ ⊢ (σ ↦ τ) ↦ σ ↦ τ
-    A = ƛ ƛ var 1 1 · var 0 2
+    A = ƛ ƛ var 1 · var 0
 
     K : ∀ {Γ σ τ} -> Γ ⊢ σ ↦ τ ↦ σ
-    K = ƛ ƛ var 1 1
+    K = ƛ ƛ var 1
 
     S : ∀ {Γ σ τ ν} -> Γ ⊢ (σ ↦ τ ↦ ν) ↦ (σ ↦ τ) ↦ σ ↦ ν
-    S = ƛ ƛ ƛ var 2 1 · var 0 3 · (var 1 2 · var 0 3)
+    S = ƛ ƛ ƛ var 2 · var 0 · (var 1 · var 0)

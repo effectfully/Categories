@@ -18,6 +18,10 @@ nlookupʳ : ∀ {m α} {A : Set α} n -> Replicate (ℕ.suc n + m) A -> A
 nlookupʳ  0      (x , xs) = x
 nlookupʳ (suc n) (x , xs) = nlookupʳ n xs
 
+nlookupʳ₀ : ∀ {α} {A : Set α} n -> Replicate (ℕ.suc n) A -> A
+nlookupʳ₀  0      (x , _ ) = x
+nlookupʳ₀ (suc n) (x , xs) = nlookupʳ₀ n xs
+
 foldrʳ : ∀ {n α β} {A : Set α} {B : Set β} -> (A -> B -> B) -> B -> Replicate n A -> B
 foldrʳ {0}     f y  _       = y
 foldrʳ {suc n} f y (x , xs) = f x (foldrʳ f y xs)
