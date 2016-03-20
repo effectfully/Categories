@@ -2,6 +2,9 @@ open import Categories.Category
 
 module Categories.Category.CCC {α β γ} (C : Category α β γ) where
 
+open import Data.Nat.Base hiding (_⊔_)
+
+open import Categories.Utilities.Replicate
 open import Categories.Object C
 
 record CCC : Set (α ⊔ β ⊔ γ) where
@@ -18,7 +21,9 @@ record CCC : Set (α ⊔ β ⊔ γ) where
 
     infixr 7 _&_
     infixr 5 _↦_
-    infix  4 _⊢₁_
+    infix  4 _⊢_
+    infixr 5 ƛ_
+    infixl 6 _·_
 
     Type : Set α
     Type = Obj
@@ -32,26 +37,62 @@ record CCC : Set (α ⊔ β ⊔ γ) where
     _&_ : Type -> Type -> Type
     _&_ = _×_
 
-    _⊢₁_ : Type -> Type -> Set β
-    _⊢₁_ = _⇒_
+    _⊢_ : Type -> Type -> Set β
+    _⊢_ = _⇒_
 
-    unit : ∀ {σ} -> σ ⊢₁ ⋆
+    unit : ∀ {Γ} -> Γ ⊢ ⋆
     unit = ↝
 
-    ƛ_ : ∀ {σ τ ν} -> σ & τ ⊢₁ ν -> σ ⊢₁ τ ↦ ν
+    ƛ_ : ∀ {Γ σ τ} -> Γ & σ ⊢ τ -> Γ ⊢ σ ↦ τ
     ƛ_ = curr
     
-    pair : ∀ {σ τ ν} -> σ ⊢₁ τ -> σ ⊢₁ ν -> σ ⊢₁ τ & ν
+    pair : ∀ {Γ σ τ} -> Γ ⊢ σ -> Γ ⊢ τ -> Γ ⊢ σ & τ
     pair = ⟨_,_⟩
 
-    fst : ∀ {σ τ} -> σ & τ ⊢₁ σ
-    fst = π¹
+    _[_] : ∀ {Γ Δ σ} -> Γ ⊢ σ -> Δ ⊢ Γ -> Δ ⊢ σ
+    _[_] = _∘_
 
-    snd : ∀ {σ τ} -> σ & τ ⊢₁ τ
-    snd = π²
+    _·_ : ∀ {Γ σ τ} -> Γ ⊢ σ ↦ τ -> Γ ⊢ σ -> Γ ⊢ τ
+    f · x = eval [ pair f x ]
 
-    _[_]₁ : ∀ {σ τ ν} -> τ ⊢₁ ν -> σ ⊢₁ τ -> σ ⊢₁ ν
-    _[_]₁ = _∘_
+    fst : ∀ {Γ σ τ} -> Γ ⊢ σ & τ -> Γ ⊢ σ
+    fst p = π¹ [ p ]
 
-    app : ∀ {σ τ} -> (σ ↦ τ) & σ ⊢₁ τ
-    app = eval
+    snd : ∀ {Γ σ τ} -> Γ ⊢ σ & τ -> Γ ⊢ τ
+    snd p = π² [ p ]
+
+    ↑ : ∀ {Γ σ} -> Γ & σ ⊢ Γ
+    ↑ = π¹
+
+    vz : ∀ {Γ σ} -> Γ & σ ⊢ σ
+    vz = π²
+
+    shift : ∀ {Γ σ τ} -> Γ ⊢ σ -> Γ & τ ⊢ σ
+    shift t = t [ ↑ ]
+
+    Con : ℕ -> Set α
+    Con n = Replicate n Type
+
+    -- var : ∀ n m {Γ : Con (ℕ.suc n + ℕ.suc m)} -> foldrʳ₁ (flip _&_) Γ ⊢ nlookupʳ n Γ
+    -- var  0      m = vz
+    -- var (suc n) m = shift (var n m)
+
+    var : ∀ n m {Γ : Con (ℕ.suc n + m)} -> foldrʳ₁ (flip _&_) Γ ⊢ nlookupʳ n Γ
+    var  0       0      = id
+    var  0      (suc m) = vz
+    var (suc n)  m      = shift (var n m)
+
+    -- In (var n m) `n' is a de Bruijn index and (m = p - n),
+    -- where `p' is the number of variables in scope.
+
+    I : ∀ {Γ σ} -> Γ ⊢ σ ↦ σ
+    I = ƛ var 0 1
+
+    A : ∀ {Γ σ τ} -> Γ ⊢ (σ ↦ τ) ↦ σ ↦ τ
+    A = ƛ ƛ var 1 1 · var 0 2
+
+    K : ∀ {Γ σ τ} -> Γ ⊢ σ ↦ τ ↦ σ
+    K = ƛ ƛ var 1 1
+
+    S : ∀ {Γ σ τ ν} -> Γ ⊢ (σ ↦ τ ↦ ν) ↦ (σ ↦ τ) ↦ σ ↦ ν
+    S = ƛ ƛ ƛ var 2 1 · var 0 3 · (var 1 2 · var 0 3)
