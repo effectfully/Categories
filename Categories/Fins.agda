@@ -24,7 +24,7 @@ Fins = record
 open import Categories.Object Fins
 
 binaryCoproducts : BinaryCoproducts
-binaryCoproducts {n} {m} = record
+binaryCoproducts n m = record
   { Ob      = n + m
   ; ι¹      = inject+ m
   ; ι²      = raise n
@@ -49,7 +49,7 @@ binaryCoproducts {n} {m} = record
       []-univ {suc n} p q (suc i) = []-univ (p ∘′ suc) q i
 
 coequalizers : Coequalizers
-coequalizers {n} {m} {f} {g} =
+coequalizers {n} {m} f g =
   let c = coeq f g
       π = restrict c
       (s , p) = invert-restrict c
@@ -72,4 +72,4 @@ coequalizers {n} {m} {f} {g} =
     }
 
 pushouts : Pushouts
-pushouts = Coproduct&Coequalizer->Pushout binaryCoproducts coequalizers
+pushouts _ _ = Coproduct&Coequalizer->Pushout (binaryCoproducts _ _) (coequalizers _ _)

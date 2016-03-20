@@ -48,8 +48,7 @@ eval {C₁ = C₁} {C₂ = C₂} = tag record
           F⇒ id₁ ∘₂ id₂ →⟨ idʳ₂ ⟩
           F⇒ id₁        →⟨ F-id ⟩
           id₂
-        ∎
-        where open Functor F
+        ∎ where open Functor F
 
       F-∘′ : ∀ {F₁ F₂ F₃ A B C} {g : B ⇒₁ C} {f : A ⇒₁ B}
                {N₂ : NaturalTransformation F₂ F₃} {N₁ : NaturalTransformation F₁ F₂}

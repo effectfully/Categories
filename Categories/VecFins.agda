@@ -51,7 +51,7 @@ initial = record
   }
 
 binaryCoproducts : BinaryCoproducts
-binaryCoproducts {n} {m} = record
+binaryCoproducts n m = record
   { Ob      = n + m
   ; ι¹      = map (inject+ m) (allFin n)
   ; ι²      = map (raise   n) (allFin m)

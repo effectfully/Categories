@@ -39,4 +39,4 @@ record Pushout {A B C} (f : C ⇒ A) (g : C ⇒ B) : Set (α ⊔ β ⊔ γ) wher
              -> (s : p₁ ≈ p₂) -> (t : q₁ ≈ q₂) -> [ p₁ , q₁ ]∣ r ∣ ≈ [ p₂ , q₂ ]∣ s ⌈ r ⌉ˡ t ∣ 
   []-resp-≈ p q = []-univ (left []-ι¹ p) (left []-ι² q)
 
-Pushouts = ∀ {A B C} {f : C ⇒ A} {g : C ⇒ B} -> Pushout f g
+Pushouts = ∀ {A B C} -> (f : C ⇒ A) -> (g : C ⇒ B) -> Pushout f g

@@ -35,4 +35,4 @@ record Coproduct A B : Set (α ⊔ β ⊔ γ) where
             -> f₁ ≈ f₂ -> g₁ ≈ g₂ -> [ f₁ , g₁ ] ≈ [ f₂ , g₂ ]
   []-resp-≈ p q = []-univ (left []-ι¹ p) (left []-ι² q)
 
-BinaryCoproducts = ∀ {A B} -> Coproduct A B
+BinaryCoproducts = ∀ A B -> Coproduct A B

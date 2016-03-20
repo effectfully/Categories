@@ -58,7 +58,7 @@ flip-Pullback p = record
   ; ⟨⟩-univ  = λ r s -> ⟨⟩-univ s r
   } where open Pullback p
 
-Pullbacks = ∀ {A B C} {f : A ⇒ C} {g : B ⇒ C} -> Pullback f g
+Pullbacks = ∀ {A B C} -> (f : A ⇒ C) -> (g : B ⇒ C) -> Pullback f g
 
 module _ {A B C : Obj} {f : A ⇒ C} {g : B ⇒ C} (p : Pullback f g) where
   module Pullback₁ = Pullback p

@@ -30,7 +30,7 @@ module _ {α} where
     }
 
   binaryProducts : BinaryProducts
-  binaryProducts {A} {B} = record
+  binaryProducts A B = record
     { Ob      = A ×ₚ B
     ; π¹      = proj₁
     ; π²      = proj₂
@@ -40,7 +40,7 @@ module _ {α} where
     }
 
   equalizers : Equalizers
-  equalizers {f = f} {g = g} = record
+  equalizers f g = record
     { Ob      = ∃ᵢ λ x -> f x ≡ g x
     ; ι       = iproj₁
     ; ⟨_⟩∣_∣  = λ p r x -> p x ,ᵢ r x
@@ -49,8 +49,9 @@ module _ {α} where
     ; ⟨⟩-univ = λ r x -> ∃ᵢ-η (r x)
     }
 
+  -- Products&Equalizers->Pullbacks
   pullbacks : Pullbacks
-  pullbacks = Product&Equalizer->Pullback binaryProducts equalizers
+  pullbacks _ _ = Product&Equalizer->Pullback (binaryProducts _ _) (equalizers _ _)
 
   initial : Initial
   initial = record
@@ -60,7 +61,7 @@ module _ {α} where
     }
 
   binaryCoproducts : BinaryCoproducts
-  binaryCoproducts {A} {B} = record
+  binaryCoproducts A B = record
     { Ob      = A ⊎ B
     ; ι¹      = inj₁
     ; ι²      = inj₂

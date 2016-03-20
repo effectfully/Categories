@@ -6,6 +6,7 @@ open import Categories.Object.Limit.Terminal      C public
 open import Categories.Object.Limit.Product       C public
 open import Categories.Object.Limit.Equalizer     C public
 open import Categories.Object.Limit.Pullback      C public
+open import Categories.Object.Limit.Exponential   C public
 open import Categories.Object.Limit.Relations     C public
 open import Categories.Object.Colimit.Initial     C public
 open import Categories.Object.Colimit.Coproduct   C public

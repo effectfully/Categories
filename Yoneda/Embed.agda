@@ -20,10 +20,5 @@ Embed {C = C} = record
         (g ∘ (f ∘ h₂ ∘ id)) ∘ id →⟨ assoc        ⟩
         g ∘ (f ∘ h₂ ∘ id) ∘ id
       ∎
-  ; F-resp-≈ = λ {_ _ g₁ g₂} q {_ f₁ f₂} p ->
-    -- Agda doesn't want to accept simply (∘-resp-≈ q (∘-resp-≈ʳ p)).
-      begin
-        g₁ ∘ f₁ ∘ id →⟨ ∘-resp-≈ q (∘-resp-≈ʳ p) ⟩
-        g₂ ∘ f₂ ∘ id
-      ∎
+  ; F-resp-≈ = λ q p -> ∘-resp-≈ q (∘-resp-≈ʳ p)
   } where open IEqReasoningWith C

@@ -25,7 +25,7 @@ initial : Initial
 initial = record { ↜ = 1∣ _ }
 
 binaryProducts : BinaryProducts
-binaryProducts {n} {m} = record
+binaryProducts n m = record
   { Ob    = d
   ; π¹    = π¹
   ; π²    = π²
@@ -48,7 +48,7 @@ binaryProducts {n} {m} = record
       ⟨_,_⟩ = curry greatest
 
 binaryCoproducts : BinaryCoproducts
-binaryCoproducts {n} {m} = record
+binaryCoproducts n m = record
   { Ob    = d
   ; ι¹    = ι¹
   ; ι²    = ι²

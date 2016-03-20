@@ -22,7 +22,7 @@ Full {C₂ = C₂} F = ∀ {A B} -> (g : F· A ⇒ F· B) -> ∃ λ f -> F⇒ f 
 
 Bifunctor : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
           -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category α₃ β₃ γ₃ -> Set _
-Bifunctor = Tag₃ λ C₁ C₂ C₃ -> Functor (C₁ × C₂) C₃
+Bifunctor = Tag₃ λ C₁ C₂ C₃ -> Functor (C₁ ×ᶜ C₂) C₃
 
 pointᶠ : ∀ {α β γ} {C : Category α β γ} -> _ -> Functor One C
 pointᶠ = constᶠ

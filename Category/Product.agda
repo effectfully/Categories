@@ -4,9 +4,9 @@ open import Categories.Utilities.Prelude
 open import Categories.Setoid
 open import Categories.Category.Core
 
-_×_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
-    -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category (α₁ ⊔ α₂) (β₁ ⊔ β₂) (γ₁ ⊔ γ₂)
-C₁ × C₂ = record
+_×ᶜ_ : ∀ {α₁ α₂ β₁ β₂ γ₁ γ₂}
+     -> Category α₁ β₁ γ₁ -> Category α₂ β₂ γ₂ -> Category (α₁ ⊔ α₂) (β₁ ⊔ β₂) (γ₁ ⊔ γ₂)
+C₁ ×ᶜ C₂ = record
   { Obj      = Obj₁ ×ₚ Obj₂
   ; _⇒_      = _⇒₁_ <×> _⇒₂_
   ; setoid   = setoid₁ ×ⁱˢ setoid₂

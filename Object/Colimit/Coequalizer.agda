@@ -38,4 +38,4 @@ record Coequalizer {A B} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   .π-epi : Epi π
   π-epi = λ r -> right ([]-univ r) ∘-η
 
-Coequalizers = ∀ {A B} {f g : A ⇒ B} -> Coequalizer f g
+Coequalizers = ∀ {A B} -> (f g : A ⇒ B) -> Coequalizer f g

@@ -25,7 +25,7 @@ initial : Initial
 initial = record { ↜ = z≤n }
 
 binaryProducts : BinaryProducts
-binaryProducts {n} {m} = record
+binaryProducts n m = record
   { Ob    = n ⊓ m
   ; π¹    = m⊓n≤m n m
   ; π²    = m⊓n≤n n m
@@ -41,7 +41,7 @@ binaryProducts {n} {m} = record
       p≤m⊓n (s≤s p≤m) (s≤s p≤n) = s≤s (p≤m⊓n p≤m p≤n)
 
 binaryCoproducts : BinaryCoproducts
-binaryCoproducts {n} {m} = record
+binaryCoproducts n m = record
   { Ob    = n ⊔ m
   ; ι¹    = m≤m⊔n n m
   ; ι²    = n≤m⊔n n m

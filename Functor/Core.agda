@@ -107,7 +107,7 @@ constᶠ {C₂ = C₂} A₂ = record
 
 _※_ : ∀ {α₁ α₂ α₃ β₁ β₂ β₃ γ₁ γ₂ γ₃}
         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂} {C₃ : Category α₃ β₃ γ₃}
-    -> Functor C₁ C₂ -> Functor C₁ C₃ -> Functor C₁ (C₂ × C₃)
+    -> Functor C₁ C₂ -> Functor C₁ C₃ -> Functor C₁ (C₂ ×ᶜ C₃)
 F₁ ※ F₂ = record
   { F·       = < F·₁ , F·₂ >
   ; F⇒       = < F⇒₁ , F⇒₂ >
@@ -119,7 +119,7 @@ F₁ ※ F₂ = record
 _⁂_ : ∀ {α₁ α₂ α₃ α₄ β₁ β₂ β₃ β₄ γ₁ γ₂ γ₃ γ₄}
         {C₁ : Category α₁ β₁ γ₁} {C₂ : Category α₂ β₂ γ₂}
         {C₃ : Category α₃ β₃ γ₃} {C₄ : Category α₄ β₄ γ₄}
-    -> Functor C₁ C₂ -> Functor C₃ C₄ -> Functor (C₁ × C₃) (C₂ × C₄)
+    -> Functor C₁ C₂ -> Functor C₃ C₄ -> Functor (C₁ ×ᶜ C₃) (C₂ ×ᶜ C₄)
 F₁ ⁂ F₂ = record
   { F·       = map F·₁ F·₂
   ; F⇒       = map F⇒₁ F⇒₂

@@ -38,4 +38,4 @@ record Equalizer {A B} (f g : A ⇒ B) : Set (α ⊔ β ⊔ γ) where
   .ι-mono : Mono ι
   ι-mono = λ r -> right (⟨⟩-univ r) ∘-η
 
-Equalizers = ∀ {A B} {f g : A ⇒ B} -> Equalizer f g
+Equalizers = ∀ {A B} -> (f g : A ⇒ B) -> Equalizer f g
