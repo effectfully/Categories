@@ -3,8 +3,8 @@ module Categories.STLC.Term where
 open import Categories.Category
 open import Categories.STLC.OPE
 
-infixr 7 _&_
 infixr 5 _⇒_
+infixr 7 _&_
 infix  4 _∈_ _⊢_ _⊢₁_ _⊢*_
 infixr 6 _▷_
 
@@ -91,7 +91,7 @@ renᵛ-idˢ : ∀ {Γ σ} (v : σ ∈ Γ) -> renᵛ idˢ v ≡ v
 renᵛ-idˢ  vz    = prefl
 renᵛ-idˢ (vs v) = cong vs (renᵛ-idˢ v)
 
-renᵛ-∘ : ∀ {Γ Δ Θ σ} (κ : Δ ⊆ Θ) (ι : Γ ⊆ Δ) (v : σ ∈ Γ) -> renᵛ (κ ∘ˢ ι) v ≡ renᵛ κ (renᵛ ι v)
+renᵛ-∘ : ∀ {Γ Δ Ξ σ} (κ : Δ ⊆ Ξ) (ι : Γ ⊆ Δ) (v : σ ∈ Γ) -> renᵛ (κ ∘ˢ ι) v ≡ renᵛ κ (renᵛ ι v)
 renᵛ-∘  stop     stop     ()
 renᵛ-∘ (skip κ)  ι        v     = cong vs (renᵛ-∘ κ ι v)
 renᵛ-∘ (keep κ) (skip ι)  v     = cong vs (renᵛ-∘ κ ι v)
@@ -107,7 +107,7 @@ ren-idˢ (pair t s) = cong₂ pair (ren-idˢ t) (ren-idˢ s)
 ren-idˢ (fst p   ) = cong fst (ren-idˢ p)
 ren-idˢ (snd p   ) = cong snd (ren-idˢ p)
 
-ren-∘ : ∀ {Γ Δ Θ σ} (κ : Δ ⊆ Θ) (ι : Γ ⊆ Δ) (t : Γ ⊢ σ) -> ren (κ ∘ˢ ι) t ≡ ren κ (ren ι t)
+ren-∘ : ∀ {Γ Δ Ξ σ} (κ : Δ ⊆ Ξ) (ι : Γ ⊆ Δ) (t : Γ ⊢ σ) -> ren (κ ∘ˢ ι) t ≡ ren κ (ren ι t)
 ren-∘ κ ι (var v   ) = cong var (renᵛ-∘ κ ι v)
 ren-∘ κ ι (ƛ b     ) = cong ƛ_ (ren-∘ (keep κ) (keep ι) b)
 ren-∘ κ ι (f · x   ) = cong₂ _·_ (ren-∘ κ ι f) (ren-∘ κ ι x)

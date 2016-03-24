@@ -4,8 +4,6 @@
 
 Here I study some basic category theory.
 
-This repository will sleep for a while.
-
 ## [Setoids](https://github.com/effectfully/Categories/blob/master/Setoid/Setoid.agda)
 
 There are three kinds of setoids in this development:
